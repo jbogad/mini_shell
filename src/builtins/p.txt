@@ -1,2 +1,18 @@
-Esto esta aqui porque no se sube la carpeta vacia
+
+IMPORTANTE:
+    -Comandos que no necesitan execve(comandos internos)
+        · echo y echo -n 
+        · cd
+        · pwd (con getwcd)
+        · export (añade añade o modifica variables de entorno) 
+        · unset (elimina variables de entorno)
+        · env (muestra las variables de entorno)
+        · exit (sale de la shell)
+
+
+
+
+
+sto esta aqui porque no se sube la carpeta vacia
 Javi maricon
+claudio marica

@@ -1,2 +1,13 @@
+
+IMPORTANTE:
+    -Comandos externos
+        · Usa fork execve para ajecutar ls, cat y con access busca el path
+        · Redirecciones con open y dup
+        · Pipes para conectar comandos 
+        · LLama a builtins si no es un comando externo
+        · Gestion de erro command not found
+
+
+
 Esto esta aqui porque no se sube la carpeta vacia
 Javi maricon
