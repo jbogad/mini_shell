@@ -1,2 +1,17 @@
-Esto esta aqui porque no se sube la carpeta vacia
-Javi maricon
+Leer la linea introducida y dividirla en tokens:
+    -Comandos
+    -Argumentos
+    -Pipes
+    -Redirecciones (`>`, `<`, `>>`, `<<`)
+    -Variables de entorno('$VAR')
+    -Comillas simples y dobles
+
+
+
+| Paso | Área        | Qué hacer                                |
+| ---- | ----------- | ---------------------------------------- |
+| 1    | readline    | Leer input + histórico                   |
+| 2    | signals     | `SIGINT` y `SIGQUIT` en el prompt        |
+| 3    | parser      | Tokenizar input en comandos y args       |
+| 4    | parser      | Crear estructura `t_command` básica      |
+| 5    | parser+exec | Probar pasar un comando real a ejecución |

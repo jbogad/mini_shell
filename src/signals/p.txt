@@ -1,2 +1,6 @@
-Esto esta aqui porque no se sube la carpeta vacia
-Javi maricon
+Manejar señales durante la ejecucion:
+    -ctrl-C
+    -ctrl-d
+    -ctrl-\
+    -Restaurar señales cuando se ejecuten procesos externos
+    -Configurar señales para heredados(heredoc, fork...)

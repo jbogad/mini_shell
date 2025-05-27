@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: claudio <claudio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/05/26 14:51:54 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:15:36 by claudio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,15 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
+
+//PARSER
+char *read_input();
+
+//SIGNALS
+void call_signals();
 
 
 
