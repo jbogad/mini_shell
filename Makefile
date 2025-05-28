@@ -7,13 +7,13 @@ LIBFT_DIR	= src/libft
 LIBFT_LIB	= src/libft/libft.a
 
 #Aqui ves poniendo las rutas de los archivos y luego lo metes en src y si necesitas alguna lib metela en libs BRRRRRRRRRR
-#SRC_BUILTINS =
-#SRC_EXEC = 
+SRC_BUILTINS = src/builtins/pwd.c
+SRC_EXEC = src/exec/exec.c 
 SRC_PARSER = src/parser/read_input.c src/parser/get_short_path.c src/parser/extract_tokens.c
 SRC_SIGNALS = src/signals/signals.c
 LIBS = -lreadline
 
-SRC		= src/minishell.c $(SRC_PARSER) $(SRC_SIGNALS)
+SRC		= src/minishell.c $(SRC_PARSER) $(SRC_SIGNALS) $(SRC_BUILTINS) $(SRC_EXEC)
 OBJS		= $(SRC:.c=.o)
 
 all: $(NAME)

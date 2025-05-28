@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/05/28 15:20:43 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/05/28 19:56:39 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,17 @@ typedef struct s_token
 } t_token;
 
 
+
+/*================JAVIER================*/
+
+/*pwd*/
+void    ft_pwd(void);
+
+/*exec*/
+void execute(t_token **tokens);
+
+
+/*===========EL INUTIL DE CLAUDIO================*/
 
 //PARSER
 char *read_input();
