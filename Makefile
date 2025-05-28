@@ -9,7 +9,7 @@ LIBFT_LIB	= src/libft/libft.a
 #Aqui ves poniendo las rutas de los archivos y luego lo metes en src y si necesitas alguna lib metela en libs BRRRRRRRRRR
 #SRC_BUILTINS =
 #SRC_EXEC = 
-SRC_PARSER = src/parser/read_input.c
+SRC_PARSER = src/parser/read_input.c src/parser/get_short_path.c src/parser/extract_tokens.c
 SRC_SIGNALS = src/signals/signals.c
 LIBS = -lreadline
 

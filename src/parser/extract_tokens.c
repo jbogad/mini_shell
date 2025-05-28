@@ -1,33 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_input.c                                       :+:      :+:    :+:   */
+/*   extract_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 11:45:09 by claudio           #+#    #+#             */
-/*   Updated: 2025/05/28 12:34:18 by clalopez         ###   ########.fr       */
+/*   Created: 2025/05/28 15:23:09 by clalopez          #+#    #+#             */
+/*   Updated: 2025/05/28 15:32:23 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-/*Funcion para crear el input(minishell)
-e ir añadiendo los comandos utilizados al historial
-maneja el add_history tambien las flechas de ir hacia arriba
-y hacia abajo*/
-
-char	*read_input(void)
+//Funcion para dividir el input en tokens
+t_token **extract_tokens(char *input)
 {
-	char	*input;
-	char	*prompt;
-
-	prompt = get_short_path();
-	if (!prompt)
-		return (NULL);
-	input = readline(prompt);
-	free(prompt);
-	if (input && *input != '\0')
-		add_history(input);
-	return (input);
+    ft_printf("%s", input);
+    return (0);
 }

@@ -15,3 +15,84 @@ Leer la linea introducida y dividirla en tokens:
 | 3    | parser      | Tokenizar input en comandos y args       |
 | 4    | parser      | Crear estructura `t_command` básica      |
 | 5    | parser+exec | Probar pasar un comando real a ejecución |
+
+
+Casos de uso del parseo
+# Comillas simples: no hay expansión
+echo 'Hola $USER'
+# → Hola $USER
+
+echo 'Hoy es $(date)'
+# → Hoy es $(date)
+
+# Comillas dobles: se expanden variables y comandos
+echo "Hola $USER"
+# → Hola <tu_usuario>
+
+echo "Hoy es $(date)"
+# → Hoy es <fecha_actual>
+
+# Sin comillas: expansión + splitting
+echo Hola $USER
+# → Hola <tu_usuario>
+
+# Mezcla de comillas
+echo "Usuario: '$USER'"
+# → Usuario: '<tu_usuario>'
+
+echo 'Usuario: '"$USER"
+# → Usuario: <tu_usuario>
+
+# Comillas anidadas y escapes
+echo "Dijo: \"Hola\""
+# → Dijo: "Hola"
+
+echo 'Dijo: "Hola"'
+# → Dijo: "Hola"
+
+# Variables y comandos dentro de comillas dobles
+var=42
+echo "El valor es $var"
+# → El valor es 42
+
+echo "Fecha: $(date)"
+# → Fecha: <fecha_actual>
+
+# Espacios y splitting
+echo hola     mundo
+# → hola mundo
+
+echo "hola     mundo"
+# → hola     mundo
+
+# Escape con barra invertida
+echo hola\ mundo
+# → hola mundo
+
+echo "hola\"mundo"
+# → hola"mundo
+
+# Variables con diferentes comillas
+echo '$HOME' "$HOME"
+# → $HOME /home/<usuario>
+
+# Uso de comillas complejas
+echo "A'\''B"
+# → A''B
+
+# Redirecciones (solo observar parsing, no ejecutar si no quieres sobrescribir archivos)
+echo "hola" > out.txt
+# → (archivo 'out.txt' contiene "hola")
+
+cat < out.txt
+# → hola
+
+echo hola | cat
+# → hola
+
+# Debug de parsing con set -x
+set -x
+echo "Hola $USER"
+set +x
+# → + echo 'Hola <tu_usuario>'
+# → Hola <tu_usuario>
