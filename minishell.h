@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/05/28 19:56:39 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:15:51 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <curses.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <signal.h>
 # include <stdarg.h>
 # include <sys/ioctl.h>
@@ -25,49 +27,48 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+
 
 /* Estructura para guardar los tokens del input
-cada token tendra su valor guardado 
+cada token tendra su valor guardado
 ej: TOKEN_WORD -> echo */
 typedef enum e_token_type
 {
-    TOKEN_WORD,       // comandos y argumntos
-    TOKEN_PIPE,       // |
-    TOKEN_REDIR_IN,   // <
-    TOKEN_REDIR_OUT,  // >
-    TOKEN_APPEND,     // >>
-    TOKEN_HEREDOC,    // <<
-    TOKEN_STRING,     // string entre comillas
-} t_token_type;
+	TOKEN_WORD,      // comandos y argumntos
+	TOKEN_PIPE,      // |
+	TOKEN_REDIR_IN,  // <
+	TOKEN_REDIR_OUT, // >
+	TOKEN_APPEND,    // >>
+	TOKEN_HEREDOC,   // <<
+	TOKEN_STRING,    // string entre comillas
+}					t_token_type;
 
 typedef struct s_token
 {
-    t_token_type type;
-    char         *value;
-} t_token;
+	t_token_type	type;
+	char			*value;
+}					t_token;
 
-
+// Utils
+char				*ft_strndup(const char *s, size_t n);
 
 /*================JAVIER================*/
 
 /*pwd*/
-void    ft_pwd(void);
+void				ft_pwd(void);
 
 /*exec*/
-void execute(t_token **tokens);
-
+void				execute(t_token **tokens);
 
 /*===========EL INUTIL DE CLAUDIO================*/
 
-//PARSER
-char *read_input();
-char	*get_short_path(void);
+// Parser
+char				*read_input(void);
+char				*get_short_path(void);
+t_token				**extract_word_token(char *input);
+t_token				**extract_ops_tokens(char *input);
 
-//SIGNALS
-void call_signals();
-
-
+// Signals
+void				call_signals(void);
 
 #endif
