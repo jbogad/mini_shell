@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/02 13:17:08 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:32:59 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,12 @@ char				*ft_strndup(const char *s, size_t n);
 
 /*pwd*/
 void				ft_pwd(void);
+
+/*echo*/
+void 				ft_echo(t_token **tokens);
+
+/*cd*/
+void 				ft_cd(t_token **tokens);
 
 /*exec*/
 void				execute(t_token **tokens);

@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/05/28 20:23:32 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:32:12 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ void execute(t_token **tokens)
 
     if (ft_strncmp(tokens[0]->value, "pwd", ft_strlen("pwd")) == 0)//para comprobar el error de pwdcdasawe -> falla
         ft_pwd();
+    else if (ft_strncmp(tokens[0]->value, "echo", ft_strlen("echo")) == 0)
+        ft_echo(tokens);
+    else if (ft_strncmp(tokens[0]->value, "cd", ft_strlen("cd")) == 0)
+        ft_cd(tokens);    
     else
         ft_printf("error\n", tokens[0]->value);
 }

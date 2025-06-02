@@ -8,7 +8,7 @@ LIBFT_LIB	= src/libft/libft.a
 
 #Aqui ves poniendo las rutas de los archivos y luego lo metes en src y si necesitas alguna lib metela en libs BRRRRRRRRRR
 SRC_UTILS = src/utils/utils.c
-SRC_BUILTINS = src/builtins/pwd.c
+SRC_BUILTINS = src/builtins/pwd.c src/builtins/echo.c src/builtins/cd.c
 SRC_EXEC = src/exec/exec.c 
 SRC_PARSER = src/parser/read_input.c src/parser/get_short_path.c src/parser/extract_tokens.c \
 			 src/parser/extract_ops_tokens.c src/parser/extract_quotes_tokens.c

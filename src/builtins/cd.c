@@ -6,8 +6,13 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:21 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/05/26 19:06:23 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:33:27 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
+
+void ft_cd(t_token **tokens)
+{
+    printf("terminar");
+}
