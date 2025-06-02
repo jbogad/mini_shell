@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/05/29 15:15:51 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:17:08 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # include <termios.h>
 # include <unistd.h>
 
-
 /* Estructura para guardar los tokens del input
 cada token tendra su valor guardado
 ej: TOKEN_WORD -> echo */
@@ -40,7 +39,8 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT, // >
 	TOKEN_APPEND,    // >>
 	TOKEN_HEREDOC,   // <<
-	TOKEN_STRING,    // string entre comillas
+	TOKEN_SIM_QUOTE, // string entre comillas simples 'Hola'
+	TOKEN_DOB_QUOTE, // string entre comillas doblres "Hola"
 }					t_token_type;
 
 typedef struct s_token
@@ -67,6 +67,8 @@ char				*read_input(void);
 char				*get_short_path(void);
 t_token				**extract_word_token(char *input);
 t_token				**extract_ops_tokens(char *input);
+int					count_quotes_dob_tokens(char *input);
+int					count_quotes_sim_tokens(char *input);
 
 // Signals
 void				call_signals(void);

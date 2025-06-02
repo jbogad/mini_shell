@@ -11,7 +11,7 @@ SRC_UTILS = src/utils/utils.c
 SRC_BUILTINS = src/builtins/pwd.c
 SRC_EXEC = src/exec/exec.c 
 SRC_PARSER = src/parser/read_input.c src/parser/get_short_path.c src/parser/extract_tokens.c \
-			 src/parser/extract_ops_tokens.c
+			 src/parser/extract_ops_tokens.c src/parser/extract_quotes_tokens.c
 SRC_SIGNALS = src/signals/signals.c
 LIBS = -lreadline
 
