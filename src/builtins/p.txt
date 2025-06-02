@@ -9,10 +9,3 @@ IMPORTANTE:
         · env (muestra las variables de entorno)
         · exit (sale de la shell)
 
-
-
-
-
-sto esta aqui porque no se sube la carpeta vacia
-Javi maricon
-claudio marica
