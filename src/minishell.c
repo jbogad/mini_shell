@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/02 14:29:24 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:33:04 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,13 @@ int	main(int argc, char **argv)
 		}  
 
 		ft_printf("Input: %s\n", input);
-		int sim_quotes = count_quotes_sim_tokens(input);
-		ft_printf("Tokens comillas sim: %d\n", sim_quotes);
-
-		/* t_token **tokens_word = extract_word_token(input);
+		t_token **tokens_word = extract_sim_quote_tokens(input);
 		int i = 0;
 		while (tokens_word[i] != NULL)
 		{
             ft_printf("[Token de tipo %d]: Valor:%s\n", tokens_word[i]->type, tokens_word[i]->value);
 			i++;
-		} */  
+		}  
 	}
 	return (0);
 }

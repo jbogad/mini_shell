@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/02 14:32:59 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:32:55 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,9 @@ t_token				**extract_word_token(char *input);
 t_token				**extract_ops_tokens(char *input);
 int					count_quotes_dob_tokens(char *input);
 int					count_quotes_sim_tokens(char *input);
+t_token				**extract_dob_quote_tokens(char *input);
+t_token				**extract_sim_quote_tokens(char *input);
+
 
 // Signals
 void				call_signals(void);
