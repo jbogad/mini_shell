@@ -14,5 +14,6 @@
 
 void	ft_cd(t_token **tokens)
 {
+	(void)tokens;
 	printf("terminar");
 }
