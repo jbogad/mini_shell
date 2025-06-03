@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/02 15:35:18 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:12:45 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,49 +41,54 @@ int	count_quotes_sim_tokens(char *input)
 	return (count);
 }
 
-t_token	**extract_sim_quote_tokens(char *input)
+void	init_extract(t_extract *e)
 {
-	t_token	**tokens;
-	t_token	*new_token;
-	int		i;
-	int		start;
-	int		count;
-	int		in_sim_quote;
-	int		in_dob_quote;
+	e->i = 0;
+	e->start = -1;
+	e->count = 0;
+	e->in_sim_quote = 0;
+	e->in_dob_quote = 0;
+}
 
-	count = count_quotes_sim_tokens(input);
-	tokens = malloc(sizeof(t_token *) * (count + 1));
-	if (!tokens)
-		return (NULL);
-	i = 0;
-	start = -1;
-	count = 0;
-	in_sim_quote = 0;
-	in_dob_quote = 0;
-	while (input[i])
+void	fill_sim_quote_tokens(char *input, t_token **tokens, t_extract *e)
+{
+	t_token	*new_tkn;
+
+	init_extract(e);
+	while (input[e->i])
 	{
-		if (input[i] == '"' && !in_sim_quote)
-			in_dob_quote = !in_dob_quote;
-		else if (input[i] == '\'' && !in_dob_quote)
+		if (input[e->i] == '"' && !e->in_sim_quote)
+			e->in_dob_quote = !e->in_dob_quote;
+		else if (input[e->i] == '\'' && !e->in_dob_quote)
 		{
-			if (in_sim_quote)
+			if (e->in_sim_quote)
 			{
-				in_sim_quote = 0;
-				new_token = malloc(sizeof(t_token));
-				if (!new_token)
-					return (NULL);
-				new_token->type = TOKEN_SIM_QUOTE;
-				new_token->value = ft_strndup(&input[start], i - start);
-				tokens[count++] = new_token;
+				e->in_sim_quote = 0;
+				new_tkn = malloc(sizeof(t_token));
+				new_tkn->type = TOKEN_SIM_QUOTE;
+				new_tkn->value = ft_strndup(&input[e->start], e->i - e->start);
+				tokens[e->count++] = new_tkn;
 			}
 			else
 			{
-				in_sim_quote = 1;
-				start = i + 1;
+				e->start = e->i + 1;
+				e->in_sim_quote = 1;
 			}
 		}
-		i++;
+		e->i++;
 	}
-	tokens[count] = NULL;
+}
+
+t_token	**extract_sim_quote_tokens(char *input)
+{
+	t_token		**tokens;
+	t_extract	extract;
+
+	extract.count = count_quotes_sim_tokens(input);
+	tokens = malloc(sizeof(t_token *) * (extract.count + 1));
+	if (!tokens)
+		return (NULL);
+	fill_sim_quote_tokens(input, tokens, &extract);
+	tokens[extract.count] = NULL;
 	return (tokens);
 }

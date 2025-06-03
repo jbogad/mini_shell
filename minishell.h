@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/03 12:06:53 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:16:10 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,16 @@ typedef struct s_token
 	t_token_type	type;
 	char			*value;
 }					t_token;
+
+typedef struct s_extract
+{
+	int	i;
+	int	start;
+	int	count;
+	int	in_sim_quote;
+	int	in_dob_quote;
+}		t_extract;
+
 
 // Utils
 char				*ft_strndup(const char *s, size_t n);

@@ -29,7 +29,7 @@ $(NAME): $(LIBFT_LIB) $(OBJS)
 
 $(LIBFT_LIB):
 	$(MAKE) -C $(LIBFT_DIR)
-
+	
 HEADER = "\n\033[1;36m\
 ███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗     \n\
 ████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║     \n\
@@ -40,6 +40,7 @@ HEADER = "\n\033[1;36m\
 \n\033[0m\
                 MASTODONTES DEEEEEEEEEE:                    		\n\
 \t\t--- \033[1;36mclalopez\033[0m && \033[1;36mjaboga-d\033[0m --- \n"
+
 
 
 clean:

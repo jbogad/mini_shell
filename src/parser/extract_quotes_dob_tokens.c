@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:47:15 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/02 15:32:31 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:23:22 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,52 +40,55 @@ int	count_quotes_dob_tokens(char *input)
 	}
 	return (count);
 }
-
-t_token	**extract_dob_quote_tokens(char *input)
+void	init_extract2(t_extract *e)
 {
-	t_token	**tokens;
-	t_token	*new_token;
-	int		i;
-	int		start;
-	int		count;
-	int		in_double_quote;
-	int		in_single_quote;
+	e->i = 0;
+	e->start = -1;
+	e->count = 0;
+	e->in_sim_quote = 0;
+	e->in_dob_quote = 0;
+}
 
-	count = count_quotes_dob_tokens(input);
-	tokens = malloc(sizeof(t_token *) * (count + 1));
-	if (!tokens)
-		return (NULL);
-	i = 0;
-	start = -1;
-	count = 0;
-	in_double_quote = 0;
-	in_single_quote = 0;
-	while (input[i])
+void	fill_dob_quote_tokens(char *input, t_token **tokens, t_extract *e)
+{
+	t_token	*new_tkn;
+
+	init_extract2(e);
+	while (input[e->i])
 	{
-		if (input[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (input[i] == '"' && !in_single_quote)
+		if (input[e->i] == '\'' && !e->in_dob_quote)
+			e->in_sim_quote = !e->in_sim_quote;
+		else if (input[e->i] == '"' && !e->in_sim_quote)
 		{
-			if (in_double_quote)
+			if (e->in_dob_quote)
 			{
-				in_double_quote = 0;
-				new_token = malloc(sizeof(t_token));
-				if (!new_token)
-					return (NULL);
-				new_token->type = TOKEN_DOB_QUOTE;
-				new_token->value = ft_strndup(&input[start], i - start);
-				tokens[count++] = new_token;
+				e->in_dob_quote = 0;
+				new_tkn = malloc(sizeof(t_token));
+				new_tkn->type = TOKEN_DOB_QUOTE;
+				new_tkn->value = ft_strndup(&input[e->start], e->i - e->start);
+				tokens[e->count++] = new_tkn;
 			}
 			else
 			{
-				in_double_quote = 1;
-				start = i + 1;
+				e->start = e->i + 1;
+				e->in_dob_quote = 1;
 			}
 		}
-		i++;
+		e->i++;
 	}
-	tokens[count] = NULL;
-	return (tokens);
 }
 
+t_token	**extract_dob_quote_tokens(char *input)
+{
+	t_token		**tokens;
+	t_extract	extract;
+
+	extract.count = count_quotes_dob_tokens(input);
+	tokens = malloc(sizeof(t_token *) * (extract.count + 1));
+	if (!tokens)
+		return (NULL);
+	fill_dob_quote_tokens(input, tokens, &extract);
+	tokens[extract.count] = NULL;
+	return (tokens);
+}
 
