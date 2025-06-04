@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/03 15:16:10 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:55:50 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
-
 
 /* Estructura para guardar los tokens del input
 cada token tendra su valor guardado
@@ -52,16 +51,18 @@ typedef struct s_token
 
 typedef struct s_extract
 {
-	int	i;
-	int	start;
-	int	count;
-	int	in_sim_quote;
-	int	in_dob_quote;
-}		t_extract;
-
+	int				i;
+	int				start;
+	int				count;
+	int				index;
+	int				in_sim_quote;
+	int				in_dob_quote;
+}					t_extract;
 
 // Utils
 char				*ft_strndup(const char *s, size_t n);
+void				free_tokens(t_token **tokens);
+
 
 /*================JAVIER================*/
 
@@ -69,10 +70,10 @@ char				*ft_strndup(const char *s, size_t n);
 void				ft_pwd(void);
 
 /*echo*/
-void 				ft_echo(t_token **tokens);
+void				ft_echo(t_token **tokens);
 
 /*cd*/
-void 				ft_cd(t_token **tokens);
+void				ft_cd(t_token **tokens);
 
 /*exec*/
 void				execute(t_token **tokens);
@@ -82,13 +83,15 @@ void				execute(t_token **tokens);
 // Parser
 char				*read_input(void);
 char				*get_short_path(void);
-t_token				**extract_word_token(char *input);
-t_token				**extract_ops_tokens(char *input);
 int					count_quotes_dob_tokens(char *input);
 int					count_quotes_sim_tokens(char *input);
+int					count_operator_tokens(char *input);
+int					count_word_token(char *input);
+t_token				**extract_word_token(char *input);
+t_token				**extract_ops_tokens(char *input);
 t_token				**extract_dob_quote_tokens(char *input);
 t_token				**extract_sim_quote_tokens(char *input);
-
+t_token				**extract_all_tokens(char *input);
 
 // Signals
 void				call_signals(void);

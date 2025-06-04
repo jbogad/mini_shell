@@ -6,12 +6,13 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/03 13:12:45 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:58:42 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+//Contar cuantos tokens de comillas simples hay
 int	count_quotes_sim_tokens(char *input)
 {
 	int	i;
@@ -41,6 +42,7 @@ int	count_quotes_sim_tokens(char *input)
 	return (count);
 }
 
+//Inicializar las variables para extraer los tokens
 void	init_extract(t_extract *e)
 {
 	e->i = 0;
@@ -50,6 +52,7 @@ void	init_extract(t_extract *e)
 	e->in_dob_quote = 0;
 }
 
+//Añadir el contenifo de los tokens de comillas simples
 void	fill_sim_quote_tokens(char *input, t_token **tokens, t_extract *e)
 {
 	t_token	*new_tkn;
@@ -79,6 +82,7 @@ void	fill_sim_quote_tokens(char *input, t_token **tokens, t_extract *e)
 	}
 }
 
+//Extraer los tokens
 t_token	**extract_sim_quote_tokens(char *input)
 {
 	t_token		**tokens;

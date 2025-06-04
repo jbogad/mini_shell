@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:34:02 by clalopez          #+#    #+#             */
-/*   Updated: 2025/05/28 12:42:48 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:08:39 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ char	*extract_short_path(char *route, int len)
 
 char	*get_short_path(void)
 {
-	char *cwd;
-	char *route;
-	char *result;
-	int len;
+	char	*cwd;
+	char	*route;
+	char	*result;
+	int		len;
 
 	cwd = getcwd(NULL, 0);
 	route = ft_strjoin(cwd, "$ ");

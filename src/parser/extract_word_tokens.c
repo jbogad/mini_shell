@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   extract_tokens.c                                   :+:      :+:    :+:   */
+/*   extract_word_tokens.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:23:09 by clalopez          #+#    #+#             */
-/*   Updated: 2025/05/29 15:39:51 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:07:48 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Funcion para contar cuantos tokens_word hay
+// Funcion para contar cuantos tokens_word hay
 int	count_word_token(char *input)
 {
 	int	i;
@@ -32,7 +32,8 @@ int	count_word_token(char *input)
 	}
 	return (count);
 }
-// Funcion para ir añadiendo los tokens, tengo que quitarle un parametro  
+
+// Funcion para ir añadiendo los tokens, tengo que quitarle un parametro
 void	add_word_token(t_token **tokens, char *input, int start, int end,
 		int *token_count)
 {
@@ -46,10 +47,35 @@ void	add_word_token(t_token **tokens, char *input, int start, int end,
 	tokens[*token_count] = new_token;
 	(*token_count)++;
 }
-// Funcion para dividir el input en tokens
-// IMPORTANTE: No interpretar comillas sin cerrar o caracteres especiales no especificados en el
+
+// Funciones para dividir el input en tokens
+// IMPORTANTE: No interpretar comillas sin cerrar o caracteres 
+//especiales no especificados en el
 // enunciado como \ (barra invertida) o ; (punto y coma).
 // No se si tiene que mostrar error o se la tiene que pelar
+int	skip_spaces_and_quotes(char *input, int i)
+{
+	while (input[i] == ' ')
+		i++;
+	if (input[i] == '\'')
+	{
+		i++;
+		while (input[i] && input[i] != '\'')
+			i++;
+		if (input[i] == '\'')
+			i++;
+	}
+	if (input[i] == '"')
+	{
+		i++;
+		while (input[i] && input[i] != '"')
+			i++;
+		if (input[i] == '"')
+			i++;
+	}
+	return (i);
+}
+
 t_token	**extract_word_token(char *input)
 {
 	int		i;
@@ -64,8 +90,7 @@ t_token	**extract_word_token(char *input)
 		return (NULL);
 	while (input[i])
 	{
-		while (input[i] == ' ')
-			i++;
+		i = skip_spaces_and_quotes(input, i);
 		start = i;
 		while (input[i] && input[i] != ' ' && input[i] != '|' && input[i] != '>'
 			&& input[i] != '<')
@@ -78,14 +103,3 @@ t_token	**extract_word_token(char *input)
 	tokens[token_count] = NULL;
 	return (tokens);
 }
-// Esto es para ver que se divide en tokens(Claudio)
-// Si lo quieres probar ponlo debajo de tu if en el main
-		/* ft_printf("Input: %s\n", input);
-		t_token **tokens_word = extract_word_token(input);
-		int i = 0;
-		while (tokens_word[i] != NULL)
-		{
-            ft_printf("[Token de tipo %d]: Valor:%s\n", tokens_word[i]->type, tokens_word[i]->value);
-			i++;
-		} */
-

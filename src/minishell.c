@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/03 14:22:19 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:57:04 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ int	main(int argc, char **argv)
 		}  
 
 		ft_printf("Input: %s\n", input);
-		t_token **tokens_word = extract_dob_quote_tokens(input);
+		t_token **tokens_word = extract_all_tokens(input);
 		int i = 0;
 		while (tokens_word[i] != NULL)
 		{
             ft_printf("[Token de tipo %d]: Valor:%s\n", tokens_word[i]->type, tokens_word[i]->value);
 			i++;
-		}  
+		}
 	}
 	return (0);
 }

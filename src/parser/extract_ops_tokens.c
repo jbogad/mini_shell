@@ -6,13 +6,13 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:51:27 by clalopez          #+#    #+#             */
-/*   Updated: 2025/05/29 15:06:14 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:59:16 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Funcion para contar el numero de tokens operadores que hay en el input
+// Funcion para contar el numero de tokens operadores que hay en el input
 int	count_operator_tokens(char *input)
 {
 	int	i;
@@ -22,8 +22,8 @@ int	count_operator_tokens(char *input)
 	count = 0;
 	while (input[i])
 	{
-		if (input[i] == '|')
-			count++, i++;
+		if (input[i++] == '|')
+			count++;
 		else if ((input[i] == '<' && input[i + 1] == '<') || (input[i] == '>'
 				&& input[i + 1] == '>'))
 		{
@@ -40,7 +40,8 @@ int	count_operator_tokens(char *input)
 	}
 	return (count);
 }
-//Funcion para extrae la barra
+
+// Funcion para extrae la barra
 t_token	*extract_pipe_token(char *input, int *i)
 {
 	t_token	*new_token;
@@ -58,7 +59,7 @@ t_token	*extract_pipe_token(char *input, int *i)
 	return (NULL);
 }
 
-//Funcion para extraer << y >>
+// Funcion para extraer << y >>
 t_token	*extract_double_redir_token(char *input, int *i)
 {
 	t_token	*new_token;
@@ -85,7 +86,8 @@ t_token	*extract_double_redir_token(char *input, int *i)
 	}
 	return (NULL);
 }
-//Funcion para extraer < y >
+
+// Funcion para extraer < y >
 t_token	*extract_single_redir_token(char *input, int *i)
 {
 	t_token	*new_token;
@@ -112,7 +114,8 @@ t_token	*extract_single_redir_token(char *input, int *i)
 	}
 	return (NULL);
 }
-//Putisima norminette
+
+// Putisima norminette
 t_token	**extract_ops_tokens(char *input)
 {
 	int		i;
