@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:23:09 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/04 16:07:48 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:09:19 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,24 @@ int	count_word_token(char *input)
 {
 	int	i;
 	int	count;
+	int	in_word;
 
 	i = 0;
 	count = 0;
-	while (input[i] == ' ')
-		i++;
-	if (input[i] == '\0')
-		return (0);
-	while (input[i] != '\0')
+	in_word = 0;
+	while (input[i])
 	{
-		if (input[i] == ' ' && input[i + 1] != ' ' && input[i + 1] != '\0')
-			count++;
+		if (input[i] != ' ' && input[i] != '<' && input[i] != '>'
+			&& input[i] != '|')
+		{
+			if (!in_word)
+			{
+				count++;
+				in_word = 1;
+			}
+		}
+		else
+			in_word = 0;
 		i++;
 	}
 	return (count);
@@ -49,8 +56,8 @@ void	add_word_token(t_token **tokens, char *input, int start, int end,
 }
 
 // Funciones para dividir el input en tokens
-// IMPORTANTE: No interpretar comillas sin cerrar o caracteres 
-//especiales no especificados en el
+// IMPORTANTE: No interpretar comillas sin cerrar o caracteres
+// especiales no especificados en el
 // enunciado como \ (barra invertida) o ; (punto y coma).
 // No se si tiene que mostrar error o se la tiene que pelar
 int	skip_spaces_and_quotes(char *input, int i)
@@ -78,10 +85,10 @@ int	skip_spaces_and_quotes(char *input, int i)
 
 t_token	**extract_word_token(char *input)
 {
-	int		i;
-	int		start;
-	t_token	**tokens;
-	int		token_count;
+	int i;
+	int start;
+	t_token **tokens;
+	int token_count;
 
 	i = 0;
 	token_count = 0;

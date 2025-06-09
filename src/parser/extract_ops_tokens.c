@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:51:27 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/04 15:59:16 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:49:27 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@ int	count_operator_tokens(char *input)
 	count = 0;
 	while (input[i])
 	{
-		if (input[i++] == '|')
+		if (input[i] == '|')
+		{
 			count++;
-		else if ((input[i] == '<' && input[i + 1] == '<') || (input[i] == '>'
-				&& input[i + 1] == '>'))
+			i++;
+		}
+		else if ((input[i] == '<' && input[i + 1] && input[i + 1] == '<') ||
+				(input[i] == '>' && input[i + 1] && input[i + 1] == '>'))
 		{
 			count++;
 			i += 2;
@@ -41,6 +44,7 @@ int	count_operator_tokens(char *input)
 	return (count);
 }
 
+
 // Funcion para extrae la barra
 t_token	*extract_pipe_token(char *input, int *i)
 {
@@ -53,6 +57,11 @@ t_token	*extract_pipe_token(char *input, int *i)
 			return (NULL);
 		new_token->type = TOKEN_PIPE;
 		new_token->value = ft_strdup("|");
+		if (!new_token->value)
+		{
+			free(new_token);
+			return (NULL);
+		}
 		(*i)++;
 		return (new_token);
 	}
@@ -118,29 +127,14 @@ t_token	*extract_single_redir_token(char *input, int *i)
 // Putisima norminette
 t_token	**extract_ops_tokens(char *input)
 {
-	int		i;
-	int		token_count;
 	t_token	**tokens;
-	t_token	*new_token;
+	int		token_count;
 
-	i = 0;
 	token_count = 0;
 	tokens = malloc(sizeof(t_token *) * (count_operator_tokens(input) + 1));
 	if (!tokens)
 		return (NULL);
-	while (input[i])
-	{
-		new_token = NULL;
-		new_token = extract_pipe_token(input, &i);
-		if (!new_token)
-			new_token = extract_double_redir_token(input, &i);
-		if (!new_token)
-			new_token = extract_single_redir_token(input, &i);
-		if (new_token)
-			tokens[token_count++] = new_token;
-		else
-			i++;
-	}
+	fill_operator_tokens(input, tokens, &token_count);
 	tokens[token_count] = NULL;
 	return (tokens);
 }

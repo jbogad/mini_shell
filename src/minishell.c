@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/06 13:34:55 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:05:08 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,14 @@ int	main(int argc, char **argv)
 		}
 
 		ft_printf("Input: %s\n", input);
-		t_token **tokens_word = extract_all_tokens(input);
+		t_token **tokens = extract_all_tokens(input);
 		int i = 0;
-		while (tokens_word[i] != NULL)
+		while (tokens[i] != NULL)
 		{
-            ft_printf("[Token de tipo %d]: Valor:%s\n", tokens_word[i]->type, tokens_word[i]->value);
+            ft_printf("[Token de tipo %d]: Valor:%s\n", tokens[i]->type, tokens[i]->value);
 			i++;
 		}
+		
 	}
 	return (0);
 }
