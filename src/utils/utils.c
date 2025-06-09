@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:06:54 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/04 14:54:55 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:05:53 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ char	*ft_strndup(const char *s, size_t n)
 	return (dup);
 }
 
-void free_tokens(t_token **tokens)
+void	free_tokens(t_token **tokens)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (tokens[i])
 	{
 		free(tokens[i]->value);

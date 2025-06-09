@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/04 14:55:50 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:59:06 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ cada token tendra su valor guardado
 ej: TOKEN_WORD -> echo */
 typedef enum e_token_type
 {
-	TOKEN_WORD,      // comandos y argumntos
-	TOKEN_PIPE,      // |
-	TOKEN_REDIR_IN,  // <
-	TOKEN_REDIR_OUT, // >
-	TOKEN_APPEND,    // >>
-	TOKEN_HEREDOC,   // <<
-	TOKEN_SIM_QUOTE, // string entre comillas simples 'Hola'
-	TOKEN_DOB_QUOTE, // string entre comillas doblres "Hola"
+	TOKEN_WORD,			// comandos y argumntos
+	TOKEN_PIPE,			// |
+	TOKEN_REDIR_IN,		// <
+	TOKEN_REDIR_OUT,	// >
+	TOKEN_APPEND,		// >>
+	TOKEN_HEREDOC,		// <<
+	TOKEN_SIM_QUOTE,	// string entre comillas simples 'Hola'
+	TOKEN_DOB_QUOTE,	// string entre comillas doblres "Ho la"
 }					t_token_type;
 
 typedef struct s_token
@@ -59,10 +59,16 @@ typedef struct s_extract
 	int				in_dob_quote;
 }					t_extract;
 
+typedef struct s_env
+{
+	char	*name_env;
+	char	*val_env;
+	struct s_env *next;
+}				t_env;
+
 // Utils
 char				*ft_strndup(const char *s, size_t n);
 void				free_tokens(t_token **tokens);
-
 
 /*================JAVIER================*/
 

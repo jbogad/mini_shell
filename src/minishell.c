@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/04 14:57:04 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:34:55 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int argc, char **argv)
 			tokens[0] = &token;
 			tokens[1] = NULL;
 			execute(tokens);
-		}  
+		}
 
 		ft_printf("Input: %s\n", input);
 		t_token **tokens_word = extract_all_tokens(input);
@@ -66,40 +66,40 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-/* int main(int argc, char **argv)
-{
-	char	*input;
-	t_token	token[10];
-	t_token	*tokens[11];
-	char	**args;
-	int		i;
+// int main(int argc, char **argv)
+// {
+// 	char	*input;
+// 	t_token	token[10];
+// 	t_token	*tokens[11];
+// 	char	**args;
+// 	int		i;
 
-	call_signals();
-	while (1)
-	{
-		input = gen_shell(argc, argv);
-		if	(!input)
-		{
-			ft_printf("exit\n");
-			rl_clear_history();
-			break;
-		}
-		if (*input)
-		{
-			args = ft_split(input, ' ');
-			i = 0;
-			while (args[i] && i < 10)
-			{
-				token[i].type = TOKEN_WORD;
-				token[i].value = args[i];
-				tokens[i] = &token[i];
-				i++;
-			}
-			tokens[i] = NULL;
-			execute(tokens);
-			free(args);
-		}
-		free(input);
-	}
-	return (0);
-} */
+// 	call_signals();
+// 	while (1)
+// 	{
+// 		input = gen_shell(argc, argv);
+// 		if	(!input)
+// 		{
+// 			ft_printf("exit\n");
+// 			rl_clear_history();
+// 			break;
+// 		}
+// 		if (*input)
+// 		{
+// 			args = ft_split(input, ' ');
+// 			i = 0;
+// 			while (args[i] && i < 10)
+// 			{
+// 				token[i].type = TOKEN_WORD;
+// 				token[i].value = args[i];
+// 				tokens[i] = &token[i];
+// 				i++;
+// 			}
+// 			tokens[i] = NULL;
+// 			execute(tokens);
+// 			free(args);
+// 		}
+// 		free(input);
+// 	}
+// 	return (0);
+// }

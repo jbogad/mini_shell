@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:11:30 by clalopez          #+#    #+#             */
-/*   Updated: 2025/01/29 11:41:58 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:03:33 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
-{	
+{
 	while (*s)
 	{
 		if (*s == (char)c)
