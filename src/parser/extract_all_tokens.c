@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:47:31 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/09 15:42:41 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:53:22 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,26 @@ int	count_total_tokens(char *input)
 	return (total);
 }
 
+void	loop_add_tokens(t_token **tmp, t_token **tokens, int *index)
+{
+	int	j;
+
+	j = 0;
+	while (tmp && tmp[j])
+	{
+		tokens[*index] = tmp[j];
+		j++;
+		(*index)++;
+	}
+	free(tmp);
+}
+
 t_token	**extract_all_tokens(char *input)
 {
 	t_token		**tokens;
 	t_token		**tmp;
 	t_extract	e;
 	int			total;
-	int			j;
 
 	total = count_total_tokens(input);
 	tokens = malloc(sizeof(t_token *) * (total + 1));
@@ -42,25 +55,13 @@ t_token	**extract_all_tokens(char *input)
 		return (NULL);
 	e.index = 0;
 	tmp = extract_word_token(input);
-	j = 0;
-	while (tmp && tmp[j])
-		tokens[e.index++] = tmp[j++];
-	free(tmp);
+	loop_add_tokens(tmp, tokens, &e.index);
 	tmp = extract_ops_tokens(input);
-	j = 0;
-	while (tmp && tmp[j])
-		tokens[e.index++] = tmp[j++];
-	free(tmp);
+	loop_add_tokens(tmp, tokens, &e.index);
 	tmp = extract_sim_quote_tokens(input);
-	j = 0;
-	while (tmp && tmp[j])
-		tokens[e.index++] = tmp[j++];
-	free(tmp);
+	loop_add_tokens(tmp, tokens, &e.index);
 	tmp = extract_dob_quote_tokens(input);
-	j = 0;
-	while (tmp && tmp[j])
-		tokens[e.index++] = tmp[j++];
-	free(tmp);
+	loop_add_tokens(tmp, tokens, &e.index);
 	tokens[e.index] = NULL;
 	return (tokens);
 }

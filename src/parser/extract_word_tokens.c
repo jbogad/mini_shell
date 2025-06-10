@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:23:09 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/09 16:09:19 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:53:48 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,22 @@ int	count_word_token(char *input)
 }
 
 // Funcion para ir añadiendo los tokens, tengo que quitarle un parametro
-void	add_word_token(t_token **tokens, char *input, int start, int end,
+void	add_word_token(t_token **tokens, char *input, int start,
 		int *token_count)
 {
 	t_token	*new_token;
+	int		end;
 
+	end = start;
+	while (input[end] && input[end] != ' ' && input[end] != '|'
+		&& input[end] != '>' && input[end] != '<')
+		end++;
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return ;
 	new_token->type = TOKEN_WORD;
 	new_token->value = ft_strndup(&input[start], end - start);
-	tokens[*token_count] = new_token;
-	(*token_count)++;
+	tokens[(*token_count)++] = new_token;
 }
 
 // Funciones para dividir el input en tokens
@@ -85,10 +89,10 @@ int	skip_spaces_and_quotes(char *input, int i)
 
 t_token	**extract_word_token(char *input)
 {
-	int i;
-	int start;
-	t_token **tokens;
-	int token_count;
+	int		i;
+	int		start;
+	t_token	**tokens;
+	int		token_count;
 
 	i = 0;
 	token_count = 0;
@@ -103,7 +107,7 @@ t_token	**extract_word_token(char *input)
 			&& input[i] != '<')
 			i++;
 		if (start != i)
-			add_word_token(tokens, input, start, i, &token_count);
+			add_word_token(tokens, input, start, &token_count);
 		else
 			i++;
 	}

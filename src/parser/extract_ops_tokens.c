@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:51:27 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/09 15:49:27 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:42:10 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,13 @@ int	count_operator_tokens(char *input)
 	count = 0;
 	while (input[i])
 	{
-		if (input[i] == '|')
-		{
-			count++;
-			i++;
-		}
-		else if ((input[i] == '<' && input[i + 1] && input[i + 1] == '<') ||
-				(input[i] == '>' && input[i + 1] && input[i + 1] == '>'))
+		if ((input[i] == '<' && input[i + 1] && input[i + 1] == '<')
+			|| (input[i] == '>' && input[i + 1] && input[i + 1] == '>'))
 		{
 			count++;
 			i += 2;
 		}
-		else if (input[i] == '<' || input[i] == '>')
+		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
 		{
 			count++;
 			i++;
@@ -43,7 +38,6 @@ int	count_operator_tokens(char *input)
 	}
 	return (count);
 }
-
 
 // Funcion para extrae la barra
 t_token	*extract_pipe_token(char *input, int *i)
