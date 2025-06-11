@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/11 16:10:10 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:11:20 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	count_env(char **envp)
 		count++;
 	return (count);
 }
+
 // Inicializa la estructura y va copiando lo que hay a la izquierda
 // del igual en el nombre del env y lo que hay a la derecha lo pega
 // en el valor
