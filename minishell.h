@@ -70,6 +70,7 @@ typedef struct s_env
 // Utils
 char				*ft_strndup(const char *s, size_t n);
 void				free_tokens(t_token **tokens);
+int					ft_strcmp(const char *s1, const char *s2);
 
 /*================JAVIER================*/
 

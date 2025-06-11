@@ -6,13 +6,13 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/11 16:01:55 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:10:10 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Cuenta cauntas variables de entorno hay
+// Cuenta cauntas variables de entorno hay
 int	count_env(char **envp)
 {
 	int	count;
@@ -22,9 +22,9 @@ int	count_env(char **envp)
 		count++;
 	return (count);
 }
-//Inicializa la estructura y va copiando lo que hay a la izquierda 
-//del igual en el nombre del env y lo que hay a la derecha lo pega
-//en el valor
+// Inicializa la estructura y va copiando lo que hay a la izquierda
+// del igual en el nombre del env y lo que hay a la derecha lo pega
+// en el valor
 t_env	*init_env(char **envp)
 {
 	int		count;
@@ -50,8 +50,8 @@ t_env	*init_env(char **envp)
 	return (env);
 }
 
-//Compara con el env el nombre que se le ha pasado, 
-//y si existe devuelve su valor 
+// Compara con el env el nombre que se le ha pasado,
+// y si existe devuelve su valor
 char	*get_env_value(t_env *env, char *name)
 {
 	int	i;
@@ -59,7 +59,7 @@ char	*get_env_value(t_env *env, char *name)
 	i = 0;
 	while (env[i].name_env)
 	{
-		if (strcmp(env[i].name_env, name) == 0)
+		if (ft_strcmp(env[i].name_env, name) == 0)
 			return (env[i].val_env);
 		i++;
 	}
