@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/09 16:05:08 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:03:01 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*gen_shell(int argc, char **argv)
 /*Main para probar que se genera la shell y que la call_signals
 funcionan*/
 /*Main para probar pwd y creo que funciona bien(javier)*/
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
 	char *input;
 	t_token token;
@@ -54,14 +54,17 @@ int	main(int argc, char **argv)
 			execute(tokens);
 		}
 
-		ft_printf("Input: %s\n", input);
+		t_env *env_list = init_env(envp);
+		printf("Usuario = %s\n", get_env_value(env_list, "USER"));
+
+		/* ft_printf("Input: %s\n", input);
 		t_token **tokens = extract_all_tokens(input);
 		int i = 0;
 		while (tokens[i] != NULL)
 		{
             ft_printf("[Token de tipo %d]: Valor:%s\n", tokens[i]->type, tokens[i]->value);
 			i++;
-		}
+		} */
 		
 	}
 	return (0);

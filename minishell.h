@@ -26,19 +26,23 @@
 # include <termios.h>
 # include <unistd.h>
 
+//Colores para la mini jeje, odio a morata
+# define RED_BRIGHT "\001\033[1;31m\002"
+# define RESET "\001\033[0m\002"
+
 /* Estructura para guardar los tokens del input
 cada token tendra su valor guardado
 ej: TOKEN_WORD -> echo */
 typedef enum e_token_type
 {
-	TOKEN_WORD,			// comandos y argumntos
-	TOKEN_PIPE,			// |
-	TOKEN_REDIR_IN,		// <
-	TOKEN_REDIR_OUT,	// >
-	TOKEN_APPEND,		// >>
-	TOKEN_HEREDOC,		// <<
-	TOKEN_SIM_QUOTE,	// string entre comillas simples 'Hola'
-	TOKEN_DOB_QUOTE,	// string entre comillas doblres "Ho la"
+	TOKEN_WORD,      // comandos y argumntos
+	TOKEN_PIPE,      // |
+	TOKEN_REDIR_IN,  // <
+	TOKEN_REDIR_OUT, // >
+	TOKEN_APPEND,    // >>
+	TOKEN_HEREDOC,   // <<
+	TOKEN_SIM_QUOTE, // string entre comillas simples 'Hola'
+	TOKEN_DOB_QUOTE, // string entre comillas doblres "Ho la"
 }					t_token_type;
 
 typedef struct s_token
@@ -59,10 +63,9 @@ typedef struct s_extract
 
 typedef struct s_env
 {
-	char	*name_env;
-	char	*val_env;
-	struct s_env *next;
-}				t_env;
+	char			*name_env;
+	char			*val_env;
+}					t_env;
 
 // Utils
 char				*ft_strndup(const char *s, size_t n);
@@ -88,10 +91,9 @@ void				execute(t_token **tokens);
 char				*read_input(void);
 char				*get_short_path(void);
 
-t_token	*extract_single_redir_token(char *input, int *i);
-t_token	*extract_double_redir_token(char *input, int *i);
-t_token	*extract_pipe_token(char *input, int *i);
-
+t_token				*extract_single_redir_token(char *input, int *i);
+t_token				*extract_double_redir_token(char *input, int *i);
+t_token				*extract_pipe_token(char *input, int *i);
 
 void				fill_operator_tokens(char *input, t_token **tokens,
 						int *token_count);
@@ -105,6 +107,10 @@ t_token				**extract_ops_tokens(char *input);
 t_token				**extract_dob_quote_tokens(char *input);
 t_token				**extract_sim_quote_tokens(char *input);
 t_token				**extract_all_tokens(char *input);
+
+//Expansor
+char *get_env_value(t_env *env, char *name);
+t_env	*init_env(char **envp);
 
 // Signals
 void				call_signals(void);
