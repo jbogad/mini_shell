@@ -112,6 +112,8 @@ t_token				**extract_all_tokens(char *input);
 //Expansor
 char *get_env_value(t_env *env, char *name);
 t_env	*init_env(char **envp);
+void	expand_env_values(t_env *env_list, t_token **tokens);
+
 
 // Signals
 void				call_signals(void);

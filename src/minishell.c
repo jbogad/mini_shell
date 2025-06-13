@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/11 16:03:01 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/13 14:54:19 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,18 @@ int	main(int argc, char **argv, char **envp)
 		}
 
 		t_env *env_list = init_env(envp);
-		printf("Usuario = %s\n", get_env_value(env_list, "USER"));
+		ft_printf("Input: %s\n", input);
 
-		/* ft_printf("Input: %s\n", input);
 		t_token **tokens = extract_all_tokens(input);
+
+		expand_env_values(env_list, tokens);
 		int i = 0;
 		while (tokens[i] != NULL)
 		{
-            ft_printf("[Token de tipo %d]: Valor:%s\n", tokens[i]->type, tokens[i]->value);
+			ft_printf("[Token de tipo %d]: Valor:%s\n", tokens[i]->type, tokens[i]->value);
 			i++;
-		} */
+		}
+
 		
 	}
 	return (0);

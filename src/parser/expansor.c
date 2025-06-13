@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/11 16:11:20 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/13 15:05:22 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,47 @@ char	*get_env_value(t_env *env, char *name)
 		i++;
 	}
 	return (NULL);
+}
+
+//Esto coge y junta lo que hay antes del $ si hay algo con el valor expandido
+// de la variable de entorno 
+void	get_value_expanded(char *new_value, t_token **tokens, int i, char *env)
+{
+	char	*dollar;
+
+	dollar = ft_strchr(tokens[i]->value, '$');
+	new_value = ft_strjoin(ft_substr(tokens[i]->value, 0, dollar
+				- tokens[i]->value), env);
+	free(tokens[i]->value);
+	tokens[i]->value = new_value;
+}
+
+//Esto expande las variables de env, de momento con los TOKENS_WORD
+// y creo que funciona como en el bash
+void	expand_env_values(t_env *env_list, t_token **tokens)
+{
+	int		i;
+	char	*dollar;
+	char	*env;
+	char	*new_value;
+
+	new_value = NULL;
+	i = 0;
+	while (tokens[i] != NULL)
+	{
+		if (tokens[i]->type == TOKEN_WORD)
+		{
+			dollar = ft_strchr(tokens[i]->value, '$');
+			if (dollar && *(dollar + 1))
+			{
+				env = get_env_value(env_list, dollar + 1);
+				if (env)
+					get_value_expanded(new_value, tokens, i, env);
+				else
+					tokens[i]->value = ft_strndup(tokens[i]->value, dollar
+							- tokens[i]->value);
+			}
+		}
+		i++;
+	}
 }
