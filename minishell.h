@@ -26,7 +26,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-//Colores para la mini jeje, odio a morata
+// Colores para la mini jeje, odio a morata
 # define RED_BRIGHT "\001\033[1;31m\002"
 # define RESET "\001\033[0m\002"
 
@@ -60,6 +60,17 @@ typedef struct s_extract
 	int				in_sim_quote;
 	int				in_dob_quote;
 }					t_extract;
+
+typedef struct s_expand
+{
+	int		i;
+	char	*result;
+	char	*env;
+	char	*var;
+	char	*tmp;
+	int		start;
+
+}			t_expand;
 
 typedef struct s_env
 {
@@ -109,11 +120,13 @@ t_token				**extract_dob_quote_tokens(char *input);
 t_token				**extract_sim_quote_tokens(char *input);
 t_token				**extract_all_tokens(char *input);
 
-//Expansor
-char *get_env_value(t_env *env, char *name);
-t_env	*init_env(char **envp);
-void	expand_env_values(t_env *env_list, t_token **tokens);
-
+// Expansor
+char				*get_env_value(t_env *env, char *name);
+t_env				*init_env(char **envp);
+char				*get_env_value(t_env *env, char *name);
+void				get_value_expanded(char *new_value, t_token **tokens, int i,
+						char *env);
+void				expand_env_values(t_env *env_list, t_token **tokens);
 
 // Signals
 void				call_signals(void);

@@ -12,7 +12,7 @@ SRC_EXEC = src/exec/exec.c
 SRC_PARSER = src/parser/read_input.c src/parser/get_short_path.c src/parser/extract_word_tokens.c \
 			 src/parser/extract_ops_tokens.c src/parser/extract_quotes_dob_tokens.c \
 			 src/parser/extract_quotes_sim_tokens.c src/parser/extract_all_tokens.c \
-			 src/parser/extract_ops_tokens_utils.c src/parser/expansor.c
+			 src/parser/extract_ops_tokens_utils.c src/parser/expansor.c src/parser/expand_tokens.c
 SRC_SIGNALS = src/signals/signals.c
 LIBS = -lreadline
 
