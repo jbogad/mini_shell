@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/16 15:25:42 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:32:22 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,14 @@ funcionan*/
 /*Main para probar pwd y creo que funciona bien(javier)*/
 int	main(int argc, char **argv, char **envp)
 {
-	char *input;
-	t_token token;
-	t_token *tokens[2]; // guardo la lista de tokens , tengo que cambiarla
+	char	*input;
+	t_token	token;
+	t_env	*env_list;
+	t_token	**tokens_ext;
+	int		i;
 
+	t_token *tokens[2]; // guardo la lista de tokens , tengo que cambiarla
+	env_list = init_env(envp);
 	call_signals();
 	while (1)
 	{
@@ -54,21 +58,25 @@ int	main(int argc, char **argv, char **envp)
 			execute(tokens);
 		}
 
-		t_env *env_list = init_env(envp);
+		//Claudio, esto es solo pruebas
 		ft_printf("Input: %s\n", input);
-
-		t_token **tokens = extract_all_tokens(input);
-
-		expand_env_values(env_list, tokens);
-		int i = 0;
-		while (tokens[i] != NULL)
+		tokens_ext = extract_all_tokens(input);
+		expand_env_values(env_list, tokens_ext);
+		i = 0;
+		while (tokens_ext[i] != NULL)
 		{
-			ft_printf("[Token de tipo %d]: Valor:%s\n", tokens[i]->type, tokens[i]->value);
+			ft_printf("[Token de tipo %d]: Valor:%s\n", tokens_ext[i]->type,
+				tokens_ext[i]->value);
+			free(tokens_ext[i]->value);
+			free(tokens_ext[i]);
 			i++;
 		}
-
-		
+		free(tokens_ext);
+		free(input);
+		// free_tokens(tokens_ext);
 	}
+	free_env(env_list);
+	free(input);
 	return (0);
 }
 
@@ -88,7 +96,7 @@ int	main(int argc, char **argv, char **envp)
 // 		{
 // 			ft_printf("exit\n");
 // 			rl_clear_history();
-// 			break;
+// 			break ;
 // 		}
 // 		if (*input)
 // 		{

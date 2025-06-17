@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 11:45:09 by claudio           #+#    #+#             */
-/*   Updated: 2025/06/13 15:13:48 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:14:19 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@ char	*read_input(void)
 	char	*input;
 	char	*prompt;
 	char	*tmp;
+	char	*short_path;
 
-	tmp = ft_strjoin(RED_BRIGHT, get_short_path());
+	short_path = get_short_path();
+	tmp = ft_strjoin(RED_BRIGHT, short_path);
 	prompt = ft_strjoin(tmp, RESET);
 	free(tmp);
+	free(short_path);
 	if (!prompt)
 		return (NULL);
 	input = readline(prompt);

@@ -3,10 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/06 14:59:06 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:50:11 by clalopez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -63,14 +65,14 @@ typedef struct s_extract
 
 typedef struct s_expand
 {
-	int		i;
-	char	*result;
-	char	*env;
-	char	*var;
-	char	*tmp;
-	int		start;
+	int				i;
+	char			*result;
+	char			*env;
+	char			*var;
+	char			*tmp;
+	int				start;
 
-}			t_expand;
+}					t_expand;
 
 typedef struct s_env
 {
@@ -82,6 +84,7 @@ typedef struct s_env
 char				*ft_strndup(const char *s, size_t n);
 void				free_tokens(t_token **tokens);
 int					ft_strcmp(const char *s1, const char *s2);
+void				free_env(t_env *env_list);
 
 /*================JAVIER================*/
 

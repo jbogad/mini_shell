@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:23:52 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/16 15:12:30 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:34:36 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*strjoin_and_free(char *s1, char *s2)
 
 	tmp = ft_strjoin(s1, s2);
 	free(s1);
+	free(s2);
 	return (tmp);
 }
 

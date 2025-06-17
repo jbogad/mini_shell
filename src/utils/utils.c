@@ -3,10 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:06:54 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/06 15:05:53 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:39:03 by clalopez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../minishell.h"
 
@@ -42,6 +44,20 @@ int	ft_strcmp(const char *s1, const char *s2)
 		i++;
 	}
 	return (0);
+}
+
+void	free_env(t_env *env_list)
+{
+	int	i;
+
+	i = 0;
+	while (env_list[i].name_env != NULL)
+	{
+		free(env_list[i].name_env);
+		free(env_list[i].val_env);
+		i++;
+	}
+	free(env_list);
 }
 
 void	free_tokens(t_token **tokens)
