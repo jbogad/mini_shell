@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/17 15:50:11 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:44:34 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
-
-// Colores para la mini jeje, odio a morata
 # define RED_BRIGHT "\001\033[1;31m\002"
 # define RESET "\001\033[0m\002"
 
@@ -122,6 +120,9 @@ t_token				**extract_ops_tokens(char *input);
 t_token				**extract_dob_quote_tokens(char *input);
 t_token				**extract_sim_quote_tokens(char *input);
 t_token				**extract_all_tokens(char *input);
+
+// Heredoc
+void				heredoc(t_token **tokens);
 
 // Expansor
 char				*get_env_value(t_env *env, char *name);

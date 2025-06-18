@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:23:09 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/10 12:53:48 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:41:53 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	add_word_token(t_token **tokens, char *input, int start,
 // No se si tiene que mostrar error o se la tiene que pelar
 int	skip_spaces_and_quotes(char *input, int i)
 {
+	if (!input)
+		return (i);
 	while (input[i] == ' ')
 		i++;
 	if (input[i] == '\'')
@@ -99,7 +101,7 @@ t_token	**extract_word_token(char *input)
 	tokens = malloc(sizeof(t_token *) * (count_word_token(input) + 1));
 	if (!tokens)
 		return (NULL);
-	while (input[i])
+	while (input && input[i])
 	{
 		i = skip_spaces_and_quotes(input, i);
 		start = i;
@@ -108,7 +110,7 @@ t_token	**extract_word_token(char *input)
 			i++;
 		if (start != i)
 			add_word_token(tokens, input, start, &token_count);
-		else
+		else if (input[i])
 			i++;
 	}
 	tokens[token_count] = NULL;

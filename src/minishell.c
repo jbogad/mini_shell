@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/17 15:32:22 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:30:57 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	main(int argc, char **argv, char **envp)
 			rl_clear_history();
 			break ;
 		}
-		/*parte de javier para probar comandos, asigno el tipo de dato
-		le doy el comando al value "pwd" meto la memoria y luego null y ejecuto*/
+		//parte de javier para probar comandos, asigno el tipo de dato
+		//le doy el comando al value "pwd" meto la memoria y luego null y ejecuto
 		if (*input)
 		{
 			token.type = TOKEN_WORD;
@@ -59,26 +59,28 @@ int	main(int argc, char **argv, char **envp)
 		}
 
 		//Claudio, esto es solo pruebas
-		ft_printf("Input: %s\n", input);
+		//ft_printf("Input: %s\n", input);
 		tokens_ext = extract_all_tokens(input);
+		heredoc(tokens_ext);
 		expand_env_values(env_list, tokens_ext);
 		i = 0;
 		while (tokens_ext[i] != NULL)
 		{
-			ft_printf("[Token de tipo %d]: Valor:%s\n", tokens_ext[i]->type,
-				tokens_ext[i]->value);
+			//ft_printf("[Token de tipo %d]: Valor:%s\n", tokens_ext[i]->type,
+			//	tokens_ext[i]->value);
 			free(tokens_ext[i]->value);
 			free(tokens_ext[i]);
 			i++;
 		}
 		free(tokens_ext);
 		free(input);
-		// free_tokens(tokens_ext);
+		input = NULL;
 	}
 	free_env(env_list);
 	free(input);
 	return (0);
 }
+
 
 // int main(int argc, char **argv)
 // {

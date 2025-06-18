@@ -1,6 +1,6 @@
 NAME = libft.a
 CC = cc
-CCFLAGS = -Wall -Wextra -Werror
+CCFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address -fsanitize=leak -fno-omit-frame-pointer
 SRC =	ft_atoi.c ft_isprint.c ft_memmove.c ft_strchr.c ft_strmapi.c ft_toupper.c \
 		ft_bzero.c ft_itoa.c ft_memset.c ft_strdup.c ft_strncmp.c \
 		ft_calloc.c ft_putchar_fd.c ft_striteri.c ft_strnstr.c \

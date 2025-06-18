@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:47:31 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/10 11:53:22 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:44:43 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ t_token	**extract_all_tokens(char *input)
 	if (!tokens)
 		return (NULL);
 	e.index = 0;
-	tmp = extract_word_token(input);
-	loop_add_tokens(tmp, tokens, &e.index);
 	tmp = extract_ops_tokens(input);
+	loop_add_tokens(tmp, tokens, &e.index);
+	tmp = extract_word_token(input);
 	loop_add_tokens(tmp, tokens, &e.index);
 	tmp = extract_sim_quote_tokens(input);
 	loop_add_tokens(tmp, tokens, &e.index);
