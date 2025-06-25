@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/18 15:44:34 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:42:17 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,12 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
+# include <signal.h>
 # define RED_BRIGHT "\001\033[1;31m\002"
 # define RESET "\001\033[0m\002"
+
+//Variable global para manejar las señales del heredoc y minishell
+extern volatile sig_atomic_t	g_skip_next_readline;
 
 /* Estructura para guardar los tokens del input
 cada token tendra su valor guardado
@@ -78,6 +82,7 @@ typedef struct s_env
 	char			*val_env;
 }					t_env;
 
+
 // Utils
 char				*ft_strndup(const char *s, size_t n);
 void				free_tokens(t_token **tokens);
@@ -122,7 +127,7 @@ t_token				**extract_sim_quote_tokens(char *input);
 t_token				**extract_all_tokens(char *input);
 
 // Heredoc
-void				heredoc(t_token **tokens);
+void				heredoc(t_env *env_list, t_token **tokens);
 
 // Expansor
 char				*get_env_value(t_env *env, char *name);
@@ -131,8 +136,10 @@ char				*get_env_value(t_env *env, char *name);
 void				get_value_expanded(char *new_value, t_token **tokens, int i,
 						char *env);
 void				expand_env_values(t_env *env_list, t_token **tokens);
+char				*expand_all_vars(t_env *env_list, char *value);
+
 
 // Signals
-void				call_signals(void);
+void				call_signals();
 
 #endif

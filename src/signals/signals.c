@@ -3,30 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 13:07:24 by claudio           #+#    #+#             */
-/*   Updated: 2025/06/06 15:08:39 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:18:57 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../../minishell.h"
 
-/*Funcion para manejar la señal cuando se haga ctrl+call_signal
+/*Funcion para manejar la señal cuando se haga ctrl+c
 Salta a una nueva linea, la inicia vacia.
 Redisplay hace que el prompt de readline se mantenga(minishell$)*/
-void	signal_handler()
+void	signal_handler(int sig)
 {
-	ft_printf("\n");
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	return ;
 }
+
+
 
 void	ctrl_c()
 {
-	signal(SIGINT, signal_handler);
+	signal(SIGINT, signal_handler);	
 }
 
 void	ctrl_backslash()
