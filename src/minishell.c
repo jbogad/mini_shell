@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/25 16:44:14 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:57:36 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,25 @@ int	main(int argc, char **argv, char **envp)
 
 			if (!g_skip_next_readline && tokens_ext && tokens_ext[0])
 				execute(tokens_ext);
-
-
+				
 			int i = 0;
+			ft_printf("=== TOKENS DEBUG ===\n");
+			while (tokens_ext && tokens_ext[i])
+			{
+			ft_printf("Token[%d]: type=%d, value='%s'\n", i, tokens_ext[i]->type, tokens_ext[i]->value);
+				i++;
+			}
+			ft_printf("====================\n");
+
+			i = 0;
 			while (tokens_ext && tokens_ext[i])
 			{
 				free(tokens_ext[i]->value);
 				free(tokens_ext[i]);
 				i++;
 			}
+
+
 			free(tokens_ext);
 		}
 		free(input);

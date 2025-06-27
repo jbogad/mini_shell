@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:15:45 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/25 16:52:37 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:52:40 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 	{
 		free(her_input);
 		her_input = readline("> ");
+		
 		if (!her_input)
 		{
 			ft_printf("warning: here-document delimited by end-of-file (wanted `%s')\n",
@@ -43,6 +44,7 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 			free(her_input);
 			her_input = expanded;
 		}
+		ft_printf("Input: %s\n", her_input);
 	}
 	free(her_input);
 	free(to_search);
@@ -68,6 +70,7 @@ void	heredoc(t_env *env_list, t_token **tokens)
 				+ 1]->type == TOKEN_DOB_QUOTE))
 		{
 			to_search = ft_strdup(tokens[i + 1]->value);
+			ft_printf("A BUSCAR: %s\n", to_search);
 			pid = fork();
 			if (pid == 0)
 			{

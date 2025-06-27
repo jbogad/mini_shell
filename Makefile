@@ -1,7 +1,7 @@
 NAME		= minishell
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address -fsanitize=leak -fno-omit-frame-pointer
+CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address -fsanitize=leak -fno-omit-frame-pointer
 
 LIBFT_DIR	= src/libft
 LIBFT_LIB	= src/libft/libft.a
@@ -18,7 +18,8 @@ SRC_SIGNALS = src/signals/signals.c
 LIBS = -lreadline
 
 SRC		= src/minishell.c $(SRC_PARSER) $(SRC_SIGNALS) $(SRC_BUILTINS) $(SRC_EXEC) $(SRC_UTILS)
-OBJS	= $(SRC:.c=.o)
+OBJ_DIR = objects
+OBJS	= $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 
 
 all: header $(NAME)
@@ -30,8 +31,15 @@ $(NAME): $(LIBFT_LIB) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) $(LIBS) -o $(NAME)
 
 $(LIBFT_LIB):
-	$(MAKE) -C $(LIBFT_DIR)
-	
+	$(MAKE) -sC $(LIBFT_DIR)
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR);
+
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I $(LIBS) -c -o $@ $<
+
 HEADER = "\n\033[1;36m\
 ███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗     \n\
 ████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║     \n\
@@ -43,15 +51,12 @@ HEADER = "\n\033[1;36m\
                 MASTODONTES DEEEEEEEEEE:                    		\n\
 \t\t--- \033[1;36mclalopez\033[0m && \033[1;36mjaboga-d\033[0m --- \n"
 
-
-
 clean:
-	rm -f $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	rm -rf $(OBJ_DIR)
+	$(MAKE) -sC $(LIBFT_DIR) fclean
 
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
