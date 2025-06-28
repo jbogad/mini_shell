@@ -6,10 +6,9 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 13:07:24 by claudio           #+#    #+#             */
-/*   Updated: 2025/06/25 16:18:57 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:36:04 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../minishell.h"
 
@@ -25,19 +24,17 @@ void	signal_handler(int sig)
 	rl_redisplay();
 }
 
-
-
-void	ctrl_c()
+void	ctrl_c(void)
 {
-	signal(SIGINT, signal_handler);	
+	signal(SIGINT, signal_handler);
 }
 
-void	ctrl_backslash()
+void	ctrl_backslash(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	call_signals()
+void	call_signals(void)
 {
 	ctrl_c();
 	ctrl_backslash();

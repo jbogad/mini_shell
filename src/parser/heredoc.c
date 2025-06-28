@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:15:45 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/27 16:52:40 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:35:10 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,33 @@
 
 volatile sig_atomic_t	g_skip_next_readline = 0;
 
-//Funcion para correr el heredoc hasta que se haga ctrl+d
-//o se encuntre la palabra, tb  expande los tokens  de tipo word como en bash para 
-//cuando se hace por ejemplo con un cat (cat << hola)
+// Funcion para correr el heredoc hasta que se haga ctrl+d
+// o se encuntre la palabra, tb  expande los tokens  de tipo
+// word como en bash para cuando se hace por ejemplo con
+// un cat (cat << hola)
+
+void	msg_ctrld_heredoc(char *to_search)
+{
+	ft_printf("warning: here-document delimited by end-of-file"
+		"(wanted `%s')\n", to_search);
+	free(to_search);
+	exit(1);
+}
+
 void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 {
 	char	*her_input;
 	char	*expanded;
 
 	her_input = NULL;
-	//Bucle para hacer el heredoc hasta que se haga ctrl+d o se encuentre la palabra
+	// Bucle para hacer el heredoc hasta que se haga ctrl+d o
+	// se encuentre la palabra
 	while (1)
 	{
 		free(her_input);
 		her_input = readline("> ");
-		
 		if (!her_input)
-		{
-			ft_printf("warning: here-document delimited by end-of-file (wanted `%s')\n",
-				to_search);
-			free(to_search);
-			exit(1);
-		}
+			msg_ctrld_heredoc(to_search);
 		if (ft_strcmp(her_input, to_search) == 0)
 			break ;
 		if (token->type == TOKEN_WORD)
@@ -51,9 +56,29 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 	exit(0);
 }
 
-//Funcion para recorrer los tokens hasta que se encuentre un tipo | y 
-//lo siguiente sea palabra o entre comillas, asigna la palabra y hace
-//el loop
+void	run_heredoc(char *to_search, t_env *env_list, t_token *next_token)
+{
+	signal(SIGINT, SIG_DFL);
+	run_heredoc_loop(to_search, env_list, next_token);
+}
+
+void	exit_heredoc(pid_t pid, int *status)
+{
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, status, 0);
+	call_signals();
+	if (WIFSIGNALED(*status) && WTERMSIG(*status) == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		g_skip_next_readline = 1;
+	}
+	else if (WIFEXITED(*status) && WEXITSTATUS(*status) == 1)
+		g_skip_next_readline = 1;
+}
+
+// Funcion para recorrer los tokens hasta que se encuentre un tipo | y
+// lo siguiente sea palabra o entre comillas, asigna la palabra y hace
+// el loop
 void	heredoc(t_env *env_list, t_token **tokens)
 {
 	int		i;
@@ -65,31 +90,17 @@ void	heredoc(t_env *env_list, t_token **tokens)
 	while (tokens && tokens[i])
 	{
 		if (tokens[i]->type == TOKEN_HEREDOC && tokens[i + 1] && (tokens[i
-				+ 1]->type == TOKEN_WORD || tokens[i
-				+ 1]->type == TOKEN_SIM_QUOTE || tokens[i
-				+ 1]->type == TOKEN_DOB_QUOTE))
+					+ 1]->type == TOKEN_WORD || tokens[i
+					+ 1]->type == TOKEN_SIM_QUOTE || tokens[i
+					+ 1]->type == TOKEN_DOB_QUOTE))
 		{
 			to_search = ft_strdup(tokens[i + 1]->value);
 			ft_printf("A BUSCAR: %s\n", to_search);
 			pid = fork();
 			if (pid == 0)
-			{
-				signal(SIGINT, SIG_DFL);
-				run_heredoc_loop(to_search, env_list, tokens[i + 1]);
-			}
+				run_heredoc(to_search, env_list, tokens[i + 1]);
 			else
-			{
-				signal(SIGINT, SIG_IGN);//Ignora  el ctrl+c de la minishell
-				waitpid(pid, &status, 0);//Espera al heredoc
-				call_signals();
-				if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-				{
-					write(STDOUT_FILENO, "\n", 1);
-					g_skip_next_readline = 1; //Saltar al siguiente readline si se hace ctr+c
-				}
-				else if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
-					g_skip_next_readline = 1; //Saltar al siguiente readline si se hace ctr+d
-			}
+				exit_heredoc(pid, &status);
 			free(to_search);
 			i++;
 		}

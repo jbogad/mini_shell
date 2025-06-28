@@ -1,7 +1,7 @@
 NAME		= minishell
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address -fsanitize=leak -fno-omit-frame-pointer
+CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address -fsanitize=leak -fno-omit-frame-pointer
 
 LIBFT_DIR	= src/libft
 LIBFT_LIB	= src/libft/libft.a

@@ -6,13 +6,13 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:47:15 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/04 16:08:53 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:58:29 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Contar cuantos tokens de dobles comillas hay
+// Contar cuantos tokens de dobles comillas hay
 int	count_quotes_dob_tokens(char *input)
 {
 	int	i;
@@ -42,7 +42,7 @@ int	count_quotes_dob_tokens(char *input)
 	return (count);
 }
 
-//Inicializar las variables para extraer los tokens
+// Inicializar las variables para extraer los tokens
 void	init_extract2(t_extract *e)
 {
 	e->i = 0;
@@ -52,7 +52,7 @@ void	init_extract2(t_extract *e)
 	e->in_dob_quote = 0;
 }
 
-//Añadir el contenifo de los tokens de dobles comillas
+// Añadir el contenifo de los tokens de dobles comillas
 void	fill_dob_quote_tokens(char *input, t_token **tokens, t_extract *e)
 {
 	t_token	*new_tkn;
@@ -82,17 +82,23 @@ void	fill_dob_quote_tokens(char *input, t_token **tokens, t_extract *e)
 	}
 }
 
-//Extraer los tokens
-t_token	**extract_dob_quote_tokens(char *input)
+// Extraer los tokens
+t_token	*extract_dob_quote_token(char *input, int *i)
 {
-	t_token		**tokens;
-	t_extract	extract;
+	t_token	*token;
+	int		start;
 
-	extract.count = count_quotes_dob_tokens(input);
-	tokens = malloc(sizeof(t_token *) * (extract.count + 1));
-	if (!tokens)
+	start = *i + 1;
+	(*i)++;
+	while (input[*i] && input[*i] != '"')
+		(*i)++;
+	if (!input[*i])
 		return (NULL);
-	fill_dob_quote_tokens(input, tokens, &extract);
-	tokens[extract.count] = NULL;
-	return (tokens);
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = TOKEN_DOB_QUOTE;
+	token->value = ft_strndup(&input[start], *i - start);
+	(*i)++;
+	return (token);
 }

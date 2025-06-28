@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:23:09 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/18 12:41:53 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/28 12:16:24 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,26 @@ t_token	**extract_word_token(char *input)
 	}
 	tokens[token_count] = NULL;
 	return (tokens);
+}
+
+t_token	*extract_word_token_inline(char *input, int *i)
+{
+	int		start;
+	t_token	*token;
+
+	start = *i;
+	while (input[*i] && input[*i] != ' ' && input[*i] != '\t'
+		&& input[*i] != '<' && input[*i] != '>' && input[*i] != '|'
+		&& input[*i] != '\'' && input[*i] != '"')
+	{
+		(*i)++;
+	}
+	if (start == *i)
+		return (NULL);
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = TOKEN_WORD;
+	token->value = ft_strndup(&input[start], *i - start);
+	return (token);
 }

@@ -6,16 +6,18 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 11:45:09 by claudio           #+#    #+#             */
-/*   Updated: 2025/06/27 16:11:15 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/28 15:36:09 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 /**
- * @brief Funcion para crear el input(minishell) e ir añadiendo los comandos utilizados al historial maneja el add_history tambien las flechas de ir hacia arriba y hacia abajo
+ * @brief Funcion para crear el input(minishell) e ir
+ *  añadiendo los comandos utilizados al historial maneja
+ *  el add_history tambien las flechas de ir hacia arriba y hacia abajo
  * @param str string que hace cosas
- * @return string extraña
+ * @return Retorna el input que se va escribiendo en la linea
  * @warning hace malloc jasajas
  */
 char	*read_input(void)
@@ -24,7 +26,7 @@ char	*read_input(void)
 	char	*prompt;
 	char	*tmp;
 	char	*short_path;
-	
+
 	short_path = get_short_path();
 	tmp = ft_strjoin(RED_BRIGHT, short_path);
 	prompt = ft_strjoin(tmp, RESET);

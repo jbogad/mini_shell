@@ -6,13 +6,13 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/11 12:51:13 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:58:12 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Contar cuantos tokens de comillas simples hay
+// Contar cuantos tokens de comillas simples hay
 int	count_quotes_sim_tokens(char *input)
 {
 	int	i;
@@ -42,7 +42,7 @@ int	count_quotes_sim_tokens(char *input)
 	return (count);
 }
 
-//Inicializar las variables para extraer los tokens
+// Inicializar las variables para extraer los tokens
 void	init_extract(t_extract *e)
 {
 	e->i = 0;
@@ -52,7 +52,7 @@ void	init_extract(t_extract *e)
 	e->in_dob_quote = 0;
 }
 
-//Añadir el contenifo de los tokens de comillas simples
+// Añadir el contenifo de los tokens de comillas simples
 void	fill_sim_quote_tokens(char *input, t_token **tokens, t_extract *e)
 {
 	t_token	*new_tkn;
@@ -82,17 +82,23 @@ void	fill_sim_quote_tokens(char *input, t_token **tokens, t_extract *e)
 	}
 }
 
-//Extraer los tokens
-t_token	**extract_sim_quote_tokens(char *input)
+// Extraer los tokens
+t_token	*extract_sim_quote_token(char *input, int *i)
 {
-	t_token		**tokens;
-	t_extract	extract;
+	t_token	*token;
+	int		start;
 
-	extract.count = count_quotes_sim_tokens(input);
-	tokens = malloc(sizeof(t_token *) * (extract.count + 1));
-	if (!tokens)
+	start = *i + 1;
+	(*i)++;
+	while (input[*i] && input[*i] != '\'')
+		(*i)++;
+	if (!input[*i])
 		return (NULL);
-	fill_sim_quote_tokens(input, tokens, &extract);
-	tokens[extract.count] = NULL;
-	return (tokens);
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = TOKEN_SIM_QUOTE;
+	token->value = ft_strndup(&input[start], *i - start);
+	(*i)++;
+	return (token);
 }
