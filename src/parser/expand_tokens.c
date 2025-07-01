@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:23:52 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/17 14:34:36 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 10:04:27 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+/*
+	PARTE DE JAVIER
+
+*/
 
 char	*strjoin_and_free(char *s1, char *s2)
 {
