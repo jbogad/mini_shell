@@ -6,9 +6,10 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:15:45 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/01 12:23:07 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:31:49 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../minishell.h"
 
@@ -44,7 +45,7 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 	while (1)
 	{
 		free(her_input);
-		her_input = readline("> ");
+		her_input = readline("> "); 
 		if (!her_input)
 			msg_ctrld_heredoc(to_search);
 		if (ft_strcmp(her_input, to_search) == 0)

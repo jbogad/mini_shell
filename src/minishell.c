@@ -6,11 +6,23 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/01 12:01:53 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:31:07 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../minishell.h"
+
+/*
+	PARTE DE JAVIER
+	main inicia las variables de entorno que las guarda en una lista t_env
+	con valor de la variable y nombre de la variable.
+	Genera la shell
+	extrae los tokerns en una lista t_token depende del tipo de token que sea
+	trata los heredoc << pero antes de ejecutar
+	mi parte de ejecutro donde busca el comando
+	libera los tokens y la entrada en cada iteracion del bucle
+*/
 
 extern volatile sig_atomic_t	g_skip_next_readline;
 

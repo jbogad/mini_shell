@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 13:07:24 by claudio           #+#    #+#             */
-/*   Updated: 2025/07/01 12:23:26 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:27:14 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	signal_handler(int sig)
 
 /**
  * @brief Esta funcion hace que cuando se haga ctrl+c(SIGINT), 
- * llame y haga la funcion signal_handler()
+ * llame y haga la funcion signal_handler()git 
  */
 void	ctrl_c(void)
 {
