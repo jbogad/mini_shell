@@ -6,13 +6,17 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:23:09 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/28 12:16:24 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:20:47 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// Funcion para contar cuantos tokens_word hay
+/**
+ * @brief Funcion para identificar los token_word y contar cuantos hay
+ * @param input La linea que se lee al ejecutar el readline
+ * @return Devuelve la cantidad de token_word que hay
+ */
 int	count_word_token(char *input)
 {
 	int	i;
@@ -40,7 +44,13 @@ int	count_word_token(char *input)
 	return (count);
 }
 
-// Funcion para ir añadiendo los tokens, tengo que quitarle un parametro
+/**
+ * @brief Funcion para ir añadiendo los tokens
+ * @param tokens Estructura de los tokens
+ * @param input La linea que se lee al ejecutar el readline
+ * @param start Saber em que parte deñ input empieza
+ * @param token_count Contador de tokens
+ */
 void	add_word_token(t_token **tokens, char *input, int start,
 		int *token_count)
 {
@@ -59,11 +69,12 @@ void	add_word_token(t_token **tokens, char *input, int start,
 	tokens[(*token_count)++] = new_token;
 }
 
-// Funciones para dividir el input en tokens
-// IMPORTANTE: No interpretar comillas sin cerrar o caracteres
-// especiales no especificados en el
-// enunciado como \ (barra invertida) o ; (punto y coma).
-// No se si tiene que mostrar error o se la tiene que pelar
+/**
+ * @brief Funcion para saltar los espacion y comillas
+ * @param input La linea que se lee al ejecutar el readline
+ * @param i Contador
+ * @return Devuelve la cantidad de espacios y comillas
+ */
 int	skip_spaces_and_quotes(char *input, int i)
 {
 	if (!input)
@@ -88,6 +99,15 @@ int	skip_spaces_and_quotes(char *input, int i)
 	}
 	return (i);
 }
+
+/**
+ * @brief Extrae tokens de tipo palabra desde el input.
+ * Recorre la línea de entrada y crea una lista de tokens de tipo palabra
+ * (TOKEN_WORD), ignorando espacios y caracteres especiales como pipes o 
+ * redirecciones.
+ * @param input La línea leída con readline.
+ * @return Lista de tokens extraídos, terminada en NULL.
+ */
 
 t_token	**extract_word_token(char *input)
 {
@@ -117,6 +137,14 @@ t_token	**extract_word_token(char *input)
 	return (tokens);
 }
 
+/**
+ * @brief Extrae un token de tipo palabra desde la posición actual del input.
+ * Lee caracteres hasta encontrar un espacio, redirección, pipe o comillas.
+ * Devuelve un token con el contenido leído y actualiza el índice.
+ * @param input Línea de entrada.
+ * @param i Puntero al índice actual dentro del input.
+ * @return Token de tipo palabra o NULL si no se encontró nada.
+ */
 t_token	*extract_word_token_inline(char *input, int *i)
 {
 	int		start;

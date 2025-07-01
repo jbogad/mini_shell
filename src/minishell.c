@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/28 12:11:02 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:01:53 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 extern volatile sig_atomic_t	g_skip_next_readline;
 
-/*Funcion para comprobar que solo se ejcuta el ejecutable
-y generar la shell con el read_input*/
+/**
+ * @brief Esto simplemente comprueba que solo se ejecute ./minishell
+ * Y abre la minishell
+ */
 char	*gen_shell(int argc, char **argv)
 {
 	(void)argv;

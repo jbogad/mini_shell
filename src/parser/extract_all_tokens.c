@@ -6,12 +6,17 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:47:31 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/28 16:11:59 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:21:15 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+/**
+ * @brief Funciona para contar todos los tokens que hay
+ * @param input Línea de entrada a analizar.
+ * @return Token extraído si se encuentra, o NULL en caso contrario.
+ */
 int	count_total_tokens(char *input)
 {
 	int	ops_tokens;
@@ -28,6 +33,13 @@ int	count_total_tokens(char *input)
 	return (total);
 }
 
+/**
+ * @brief Añade tokens de un array temporal a otro array principal.
+ * @param tmp Array temporal de tokens para agregar.
+ * @param tokens Array principal donde se añaden los tokens.
+ * @param index Puntero al índice actual en `tokens`; se incrementa c
+ * on cada token añadido.
+ */
 void	loop_add_tokens(t_token **tmp, t_token **tokens, int *index)
 {
 	int	j;
@@ -42,6 +54,17 @@ void	loop_add_tokens(t_token **tmp, t_token **tokens, int *index)
 	free(tmp);
 }
 
+/**
+ * @brief Obtiene el siguiente token de operador en la entrada.
+ * Intenta extraer un token de redirección doble, simple o de pipe, 
+ * en ese orden.
+ * Avanza el índice `i` según corresponda si se encuentra un token.
+ * @param input Cadena de entrada a analizar.
+ * @param i Puntero al índice actual en la cadena; se actualiza al 
+ * extraer un token.
+ * @return El token extraído o NULL si no se encontró ningún token 
+ * de operador.
+ */
 t_token	*get_next_ops_token(char *input, int *i)
 {
 	t_token	*token;
@@ -84,6 +107,14 @@ t_token	*get_next_token(char *input, int *i)
 	return (NULL);
 }
 
+/**
+ * @brief Extrae todos los tokens de la cadena de entrada.
+ * Recorre la cadena `input`, saltando espacios y tabulaciones, 
+ * y extrae tokens usando `get_next_token`.
+ * @param input Cadena de entrada a tokenizar.
+ * @return Arreglo terminado en NULL con todos los tokens extraídos,
+ *  o NULL en error.
+ */
 t_token	**extract_all_tokens(char *input)
 {
 	t_token	**tokens;

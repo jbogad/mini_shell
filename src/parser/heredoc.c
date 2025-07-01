@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:15:45 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/28 16:35:10 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:23:07 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 volatile sig_atomic_t	g_skip_next_readline = 0;
 
-// Funcion para correr el heredoc hasta que se haga ctrl+d
-// o se encuntre la palabra, tb  expande los tokens  de tipo
-// word como en bash para cuando se hace por ejemplo con
-// un cat (cat << hola)
-
+/**
+ * @brief Funcion para mostrar el mensaje fr warning de bash
+ * @param to_search caracter a encontrar
+ */
 void	msg_ctrld_heredoc(char *to_search)
 {
 	ft_printf("warning: here-document delimited by end-of-file"
@@ -27,14 +26,21 @@ void	msg_ctrld_heredoc(char *to_search)
 	exit(1);
 }
 
+/**
+ * @brief Funcion para correr el heredoc hasta que sea nulo(ctrl+d)
+ * o se encuntre la palabra, tb  expande los tokens  de tipo
+ * word como en bash para cuando se hace por ejemplo con
+ * un cat (cat << hola)
+ * @param to_search Caracter a encontrar
+ * @param env_list Lista de las variable globales del env con nombre y vaolr.
+ * @param token Estructura de los tokens
+ */
 void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 {
 	char	*her_input;
 	char	*expanded;
 
 	her_input = NULL;
-	// Bucle para hacer el heredoc hasta que se haga ctrl+d o
-	// se encuentre la palabra
 	while (1)
 	{
 		free(her_input);
@@ -62,6 +68,16 @@ void	run_heredoc(char *to_search, t_env *env_list, t_token *next_token)
 	run_heredoc_loop(to_search, env_list, next_token);
 }
 
+/**
+ * @brief Espera a que acabe el proceso hijo encargado del heredoc.
+ * Esta función se encarga de esperar al proceso hijo que ejecuta el heredoc
+ * gestionando las señales. Ignora ctrl+c mientras 
+ * espera, y después restaura las señales de la minishell. 
+ * Si el heredoc termina con ctrl+c o ctrl+d actualiza la variable global
+ * para decirle que ahora esta en la parte de minishell y no heredoc
+ * @param pid pid del proceso hijo que está ejecutando el heredoc
+ * @param status puntero a la variable donde se guardara el codigo de salida
+ */
 void	exit_heredoc(pid_t pid, int *status)
 {
 	signal(SIGINT, SIG_IGN);
@@ -76,9 +92,12 @@ void	exit_heredoc(pid_t pid, int *status)
 		g_skip_next_readline = 1;
 }
 
-// Funcion para recorrer los tokens hasta que se encuentre un tipo | y
-// lo siguiente sea palabra o entre comillas, asigna la palabra y hace
-// el loop
+/**
+ * @brief Esta funcion recorre los tokens y si encuentra un heredoc seguido
+ * de comillas o palabra, empieza a correr el heredoc
+ * @param env_list Lista de las variable globales del env con nombre y vaolr.
+ * @param token Estructura de los tokens
+ */
 void	heredoc(t_env *env_list, t_token **tokens)
 {
 	int		i;

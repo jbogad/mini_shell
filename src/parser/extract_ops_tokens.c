@@ -6,13 +6,18 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:51:27 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/10 11:42:10 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:21:44 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// Funcion para contar el numero de tokens operadores que hay en el input
+/**
+ * @brief Funcion para identificar los tokens ops(< << > >> |) y 
+ * contar cuantos hay
+ * @param input La linea que se lee al ejecutar el readline
+ * @return Devuelve la cantidad de tokens ops que hay
+ */
 int	count_operator_tokens(char *input)
 {
 	int	i;
@@ -39,7 +44,15 @@ int	count_operator_tokens(char *input)
 	return (count);
 }
 
-// Funcion para extrae la barra
+/**
+ * @brief Extrae un token de tipo pipe (|) del input.
+ * Si el carácter actual es un '|', crea un nuevo token
+ * con ese valor y actualiza el índice.
+ * @param input Línea de entrada.
+ * @param i Puntero al índice actual en la línea; se incrementa si se 
+ * extrae un token.
+ * @return Un nuevo token de tipo TOKEN_PIPE o NULL si no se encuentra '|'.
+ */
 t_token	*extract_pipe_token(char *input, int *i)
 {
 	t_token	*new_token;
@@ -62,12 +75,22 @@ t_token	*extract_pipe_token(char *input, int *i)
 	return (NULL);
 }
 
-// Funcion para extraer << y >>
+/**
+ * @brief Extrae un token de doble redirección ('<<' o '>>') del input.
+ * Detecta si hay un '<<' (heredoc) o '>>' (append),
+	crea un token correspondiente,
+ * y avanza el índice en 2 posiciones.
+ * @param input Línea de entrada.
+ * @param i Puntero al índice actual en la línea; se incrementa si se 
+	extrae un token.
+ * @return Un nuevo token de tipo TOKEN_HEREDOC o TOKEN_APPEND,
+	o NULL si no se encuentra ninguno.
+ */
 t_token	*extract_double_redir_token(char *input, int *i)
 {
 	t_token	*new_token;
 
-	if (input[*i] == '<' && input[*i + 1] == '<')
+	if (input[*i] == '<' && input[*i + 1] && input[*i + 1] == '<')
 	{
 		new_token = malloc(sizeof(t_token));
 		if (!new_token)
@@ -77,7 +100,7 @@ t_token	*extract_double_redir_token(char *input, int *i)
 		(*i) += 2;
 		return (new_token);
 	}
-	else if (input[*i] == '>' && input[*i + 1] == '>')
+	else if (input[*i] == '>' && input[*i + 1] && input[*i + 1] == '>')
 	{
 		new_token = malloc(sizeof(t_token));
 		if (!new_token)
@@ -90,7 +113,17 @@ t_token	*extract_double_redir_token(char *input, int *i)
 	return (NULL);
 }
 
-// Funcion para extraer < y >
+/**
+ * @brief Extrae un token de doble redirección ('<' o '>') del input.
+ * Detecta si hay un '<' (redir_in) o '>' (redir_out),
+	crea un token correspondiente,
+ * y avanza el índice en 2 posiciones.
+ * @param input Línea de entrada.
+ * @param i Puntero al índice actual en la línea; se incrementa si se 
+ * extrae un token.
+ * @return Un nuevo token de tipo TOKEN_REDIR_IN o TOKEN_REDIR_OUT,
+	o NULL si no se encuentra ninguno.
+ */
 t_token	*extract_single_redir_token(char *input, int *i)
 {
 	t_token	*new_token;
@@ -118,7 +151,15 @@ t_token	*extract_single_redir_token(char *input, int *i)
 	return (NULL);
 }
 
-// Putisima norminette
+/**
+ * @brief Extrae todos los tokens de operadores del input ('<', '>', 
+ * '<<', '>>', '|').
+ * Reserva memoria para los tokens, cuenta cuántos operadores hay y los llena
+ * en la lista usando la función fill_operator_tokens.
+ * @param input Línea de entrada del usuario.
+ * @return Lista de tokens de operadores,
+	terminada en NULL. Devuelve NULL si falla la memoria.
+ */
 t_token	**extract_ops_tokens(char *input)
 {
 	t_token	**tokens;

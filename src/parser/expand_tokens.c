@@ -6,12 +6,18 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:23:52 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/17 14:34:36 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:22:44 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+/**
+ * @brief Funcion join pero libera memoria de los strings
+ * @param s1 Primer string 
+ * @param s2 Segundo string que se junta al segundo
+ * @return s1 y s2 concatenados
+ */
 char	*strjoin_and_free(char *s1, char *s2)
 {
 	char	*tmp;
@@ -22,6 +28,15 @@ char	*strjoin_and_free(char *s1, char *s2)
 	return (tmp);
 }
 
+/**
+ * @brief Concatena al resultado final una variable de entorno o texto normal.
+ * Si encuentra un '$', extrae el nombre de la variable, busca su valor en
+ * la lista de entorno y lo añade al resultado. Si no hay '$', concatena texto 
+ * normal.
+ * @param e Estructura que contiene el estado de expansión
+ * @param env_list Lista de las variables de entorno
+ * @param value String a procesar
+ */
 void	concat_result(t_expand *e, t_env *env_list, char *value)
 {
 	if (value[e->i] == '$')
@@ -49,6 +64,15 @@ void	concat_result(t_expand *e, t_env *env_list, char *value)
 	}
 }
 
+/**
+ * @brief Expande todas las variables de entorno.
+ * Recorre la cadena value, busca variables que empiecen por el '$' y las
+ * reemplaza por su valor correspondiente del env. Devuelve la
+ * cadena con todas las variables expandidas.
+ * @param env_list Lista de variables de entorno.
+ * @param value Cadena con posibles variables a expandir.
+ * @return Nueva cadena con las variables expandidas.
+ */
 char	*expand_all_vars(t_env *env_list, char *value)
 {
 	t_expand	*e;
@@ -64,8 +88,12 @@ char	*expand_all_vars(t_env *env_list, char *value)
 	return (final);
 }
 
-// Esto expande las variables de env, de momento con los TOKENS_WORD
-// y creo que funciona como en el bash
+/**
+ * @brief Recorre todos los tokens y si es de tipo word o dobles comillas
+ * expande las variables y le cambia el valor al value del token
+ * @param env_list Lista de variables de entorno.
+ * @param tokens Lista de todos los tokens.
+ */
 void	expand_env_values(t_env *env_list, t_token **tokens)
 {
 	int		i;

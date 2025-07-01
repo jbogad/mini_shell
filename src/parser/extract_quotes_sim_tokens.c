@@ -6,13 +6,17 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/28 11:58:12 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:19:26 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// Contar cuantos tokens de comillas simples hay
+/**
+ * @brief Funcion para identificar los token_sim_quote y contar cuantos hay
+ * @param input La linea que se lee al ejecutar el readline
+ * @return Devuelve la cantidad de token_sim_quote que hay
+ */
 int	count_quotes_sim_tokens(char *input)
 {
 	int	i;
@@ -42,7 +46,10 @@ int	count_quotes_sim_tokens(char *input)
 	return (count);
 }
 
-// Inicializar las variables para extraer los tokens
+/**
+ * @brief Funcion para inicializar la estructura de extraccion de comillas
+ * @param e La estructura de extraccion de las comillas
+ */
 void	init_extract(t_extract *e)
 {
 	e->i = 0;
@@ -52,7 +59,14 @@ void	init_extract(t_extract *e)
 	e->in_dob_quote = 0;
 }
 
-// Añadir el contenifo de los tokens de comillas simples
+/**
+ * @brief Extrae tokens entre comillas simples del input.
+ * Recorre la línea de entrada y guarda en tokens los fragmentos
+ * entre comillas simples, siempre que no estén dentro de comillas dobles.
+ * @param input La línea leída.
+ * @param tokens Lista donde se almacenan los tokens encontrados.
+ * @param e Estructura auxiliar.
+ */
 void	fill_sim_quote_tokens(char *input, t_token **tokens, t_extract *e)
 {
 	t_token	*new_tkn;
@@ -82,7 +96,15 @@ void	fill_sim_quote_tokens(char *input, t_token **tokens, t_extract *e)
 	}
 }
 
-// Extraer los tokens
+/**
+ * @brief Extrae un token entre comillas simples desde la posición dada.
+ * Busca la próxima comilla simple desde la posición actual en el input
+ * y crea un token con el texto entre esas comillas.
+ * @param input Línea de entrada.
+ * @param i Puntero al índice actual que se irá actualizando.
+ * @return Token de tipo TOKEN_SIM_QUOTE o NULL si hay error o no se 
+ * cierra la comilla.
+ */
 t_token	*extract_sim_quote_token(char *input, int *i)
 {
 	t_token	*token;

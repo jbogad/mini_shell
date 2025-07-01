@@ -6,13 +6,17 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/16 15:13:11 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:22:25 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// Cuenta cauntas variables de entorno hay
+/**
+ * @brief Cuenta el número de variables de entorno hay.
+ * @param envp Array con las variables de entorno.
+ * @return Número total de variables en `envp`.
+ */
 int	count_env(char **envp)
 {
 	int	count;
@@ -23,9 +27,15 @@ int	count_env(char **envp)
 	return (count);
 }
 
-// Inicializa la estructura y va copiando lo que hay a la izquierda
-// del igual en el nombre del env y lo que hay a la derecha lo pega
-// en el valor
+/**
+ * @brief Inicializa la lista de variables de entorno.
+ * Recibe el array de cadenas `envp` y crea un arreglo
+ * de estructuras `t_env` separando el nombre y valor de cada variable.
+ * @param envp Arreglo de cadenas con las variables de entorno en formato 
+ * "NOMBRE=VALOR".
+ * @return Arreglo de estructuras `t_env` con los nombres y valores 
+ * separados, terminado en NULL.
+ */
 t_env	*init_env(char **envp)
 {
 	int		count;
@@ -51,8 +61,14 @@ t_env	*init_env(char **envp)
 	return (env);
 }
 
-// Compara con el env el nombre que se le ha pasado,
-// y si existe devuelve su valor
+/**
+ * @brief Obtiene el valor de una variable de entorno por su nombre.
+ * Busca en la lista `env` la variable cuyo nombre coincida con `name`
+ * y devuelve su valor asociado. Si no se encuentra, devuelve NULL.
+ * @param env Arreglo de variables de entorno (t_env).
+ * @param name Nombre de la variable a buscar.
+ * @return Valor de la variable si se encuentra, NULL en caso contrario.
+ */
 char	*get_env_value(t_env *env, char *name)
 {
 	int	i;
@@ -67,8 +83,16 @@ char	*get_env_value(t_env *env, char *name)
 	return (NULL);
 }
 
-//Esto coge y junta lo que hay antes del $ si hay algo con el valor expandido
-// de la variable de entorno 
+/**
+ * @brief Reemplaza el primer '$' en el token con el valor de una variable 
+ * de entorno.
+ * Toma el token en `tokens[i]`, busca el primer '$' en su valor y lo reemplaza
+ * por el contenido de `env`, actualizando el valor del token.
+ * @param new_value Cadena para almacenar el nuevo valor (se sobrescribe).
+ * @param tokens Arreglo de tokens.
+ * @param i Índice del token a modificar.
+ * @param env Valor de la variable de entorno para reemplazar.
+ */
 void	get_value_expanded(char *new_value, t_token **tokens, int i, char *env)
 {
 	char	*dollar;

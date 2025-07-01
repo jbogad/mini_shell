@@ -6,12 +6,22 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:19:12 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/27 16:02:22 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:18:13 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+/**
+ * @brief Intenta extraer un token de operador del input.
+ * Comprueba si el carácter actual es un pipe ('|'),
+	redirección doble ('<<' o '>>')
+ * o redirección simple ('<' o '>'), y devuelve el token correspondiente.
+ * @param input Línea de entrada a analizar.
+ * @param i Puntero al índice actual dentro del input. Se actualiza si 
+ * se encuentra un token.
+ * @return Token extraído si se encuentra, o NULL en caso contrario.
+ */
 t_token	*get_operator_token(char *input, int *i)
 {
 	t_token	*token;
@@ -24,6 +34,16 @@ t_token	*get_operator_token(char *input, int *i)
 	return (token);
 }
 
+/**
+ * @brief Llena el array de tokens con los operadores encontrados en el input.
+ * Recorre la línea de entrada,
+	ignorando operadores dentro de comillas simples o dobles,
+ * y extrae los tokens de operadores (`|`, `>`, `>>`, `<`, `<<`) que encuentra.
+ * @param input Línea de entrada a analizar.
+ * @param tokens Array donde se almacenarán los tokens extraídos.
+ * @param token_count Puntero al número actual de tokens; se incrementa con 
+	cada nuevo token.
+ */
 void	fill_operator_tokens(char *input, t_token **tokens, int *token_count)
 {
 	int		i;

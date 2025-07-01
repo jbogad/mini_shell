@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 11:45:09 by claudio           #+#    #+#             */
-/*   Updated: 2025/06/28 15:36:09 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:03:18 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@
  * @brief Funcion para crear el input(minishell) e ir
  *  añadiendo los comandos utilizados al historial maneja
  *  el add_history tambien las flechas de ir hacia arriba y hacia abajo
- * @param str string que hace cosas
  * @return Retorna el input que se va escribiendo en la linea
- * @warning hace malloc jasajas
  */
 char	*read_input(void)
 {

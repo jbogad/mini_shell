@@ -6,16 +6,18 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:34:02 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/04 16:08:39 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:17:37 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-/* Este archivo es para pillar la ruta absoluta y coger lo que hay
-despues de la tercera / para ponerlo como ruta.
-Ej: /home/clalopez/Documents/mini-shell -> /Documents/mini-shell$ */
-
+/**
+ * @brief Contar cuantos caracteres hay despues de la segunda
+	/ para hacer malloc
+ * @param route Toda la ruta absoluta Ej: clalopez/home/documents/minishell
+ * @return Devuelve la cantidad en caracteres a partir del segundo /
+ */
 int	count_chars_after_second_slash(char *route)
 {
 	int	i;
@@ -36,6 +38,12 @@ int	count_chars_after_second_slash(char *route)
 	return (j);
 }
 
+/**
+ * @brief Funcion para coger un string con lo que hay a partir del segundo /
+ * @param route Toda la ruta absoluta Ej: clalopez/home/documents/minishell
+ * @param len Tamaño del string
+ * @return Devuelve un string a partir del segundo /
+ */
 char	*extract_short_path(char *route, int len)
 {
 	char	*aux;
@@ -61,6 +69,10 @@ char	*extract_short_path(char *route, int len)
 	return (aux);
 }
 
+/**
+ * @brief Funcion para obtener la ruta como en bash
+ * @return Devuelve un string con la ruta actual mas el $
+ */
 char	*get_short_path(void)
 {
 	char	*cwd;
