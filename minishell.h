@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/28 16:36:28 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/15 13:09:04 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,48 +38,78 @@ cada token tendra su valor guardado
 ej: TOKEN_WORD -> echo */
 typedef enum e_token_type
 {
-	TOKEN_WORD,      // comandos y argumntos
-	TOKEN_PIPE,      // |
-	TOKEN_REDIR_IN,  // <
-	TOKEN_REDIR_OUT, // >
-	TOKEN_APPEND,    // >>
-	TOKEN_HEREDOC,   // <<
-	TOKEN_SIM_QUOTE, // string entre comillas simples 'Hola'
-	TOKEN_DOB_QUOTE, // string entre comillas doblres "Ho la"
+    TOKEN_WORD,      // comandos y argumntos
+    TOKEN_PIPE,      // |
+    TOKEN_REDIR_IN,  // <
+    TOKEN_REDIR_OUT, // >
+    TOKEN_APPEND,    // >>
+    TOKEN_HEREDOC,   // <<
+    TOKEN_SIM_QUOTE, // string entre comillas simples 'Hola'
+    TOKEN_DOB_QUOTE, // string entre comillas doblres "Ho la"
 }								t_token_type;
 
+
+//Guarda cada elemento del comando parseado.
 typedef struct s_token
 {
-	t_token_type				type;
-	char						*value;
+    t_token_type				type;	//tipo de token (pipe, word)
+    char						*value;	//contenido del token (echo, ls, etc)
+    int							index;	//indice del token (añadido de t_lexer)
+    struct s_token				*next;	//puntero al siguiente (añadido de t_lexer)
 }								t_token;
 
+//estructura para el parseo
 typedef struct s_extract
 {
-	int							i;
-	int							start;
-	int							count;
-	int							index;
-	int							in_sim_quote;
-	int							in_dob_quote;
+    int							i;				//indice actual
+    int							start;			//indice dentro del token
+    int							count;			//Contador de token 
+    int							index;			//Indice del array de tokens
+    int							in_sim_quote;	//flag para dentro comillas simples
+    int							in_dob_quote;	//flag para dentro de comillas dobles
 }								t_extract;
 
+//Estructura para la expansión de variables
 typedef struct s_expand
 {
-	int							i;
-	char						*result;
-	char						*env;
-	char						*var;
-	char						*tmp;
-	int							start;
+    int							i;			//Indice para la expansión
+    char						*result;	//String tras expandir las variables
+    char						*env;		//Valor de la variable de entorno
+    char						*var;		//Nombre de la variable de entorno
+    char						*tmp;		//String temporal
+    int							start;		//Posicion del inicio de la variable
 
 }								t_expand;
 
+//Lista enlazada de las variables de entorno
 typedef struct s_env
 {
-	char						*name_env;
-	char						*val_env;
-}								t_env;
+    char					*name_env;	//Nombre de la variable ("HOME")
+    char					*val_env;	//Valor de la variable (ej:usr/bin)
+    struct s_env			*next;		//Puntero al siguiente
+}							t_env;
+
+// ELIMINADAS: t_lexer (duplicaba t_token)
+
+typedef struct s_parser
+{
+    char *cmd;             // comando que será ejecutado
+    int redir_in;          // redireccionamiento de entrada
+    int redir_out;         // redireccionamiento de salida
+    struct s_parser *next; //  siguiente elemento en la lista
+}			t_parser;
+
+
+typedef struct s_shell
+{
+    char **paths;           // variables de entorno del sistema
+    char **cmd_args;        // comando seguido de argumentos
+    int count_cmd_args;     // cantidad de comando + argumentos
+    t_env *env;             // lista de nodos que representa `envp`
+    t_token *tokens;        // CAMBIADO: ahora usa t_token unificado
+    t_parser *parser;       // lista de nodos que separa los comandos
+    int exit_status;        // entero que representa el estado de salida
+} t_shell;
 
 // Utils
 char							*ft_strndup(const char *s, size_t n);
@@ -99,7 +129,26 @@ void							ft_echo(t_token **tokens);
 void							ft_cd(t_token **tokens);
 
 /*exec*/
-void							execute(t_token **tokens);
+void                        execute(t_token **tokens, t_shell *msh);
+
+/*export*/
+void	                    ft_export(t_shell *msh);
+
+/*utils_export*/
+void	                    add_arg_to_env(char *var, t_shell *msh);
+
+/*Utils_global*/
+/*env*/
+t_env	                    *ft_lstnew_env(char *name, char *value, int alloc);
+void	                    ft_lstadd_back_env(t_env **lst, t_env *new);
+char	                    *get_env_name(char *fullenv);
+char	                    *get_value_of_env(char *fullenv);
+
+/*free*/
+void	                    ft_free_list(t_env **list); 
+void	                    ft_memfree(void *ptr);
+
+
 
 /*===========EL INUTIL DE CLAUDIO================*/
 
@@ -134,7 +183,6 @@ t_token							**extract_all_tokens(char *input);
 void							heredoc(t_env *env_list, t_token **tokens);
 
 // Expansor
-char							*get_env_value(t_env *env, char *name);
 t_env							*init_env(char **envp);
 char							*get_env_value(t_env *env, char *name);
 void							get_value_expanded(char *new_value,

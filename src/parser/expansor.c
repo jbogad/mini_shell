@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/01 12:22:25 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/15 15:34:00 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,38 @@ int	count_env(char **envp)
  * @return Arreglo de estructuras `t_env` con los nombres y valores 
  * separados, terminado en NULL.
  */
-t_env	*init_env(char **envp)
+ t_env	*init_env(char **envp)
 {
-	int		count;
-	t_env	*env;
+	t_env	*env_list;
+	t_env	*new_node;
 	char	*equal_sign;
 	int		i;
 
-	count = count_env(envp);
-	env = malloc(sizeof(t_env) * (count + 1));
+	env_list = NULL;
 	i = 0;
 	while (envp[i])
 	{
 		equal_sign = ft_strchr(envp[i], '=');
 		if (equal_sign)
 		{
-			env[i].name_env = ft_substr(envp[i], 0, equal_sign - envp[i]);
-			env[i].val_env = ft_strdup(equal_sign + 1);
+			char *name = ft_substr(envp[i], 0, equal_sign - envp[i]);
+			char *value = ft_strdup(equal_sign + 1);
+			
+			new_node = ft_lstnew_env(name, value, 1);
+			if (new_node)
+			{
+				if (!env_list)
+					env_list = new_node;
+				else
+					ft_lstadd_back_env(&env_list, new_node);
+			}
+			
+			free(name);
+			free(value);
 		}
 		i++;
 	}
-	env[i].name_env = NULL;
-	env[i].val_env = NULL;
-	return (env);
+	return (env_list);
 }
 
 /**
