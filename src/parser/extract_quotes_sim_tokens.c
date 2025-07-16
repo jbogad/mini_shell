@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_quotes_sim_tokens.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/01 12:19:26 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:09:11 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_token	*extract_sim_quote_token(char *input, int *i)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->type = TOKEN_SIM_QUOTE;
+	token->type = TOKEN_WORD; //he modificado esto [[JAVIER]]
 	token->value = ft_strndup(&input[start], *i - start);
 	(*i)++;
 	return (token);

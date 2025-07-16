@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_quotes_dob_tokens.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:47:15 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/01 12:18:30 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:12:17 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	fill_dob_quote_tokens(char *input, t_token **tokens, t_extract *e)
 			{
 				e->in_dob_quote = 0;
 				new_tkn = malloc(sizeof(t_token));
-				new_tkn->type = TOKEN_DOB_QUOTE;
+				new_tkn->type = TOKEN_WORD;	//he cambiado esto 
 				new_tkn->value = ft_strndup(&input[e->start], e->i - e->start);
 				tokens[e->count++] = new_tkn;
 			}
@@ -119,7 +119,7 @@ t_token	*extract_dob_quote_token(char *input, int *i)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->type = TOKEN_DOB_QUOTE;
+	token->type = TOKEN_WORD;	//he cambiado esto {{JAVIER}}
 	token->value = ft_strndup(&input[start], *i - start);
 	(*i)++;
 	return (token);

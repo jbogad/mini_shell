@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:19:22 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/07/15 15:44:03 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:56:14 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,9 @@ void	add_arg_to_env(char *arg, t_shell *msh)
 		free(name);
 		free(value);
 	}
-	else if (!find_env(msh->env, arg))
-		add_env(&(msh->env), arg, "");
+	else
+		if (!find_env(msh->env, arg))
+				add_env(&(msh->env), arg, "");
 }
 
 /**
