@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/07/16 12:04:10 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:15:42 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static void	free_cmd_args(t_shell *msh)
  */
 static void	execute_builtin(t_token **tokens, t_shell *msh)
 {
+	//PRUEBAS PARA VER SI ENTRA EN EL EXECUTE O NO 	
     printf("[PRUEBAS] token cogido: '%s'\n", tokens[0]->value);
     printf("[PRUEBAS] tamaño: %zu\n", ft_strlen(tokens[0]->value));
 	
