@@ -6,14 +6,14 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/07/16 13:15:42 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:45:17 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 static void	fill_cmd_args(t_token **tokens, t_shell *msh);
-static void	free_cmd_args(t_shell *msh);
+void		free_cmd_args(t_shell *msh);
 static void	execute_builtin(t_token **tokens, t_shell *msh);
 
 /**
@@ -57,7 +57,7 @@ static void	fill_cmd_args(t_token **tokens, t_shell *msh)
  * @brief Libera la memoria del array cmd_args anterior.
  * @param msh Estructura principal del shell.
  */
-static void	free_cmd_args(t_shell *msh)
+void	free_cmd_args(t_shell *msh)
 {
 	int	i;
 
@@ -80,19 +80,19 @@ static void	free_cmd_args(t_shell *msh)
  */
 static void	execute_builtin(t_token **tokens, t_shell *msh)
 {
-	//PRUEBAS PARA VER SI ENTRA EN EL EXECUTE O NO 	
-    printf("[PRUEBAS] token cogido: '%s'\n", tokens[0]->value);
-    printf("[PRUEBAS] tamaño: %zu\n", ft_strlen(tokens[0]->value));
-	
-	if (ft_strncmp(tokens[0]->value, "pwd", ft_strlen("pwd")) == 0)
+	// printf("[PRUEBAS] token cogido: '%s'\n", tokens[0]->value);
+	// printf("[PRUEBAS] tamaño: %zu\n", ft_strlen(tokens[0]->value));
+
+	if (ft_strcmp(tokens[0]->value, "pwd") == 0)
 		ft_pwd();
-	else if (ft_strncmp(tokens[0]->value, "echo", ft_strlen("echo")) == 0)
+	else if (ft_strcmp(tokens[0]->value, "echo") == 0)
 		ft_echo(tokens);
-	else if (ft_strncmp(tokens[0]->value, "cd", ft_strlen("cd")) == 0)
+	else if (ft_strcmp(tokens[0]->value, "cd") == 0)
 		ft_cd(tokens);
-	else if (ft_strncmp(tokens[0]->value, "export", ft_strlen("export")) == 0)
+	else if (ft_strcmp(tokens[0]->value, "export" ) == 0)
 		ft_export(msh);
+	else if (ft_strcmp(tokens[0]->value, "exit") == 0)
+		ft_exit(msh);
 	else
 		ft_printf("error\n", tokens[0]->value);
 }
-

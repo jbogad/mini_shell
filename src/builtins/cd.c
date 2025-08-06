@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:21 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/06/02 14:42:32 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:34:18 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	ft_cd(t_token **tokens)
 {
 	(void)tokens;
-	printf("terminar");
+	printf("terminar\n");
 }

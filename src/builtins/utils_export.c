@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:19:22 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/07/16 11:56:14 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:30:58 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ t_env	*find_env(t_env *env_list, char *name)
  * @param name Nombre de la variable.
  * @param value Valor de la variable.
  */
+/*
+si quiiero cambiar donde me meta la varible, cambiar 
+lstadd back, por lstadd_front
+*/
 void	add_env(t_env **env_list, char *name, char *value)
 {
 	t_env	*new;
@@ -85,7 +89,7 @@ void	add_arg_to_env(char *arg, t_shell *msh)
 	}
 	else
 		if (!find_env(msh->env, arg))
-				add_env(&(msh->env), arg, "");
+			add_env(&(msh->env), arg, "");
 }
 
 /**

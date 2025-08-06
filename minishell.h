@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/15 13:09:04 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:44:33 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,16 @@ void							ft_cd(t_token **tokens);
 
 /*exec*/
 void                        execute(t_token **tokens, t_shell *msh);
+void                        free_cmd_args(t_shell *msh);
 
 /*export*/
 void	                    ft_export(t_shell *msh);
 
 /*utils_export*/
 void	                    add_arg_to_env(char *var, t_shell *msh);
+
+/*exit*/
+void                        ft_exit(t_shell *msh);
 
 /*Utils_global*/
 /*env*/
