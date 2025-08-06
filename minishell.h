@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/08/06 11:44:33 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/06 19:59:05 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,9 @@ void	                    add_arg_to_env(char *var, t_shell *msh);
 
 /*exit*/
 void                        ft_exit(t_shell *msh);
+
+/*env*/
+void                        ft_env(t_shell *msh);
 
 /*Utils_global*/
 /*env*/

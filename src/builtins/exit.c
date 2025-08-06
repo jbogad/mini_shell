@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:30 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/06 12:30:20 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/06 19:54:57 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 	para probar el comando exit, 
 	exit 0-255 debe salir el numero 
 	exit < 0 | > 255 debe salir el numero % 256
+
+	cuando haces exit x -> haces un echo a la 
+	variable $? que contiene el codigo de salida.
 */
 
 static void	exit_error(char *str)
@@ -44,6 +47,9 @@ static void	check_valid_input(t_shell *msh, int i)
 
 void	ft_exit(t_shell *msh)
 {
+	printf("[DEBUG] Entrando en ft_exit\n");
+    printf("[DEBUG] Argumento 1: '%s'\n", msh->cmd_args[1] ? msh->cmd_args[1] : "NULL");
+    printf("[DEBUG] Exit status final: %d\n", msh->exit_status);
 	int	i;
 
 	if (!msh)
