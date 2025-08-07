@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/06 19:58:31 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/07 11:19:59 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ static void	execute_builtin(t_token **tokens, t_shell *msh)
 		ft_exit(msh);
 	else if (ft_strcmp(tokens[0]->value, "env") == 0)
 		ft_env(msh);
+	else if (ft_strcmp(tokens[0]->value, "unset") == 0)
+		ft_unset(msh);	
 	else
 		ft_printf("error\n", tokens[0]->value);
 }
