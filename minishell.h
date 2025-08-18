@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/08/07 11:19:33 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:48:22 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,6 @@ void							ft_pwd(void);
 /*echo*/
 void							ft_echo(t_token **tokens);
 
-/*cd*/
-void							ft_cd(t_token **tokens);
-
 /*exec*/
 void                        execute(t_token **tokens, t_shell *msh);
 void                        free_cmd_args(t_shell *msh);
@@ -147,6 +144,18 @@ void                        ft_env(t_shell *msh);
 /*unset*/
 void						ft_unset(t_shell *msh);
 
+/*cd*/
+void						ft_cd(t_shell *msh);
+
+/*pipes*/
+int							has_pipes(t_token **tokens);
+void						execute_pipes(t_token **tokens, t_shell *msh);
+int							count_commands(t_token **tokens);
+char						**build_cmd(t_token **tokens, int cmd_idx);
+void						setup_child_pipes(int i, int total, int pipes[2][2]);
+void						close_parent_pipes(int i, int pipes[2][2]);
+void						process_pipe_child(t_token **tokens, int i,
+								int total, int pipes[2][2]);
 
 /*Utils_global*/
 /*env*/

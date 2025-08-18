@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:06:54 by clalopez          #+#    #+#             */
-/*   Updated: 2025/06/17 15:39:03 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/08/18 10:56:13 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,39 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (0);
 }
 
-void	free_env(t_env *env_list)
-{
-	int	i;
+// void	free_env(t_env *env_list)
+// {
+// 	int	i;
 
-	i = 0;
-	while (env_list[i].name_env != NULL)
+// 	i = 0;
+// 	while (env_list[i].name_env != NULL)
+// 	{
+// 		free(env_list[i].name_env);
+// 		free(env_list[i].val_env);
+// 		i++;
+// 	}
+// 	free(env_list);
+// }
+
+void free_env(t_env *env_list)
+{
+	t_env *tmp;
+	int safety_counter = 0;
+
+	while (env_list && safety_counter < 1000)
 	{
-		free(env_list[i].name_env);
-		free(env_list[i].val_env);
-		i++;
+		safety_counter++;
+		tmp = env_list;
+		env_list = env_list->next;
+		
+		if (tmp->name_env)
+			free(tmp->name_env);
+		if (tmp->val_env)
+			free(tmp->val_env);
+		free(tmp);
+		if (!env_list)
+			break;
 	}
-	free(env_list);
 }
 
 void	free_tokens(t_token **tokens)

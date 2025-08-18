@@ -7,11 +7,11 @@ LIBFT_DIR	= src/libft
 LIBFT_LIB	= src/libft/libft.a
 
 SRC_UTILS = src/utils/utils.c
-SRC_BUILTINS = src/builtins/pwd.c src/builtins/echo.c src/builtins/cd.c src/builtins/export.c \
+SRC_BUILTINS = src/builtins/pwd.c src/builtins/echo.c src/builtins/export.c \
 				src/builtins/utils_export.c src/builtins/exit.c src/builtins/env.c \
-				src/builtins/unset.c
+				src/builtins/unset.c src/builtins/cd.c
 SRC_UTILS_GLOBAL = src/utils_global/utils_to_env.c src/utils_global/utils_to_free.c
-SRC_EXEC = src/exec/exec.c 
+SRC_EXEC = src/exec/exec.c src/exec/pipes.c src/exec/utils_pipes.c
 SRC_PARSER = src/parser/read_input.c src/parser/get_short_path.c src/parser/extract_word_tokens.c \
              src/parser/extract_ops_tokens.c src/parser/extract_quotes_dob_tokens.c \
              src/parser/extract_quotes_sim_tokens.c src/parser/extract_all_tokens.c \
@@ -83,8 +83,6 @@ clean:
 fclean: clean
 	@echo $(FCLEAN_MSG)
 	@rm -f $(NAME)
-	@echo "\033[1;32m[✓]\033[0m Proyecto limpio completamente\033[0m"
-
 re: fclean all
 
 .PHONY: all clean fclean re header

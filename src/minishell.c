@@ -6,7 +6,7 @@
 /*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/15 13:07:04 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:25:08 by jaboga-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,19 @@ int	main(int argc, char **argv, char **envp)
 
     while (1)
     {
+        printf("[DEBUG] INICIO de bucle while\n");
+        
         if (g_skip_next_readline)
         {
+            printf("[DEBUG] Saltando readline\n");
             g_skip_next_readline = 0;
             continue;
         }
 
+        printf("[DEBUG] Llamando gen_shell...\n");
         input = gen_shell(argc, argv);
+        printf("[DEBUG] gen_shell retornó: %s\n", input ? input : "NULL");
+        
         if (!input)
         {
             ft_printf("exit\n");
@@ -89,12 +95,19 @@ int	main(int argc, char **argv, char **envp)
 
         if (*input)
         {
+            printf("[DEBUG] Input no vacío, procesando...\n");
             tokens_ext = extract_all_tokens(input);
             heredoc(msh.env, tokens_ext);
 
             if (!g_skip_next_readline && tokens_ext && tokens_ext[0])
-                execute(tokens_ext, &msh);
+            {
+                if (has_pipes(tokens_ext))
+                    execute_pipes(tokens_ext, &msh);
+                else
+                    execute(tokens_ext, &msh);
+            }
 
+            // Liberar tokens
             i = 0;
             while (tokens_ext && tokens_ext[i])
             {
@@ -104,8 +117,19 @@ int	main(int argc, char **argv, char **envp)
             }
             free(tokens_ext);
         }
+        else
+        {
+            printf("[DEBUG] Input vacío\n");
+        }
+        
         free(input);
+        printf("[DEBUG] FIN de iteración, volviendo al inicio\n");
     }
+    
+    printf("[DEBUG] Iniciando cleanup final\n");
+    free_cmd_args(&msh);  // ← Descomenta y prueba
+    printf("[DEBUG] cmd_args liberado, ahora liberando env\n");
     free_env(msh.env);
+    printf("[DEBUG] Cleanup completado\n");
     return (0);
 }
