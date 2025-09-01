@@ -1,0 +1,4 @@
+cuando hago wc-l con ls, imprime el numero de lineas pero antes un tab -> mirarlo.  
+saltar mensaje de error cuando el comando no exite -> bash: holacomoestas: command not found
+
+cuando tiene un pipe solo no salta por error

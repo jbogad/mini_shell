@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/08/13 18:48:22 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/08/31 12:37:37 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <signal.h>
 # include <stdarg.h>
 # include <sys/ioctl.h>
+# include <stdio.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -150,12 +151,31 @@ void						ft_cd(t_shell *msh);
 /*pipes*/
 int							has_pipes(t_token **tokens);
 void						execute_pipes(t_token **tokens, t_shell *msh);
+
+/*pipes_utils*/
 int							count_commands(t_token **tokens);
-char						**build_cmd(t_token **tokens, int cmd_idx);
 void						setup_child_pipes(int i, int total, int pipes[2][2]);
 void						close_parent_pipes(int i, int pipes[2][2]);
+
+/*pipes_cmd*/
+char						**build_cmd(t_token **tokens, int cmd_idx);
+
+/*pipes_child*/
 void						process_pipe_child(t_token **tokens, int i,
-								int total, int pipes[2][2]);
+								int total, int pipes[2][2], t_shell *msh);
+
+/*redirections*/
+int							set_infile(t_token **tokens, t_shell *msh, char *cmd_name);
+int							set_outfile(t_token **tokens, t_shell *msh);
+int							set_append_outfile(t_token **tokens, t_shell *msh);
+void						set_child_hdoc(int hdoc_fd, char *cmd_name);
+int							set_redirections(t_token **tokens, t_shell *msh, int hdoc_fd);
+
+/*redirections_utils*/
+int							is_builtin_redir(char *cmd);
+int							handle_ambiguous_redirect(char *filename);
+char						*find_command(t_token **tokens);
+t_token						*find_redirection_file(t_token **tokens, t_token_type redir_type);
 
 /*Utils_global*/
 /*env*/

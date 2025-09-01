@@ -89,7 +89,7 @@ int	main(int argc, char **argv, char **envp)
         if (!input)
         {
             ft_printf("exit\n");
-            rl_clear_history();
+            clear_history();
             break ;
         }
 

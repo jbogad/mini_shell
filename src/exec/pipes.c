@@ -43,7 +43,6 @@ void	execute_pipes(t_token **tokens, t_shell *msh)
 	int		total;
 	pid_t	pid;
 
-	(void)msh;
 	total = count_commands(tokens);
 	i = 0;
 	while (i < total)
@@ -52,7 +51,7 @@ void	execute_pipes(t_token **tokens, t_shell *msh)
 			return ;
 		pid = fork();
 		if (pid == 0)
-			process_pipe_child(tokens, i, total, pipes);
+			process_pipe_child(tokens, i, total, pipes, msh);
 		if (pid > 0)
 			close_parent_pipes(i, pipes);
 		i++;
