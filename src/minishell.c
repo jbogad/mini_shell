@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/01 15:27:25 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/01 15:44:36 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,6 @@ int	main(int argc, char **argv, char **envp)
     t_shell msh;
     int     i;
 
-    // Imprime el contenido de envp para depuración
-    int z = 0;
-    printf("[DEBUG] Contenido de envp al arrancar:\n");
-    while (envp[z])
-    {
-        printf("envp[%d]: %s\n", z, envp[z]);
-        z++;
-    }
-    printf("==============================\n");
-
     // Inicializar la estructura t_shell
     ft_memset(&msh, 0, sizeof(t_shell));
     msh.env = init_env(envp);
@@ -73,18 +63,13 @@ int	main(int argc, char **argv, char **envp)
 
     while (1)
     {
-        printf("[DEBUG] INICIO de bucle while\n");
-        
         if (g_skip_next_readline)
         {
-            printf("[DEBUG] Saltando readline\n");
             g_skip_next_readline = 0;
             continue;
         }
 
-        printf("[DEBUG] Llamando gen_shell...\n");
         input = gen_shell(argc, argv);
-        printf("[DEBUG] gen_shell retornó: %s\n", input ? input : "NULL");
         
         if (!input)
         {
@@ -95,7 +80,6 @@ int	main(int argc, char **argv, char **envp)
 
         if (*input)
         {
-            printf("[DEBUG] Input no vacío, procesando...\n");
             tokens_ext = extract_all_tokens(input);
             heredoc(msh.env, tokens_ext);
 
@@ -122,19 +106,11 @@ int	main(int argc, char **argv, char **envp)
             }
             free(tokens_ext);
         }
-        else
-        {
-            printf("[DEBUG] Input vacío\n");
-        }
         
         free(input);
-        printf("[DEBUG] FIN de iteración, volviendo al inicio\n");
     }
     
-    printf("[DEBUG] Iniciando cleanup final\n");
     free_cmd_args(&msh);
-    printf("[DEBUG] cmd_args liberado, ahora liberando env\n");
     free_env(msh.env);
-    printf("[DEBUG] Cleanup completado\n");
     return (0);
 }

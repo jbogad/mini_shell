@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/11 00:27:59 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:08:22 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,135 +29,63 @@ void	execute(t_token **tokens, t_shell *msh)
 
 	if (!tokens || !tokens[0] || tokens[0]->type != TOKEN_WORD)
 		return ;
-	
-	// Hacer backup de los descriptores originales
 	stdin_backup = dup(STDIN_FILENO);
 	stdout_backup = dup(STDOUT_FILENO);
-	
-	// Procesar redirecciones
 	status = set_redirections(tokens, msh, -1);
-	
 	if (status == 1)
 	{
 		fill_cmd_args(tokens, msh);
 		execute_builtin(tokens, msh);
 	}
 	else
-	{
-		// Error en redirecciones
 		msh->exit_status = 1;
-	}
-	
-	// Restaurar descriptores originales
 	dup2(stdin_backup, STDIN_FILENO);
 	dup2(stdout_backup, STDOUT_FILENO);
 	close(stdin_backup);
 	close(stdout_backup);
 }
 
-/**
- * @brief Llena el array cmd_args con los valores de los tokens.
- * @param tokens Array de tokens de entrada.
- * @param msh Estructura principal del shell.
- */
-
-/*ESTE ES EL QUE TENIAS TU CLAUDIO*/
-
-// static void	fill_cmd_args(t_token **tokens, t_shell *msh)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (tokens[i])
-// 		i++;
-// 	msh->count_cmd_args = i;
-// 	free_cmd_args(msh);
-// 	msh->cmd_args = malloc(sizeof(char *) * (msh->count_cmd_args + 1));
-// 	i = 0;
-// 	while (tokens[i])
-// 	{
-// 		msh->cmd_args[i] = ft_strdup(tokens[i]->value);
-// 		i++;
-// 	}
-// 	msh->cmd_args[i] = NULL;
-// }
-
-/*ESTE ES EL DEL CHAT*/
 static void	fill_cmd_args(t_token **tokens, t_shell *msh)
 {
-    int count = 0;
-    int i = 0;
+	int	count;
+	int	i;
 
-    if (!msh) return;
-    free_cmd_args(msh);
-    if (!tokens || !tokens[0]) return;
-
-    // SOLO contar TOKEN_WORD consecutivos
-    while (tokens[count] && tokens[count]->type == TOKEN_WORD)
-        count++;
-
-    if (count == 0) return;
-
-    msh->cmd_args = ft_calloc(count + 1, sizeof(char *));
-    msh->count_cmd_args = count;
-
-    while (i < count)
-    {
-        msh->cmd_args[i] = ft_strdup(tokens[i]->value);
-        i++;
-    }
+	count = 0;
+	i = 0;
+	if (!msh)
+		return ;
+	free_cmd_args(msh);
+	if (!tokens || !tokens[0])
+		return ;
+	while (tokens[count] && tokens[count]->type == TOKEN_WORD)
+		count++;
+	if (count == 0)
+		return ;
+	msh->cmd_args = ft_calloc(count + 1, sizeof(char *));
+	msh->count_cmd_args = count;
+	while (i < count)
+	{
+		msh->cmd_args[i] = ft_strdup(tokens[i]->value);
+		i++;
+	}
 }
 
-
-/**
- * @brief Libera la memoria del array cmd_args anterior.
- * @param msh Estructura principal del shell.
- */
-
-/*ESTE ES EL QUE TENIAS TU CLAUDIO*/
- 
-// void	free_cmd_args(t_shell *msh)
-// {
-// 	int	i;
-
-// 	printf("[DEBUG] free_cmd_args llamado\n");
-// 	if (!msh)
-// 	{
-// 		printf("[DEBUG] msh es NULL\n");
-// 		return ;
-// 	}
-// 	if (msh->cmd_args)
-// 	{
-// 		i = 0;
-// 		while (msh->cmd_args[i])
-// 		{
-// 			free(msh->cmd_args[i]);
-// 			i++;
-// 		}
-// 		free(msh->cmd_args);
-// 		msh->cmd_args = NULL;
-// 	}
-// }
-
-
-/*ESTE ES EL QUE ME HA DICHO CHAT, YO NO LO ENTIENDO MUCHO*/
 void	free_cmd_args(t_shell *msh)
 {
-    int	i;
+	int	i;
 
-    if (!msh || !msh->cmd_args)
-        return;
-    // Usar count para evitar seguir punteros corruptos
-    i = 0;
-    while (i < msh->count_cmd_args)
-    {
-        free(msh->cmd_args[i]);
-        msh->cmd_args[i] = NULL;
-        i++;
-    }
-    free(msh->cmd_args);
-    msh->cmd_args = NULL;
-    msh->count_cmd_args = 0;
+	if (!msh || !msh->cmd_args)
+		return ;
+	i = 0;
+	while (i < msh->count_cmd_args)
+	{
+		free(msh->cmd_args[i]);
+		msh->cmd_args[i] = NULL;
+		i++;
+	}
+	free(msh->cmd_args);
+	msh->cmd_args = NULL;
+	msh->count_cmd_args = 0;
 }
 
 /**
@@ -167,9 +95,6 @@ void	free_cmd_args(t_shell *msh)
  */
 static void	execute_builtin(t_token **tokens, t_shell *msh)
 {
-	// printf("[PRUEBAS] token cogido: '%s'\n", tokens[0]->value);
-	// printf("[PRUEBAS] tamaño: %zu\n", ft_strlen(tokens[0]->value));
-
 	if (ft_strcmp(tokens[0]->value, "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(tokens[0]->value, "echo") == 0)
@@ -181,13 +106,9 @@ static void	execute_builtin(t_token **tokens, t_shell *msh)
 	else if (ft_strcmp(tokens[0]->value, "env") == 0)
 		ft_env(msh);
 	else if (ft_strcmp(tokens[0]->value, "unset") == 0)
-		ft_unset(msh);	
+		ft_unset(msh);
 	else if (ft_strcmp(tokens[0]->value, "cd") == 0)
-	{
-		printf("[DEBUG] Ejecutando ft_cd...\n");
 		ft_cd(msh);
-		printf("[DEBUG] ft_cd completado\n");
-	}
 	else
-		ft_printf("error\n", tokens[0]->value);
+		execute_external_command(tokens, msh);
 }

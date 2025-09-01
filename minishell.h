@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/01 15:26:59 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:08:22 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ void							ft_echo(t_token **tokens);
 /*exec*/
 void                        execute(t_token **tokens, t_shell *msh);
 void                        free_cmd_args(t_shell *msh);
+char                        *find_path(char *cmd, t_env *env);
+void                        execute_external_command(t_token **tokens, t_shell *msh);
 
 /*export*/
 void	                    ft_export(t_shell *msh);
