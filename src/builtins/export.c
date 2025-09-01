@@ -3,24 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:33 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/06 11:31:32 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/01 12:34:12 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 static void		ft_export_without_arg(t_shell *msh);
-static t_env	*copy_list(t_env *lst);
-static int		check_export(char *arg);
+static int		check_export_and_validate(char *arg);
 static int		is_valid_name(char *name);
+static t_env	*copy_list_for_export(t_env *lst);
 
-/**
- * @brief Ejecuta el comando export con o sin argumentos.
- * @param msh Estructura principal con variables de entorno.
- */
 void	ft_export(t_shell *msh)
 {
 	int	i;
@@ -36,7 +32,7 @@ void	ft_export(t_shell *msh)
 	i = 1;
 	while (i < msh->count_cmd_args && msh->cmd_args[i])
 	{
-		if (check_export(msh->cmd_args[i]))
+		if (check_export_and_validate(msh->cmd_args[i]))
 			add_arg_to_env(msh->cmd_args[i], msh);
 		else
 			msh->exit_status = 1;
@@ -44,10 +40,6 @@ void	ft_export(t_shell *msh)
 	}
 }
 
-/**
- * @brief Muestra todas las variables de entorno en formato declare.
- * @param msh Estructura principal con variables de entorno.
- */
 static void	ft_export_without_arg(t_shell *msh)
 {
 	t_env	*tmp;
@@ -55,7 +47,7 @@ static void	ft_export_without_arg(t_shell *msh)
 
 	if (!msh || !msh->env)
 		return ;
-	lst_cpy = copy_list(msh->env);
+	lst_cpy = copy_list_for_export(msh->env);
 	tmp = lst_cpy;
 	while (tmp)
 	{
@@ -68,12 +60,48 @@ static void	ft_export_without_arg(t_shell *msh)
 	ft_free_list(&lst_cpy);
 }
 
-/**
- * @brief Crea una copia de la lista de variables de entorno.
- * @param lst Lista original de variables de entorno.
- * @return Nueva lista copiada o NULL si error.
- */
-static t_env	*copy_list(t_env *lst)
+static int	check_export_and_validate(char *arg)
+{
+	char	*name;
+	char	*equal_pos;
+	int		result;
+
+	if (!arg || arg[0] == '=' || ft_isdigit(arg[0]))
+	{
+		printf("export: %s: not a valid identifier\n", arg);
+		return (0);
+	}
+	equal_pos = ft_strchr(arg, '=');
+	if (equal_pos)
+		name = ft_substr(arg, 0, equal_pos - arg);
+	else
+		name = ft_strdup(arg);
+	if (!name)
+		return (0);
+	result = is_valid_name(name);
+	if (!result)
+		printf("export: %s: not a valid identifier\n", name);
+	free(name);
+	return (result);
+}
+
+static int	is_valid_name(char *name)
+{
+	int	i;
+
+	if (!name || !name[0] || ft_isdigit(name[0]))
+		return (0);
+	i = 0;
+	while (name[i])
+	{
+		if (!ft_isalnum(name[i]) && name[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static t_env	*copy_list_for_export(t_env *lst)
 {
 	t_env	*cpy;
 	t_env	*tmp;
@@ -95,55 +123,4 @@ static t_env	*copy_list(t_env *lst)
 		tmp = tmp->next;
 	}
 	return (cpy);
-}
-
-/**
- * @brief Valida si un argumento de export es correcto.
- * @param arg Argumento a validar (formato: VAR=value o VAR).
- * @return 1 si es válido, 0 si no.
- */
-static int	check_export(char *arg)
-{
-	char	*name;
-	char	*equal_pos;
-	int		result;
-
-	if (!arg || arg[0] == '=' || ft_isdigit(arg[0]))
-	{
-		printf("export: %s: not a valid identifier\n", arg);
-		return (0);
-	}
-	equal_pos = ft_strchr(arg, '=');
-	if (equal_pos)
-		name = ft_substr(arg, 0, equal_pos - arg);
-	else
-		name = ft_strdup(arg);
-	if (!name)
-		return (0);
-	result = is_valid_name(name);
-	if (!result)
-		printf("export: %s: not a valid identifier\n", arg);
-	free(name);
-	return (result);
-}
-
-/**
- * @brief Verifica si un nombre de variable es válido.
- * @param name Nombre de variable a verificar.
- * @return 1 si es válido, 0 si no.
- */
-static int	is_valid_name(char *name)
-{
-	int	i;
-
-	if (!name || !name[0] || ft_isdigit(name[0]))
-		return (0);
-	i = 0;
-	while (name[i])
-	{
-		if (!ft_isalnum(name[i]) && name[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
 }

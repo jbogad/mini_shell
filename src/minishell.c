@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/01 11:10:30 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/01 12:17:48 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int	main(int argc, char **argv, char **envp)
     }
     
     printf("[DEBUG] Iniciando cleanup final\n");
-    free_cmd_args(&msh);  // ← Descomenta y prueba
+    free_cmd_args(&msh);
     printf("[DEBUG] cmd_args liberado, ahora liberando env\n");
     free_env(msh.env);
     printf("[DEBUG] Cleanup completado\n");

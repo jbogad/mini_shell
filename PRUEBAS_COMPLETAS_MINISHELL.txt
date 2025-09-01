@@ -1,0 +1,488 @@
+# 🧪 PRUEBAS COMPLETAS PARA MINISHELL
+
+## 📋 ÍNDICE
+1. [BUILT-INS](#built-ins)
+2. [EXEC (Ejecución de comandos externos)](#exec)
+3. [PIPES](#pipes)
+4. [REDIRECTIONS](#redirections)
+5. [COMBINACIONES COMPLEJAS](#combinaciones)
+6. [CASOS EDGE](#casos-edge)
+
+---
+
+## 🏗️ BUILT-INS
+
+### 1️⃣ **ECHO**
+
+#### ✅ Casos básicos:
+```bash
+echo hello
+echo "hello world"
+echo 'single quotes'
+echo hello world multiple args
+echo ""
+echo ''
+```
+
+#### ✅ Flag -n (sin newline):
+```bash
+echo -n hello
+echo -n "no newline"
+echo -n
+echo -nnnnn hello (múltiples -n)
+```
+
+#### ✅ Casos edge:
+```bash
+echo -n -n -n hello
+echo -N hello (no debería funcionar como -n)
+echo --n hello (no debería funcionar como -n)
+echo - hello
+echo -
+```
+
+#### ✅ Esperado:
+- `echo hello` → `hello\n`
+- `echo -n hello` → `hello` (sin newline)
+- `echo ""` → `\n` (solo newline)
+
+---
+
+### 2️⃣ **PWD**
+
+#### ✅ Casos básicos:
+```bash
+pwd
+pwd extra args (debería ignorar argumentos)
+```
+
+#### ✅ Casos edge:
+```bash
+pwd -L (con flags, debería ignorar)
+pwd --help (debería ignorar)
+```
+
+#### ✅ Esperado:
+- Siempre imprime el directorio actual + newline
+
+---
+
+### 3️⃣ **CD**
+
+#### ✅ Casos básicos:
+```bash
+cd /tmp
+cd ..           SI QUE FUNCIONA
+cd .            SI QUE FUNCIONA -> PERO NO SE COMO ES
+cd $HOME        NO SE SI FUNCIONA
+cd (sin argumentos, ir a HOME) BUCLE INFINITO
+```
+
+#### ✅ Rutas relativas y absolutas:
+```bash
+cd src
+cd ./src
+cd ../
+cd /usr/bin
+cd ../../
+```
+
+#### ✅ Casos de error:
+```bash
+cd /directorio/inexistente
+cd archivo_no_directorio
+cd /root (sin permisos)
+```
+
+#### ✅ Variables de entorno:
+```bash
+export TEST_DIR=/tmp
+cd $TEST_DIR
+```
+
+#### ✅ Esperado:
+- Cambio exitoso: sin output, $? = 0
+- Error: mensaje como bash + $? = 1
+
+---
+
+### 4️⃣ **EXPORT**
+
+#### ✅ Sin argumentos (mostrar variables):
+```bash
+export
+```
+
+#### ✅ Crear/modificar variables:
+```bash
+export VAR=value
+export VAR="value with spaces"
+export VAR='single quotes'
+export VAR=""
+export VAR=
+export PATH="/new/path:$PATH"
+```
+
+#### ✅ Múltiples variables:
+```bash
+export VAR1=val1 VAR2=val2 VAR3=val3
+```
+
+#### ✅ Casos de error:
+```bash
+export 123VAR=value (nombre inválido)
+export VAR*=value (caracteres inválidos)
+export =value (sin nombre)
+export VAR==value (doble =)
+```
+
+#### ✅ Esperado:
+- Éxito: sin output, variable en entorno
+- Error: "export: name: not a valid identifier"
+
+---
+
+### 5️⃣ **UNSET**
+
+#### ✅ Casos básicos:
+```bash
+export TEST=value
+unset TEST
+echo $TEST (debería estar vacío)
+```
+
+#### ✅ Múltiples variables:
+```bash
+export A=1 B=2 C=3
+unset A B C
+```
+
+#### ✅ Variables inexistentes:
+```bash
+unset NONEXISTENT (no debería dar error)
+```
+
+#### ✅ Casos de error:
+```bash
+unset 123VAR (nombre inválido)
+unset VAR* (caracteres inválidos)
+```
+
+#### ✅ Esperado:
+- Éxito: sin output, variable eliminada
+- Error: mensaje de error + $? = 1
+
+---
+
+### 6️⃣ **ENV**
+
+#### ✅ Casos básicos:
+```bash
+env
+env | grep USER
+env | wc -l
+```
+
+#### ✅ Con argumentos extra:
+```bash
+env args extra (debería ignorar)
+```
+
+#### ✅ Esperado:
+- Lista todas las variables en formato NAME=VALUE
+
+---
+
+### 7️⃣ **EXIT**
+
+#### ✅ Sin argumentos:
+```bash
+exit
+```
+
+#### ✅ Con código de salida:
+```bash
+exit 0
+exit 1
+exit 42
+exit 255
+```
+
+#### ✅ Casos de error:
+```bash
+exit abc (argumento no numérico)
+exit 256 (fuera de rango 0-255)
+exit -1 (negativo)
+exit 1 2 3 (demasiados argumentos)
+```
+
+#### ✅ Esperado:
+- `exit` → código 0
+- `exit N` → código N
+- Error: mensaje + salir con código 2
+
+---
+
+## 🚀 EXEC (Comandos externos)
+
+### 1️⃣ **Comandos básicos del sistema:**
+```bash
+ls
+ls -la
+cat /etc/passwd
+grep root /etc/passwd
+wc -l /etc/passwd
+head -5 /etc/passwd
+tail -3 /etc/passwd
+```
+
+### 2️⃣ **Comandos con argumentos:**
+```bash
+ls -la /tmp
+cat file1.txt file2.txt
+grep -n "pattern" file.txt
+```
+
+### 3️⃣ **Comandos inexistentes:**
+```bash
+comando_inexistente
+/bin/comando_inexistente
+./programa_inexistente
+```
+
+### 4️⃣ **Paths absolutos vs relativos:**
+```bash
+/bin/ls
+./mi_programa (si existe)
+ls (encontrar en PATH)
+```
+
+### 5️⃣ **Esperado:**
+- Éxito: output del comando + código de salida correcto
+- Error: "command not found" + código 127
+
+---
+
+## 🔀 PIPES
+
+### 1️⃣ **Pipes simples:**
+```bash
+echo hello | cat
+ls | wc -l
+cat /etc/passwd | grep root
+echo "test line" | wc -w
+```
+
+### 2️⃣ **Pipes múltiples:**
+```bash
+ls | head -5 | tail -2
+cat /etc/passwd | grep bash | wc -l
+echo -e "a\nb\nc" | sort | uniq
+```
+
+### 3️⃣ **Pipes con built-ins:**
+```bash
+pwd | cat
+echo hello | cat | cat
+env | grep PATH
+```
+
+### 4️⃣ **Errores de sintaxis:**
+```bash
+| ls (pipe al inicio)
+ls | (pipe al final)
+ls || pwd (pipes dobles)
+```
+
+### 5️⃣ **Esperado:**
+- Pipe válido: output correcto
+- Error sintaxis: "syntax error near unexpected token `|'"
+
+---
+
+## 📁 REDIRECTIONS
+
+### 1️⃣ **Output redirection (>):**
+```bash
+echo hello > file.txt
+ls > files.txt
+pwd > current_dir.txt
+echo "overwrite" > file.txt
+```
+
+### 2️⃣ **Append redirection (>>):**
+```bash
+echo line1 > file.txt
+echo line2 >> file.txt
+echo line3 >> file.txt
+```
+
+### 3️⃣ **Input redirection (<):**
+```bash
+echo "content" > input.txt
+cat < input.txt
+wc -l < input.txt
+```
+
+### 4️⃣ **Heredoc (<<):**
+```bash
+cat << EOF
+line 1
+line 2
+EOF
+
+wc -l << END
+test
+lines
+END
+```
+
+### 5️⃣ **Redirections con variables:**
+```bash
+export FILE=output.txt
+echo hello > $FILE
+cat < $FILE
+```
+
+### 6️⃣ **Casos de error:**
+```bash
+echo hello > /root/file.txt (sin permisos)
+cat < nonexistent.txt (archivo inexistente)
+```
+
+---
+
+## 🔥 COMBINACIONES COMPLEJAS
+
+### 1️⃣ **Pipes + Redirections:**
+```bash
+echo hello | cat > output.txt
+ls | grep txt > text_files.txt
+cat < input.txt | wc -l > count.txt
+```
+
+### 2️⃣ **Multiple redirections:**
+```bash
+echo test > file1.txt > file2.txt (solo file2.txt)
+```
+
+### 3️⃣ **Built-ins + Redirections:**
+```bash
+pwd > current.txt
+export > all_vars.txt
+env > environment.txt
+echo $PATH > path.txt
+```
+
+### 4️⃣ **Pipes largos + Redirections:**
+```bash
+ls -la | grep txt | wc -l > txt_count.txt
+cat /etc/passwd | grep bash | cut -d: -f1 > bash_users.txt
+```
+
+---
+
+## 🎯 CASOS EDGE
+
+### 1️⃣ **Variables de entorno:**
+```bash
+export TEST="ls -la"
+$TEST (debería ejecutar ls -la)
+echo $TEST
+echo "$TEST"
+echo '$TEST' (literal)
+```
+
+### 2️⃣ **Espacios y quotes:**
+```bash
+echo "hello world"
+echo 'hello world'
+echo "hello 'world'"
+echo 'hello "world"'
+```
+
+### 3️⃣ **Empty commands:**
+```bash
+""
+''
+   (solo espacios)
+```
+
+### 4️⃣ **Señales (Ctrl+C, Ctrl+D):**
+```bash
+# Durante ejecución de comando
+cat (luego Ctrl+C)
+cat (luego Ctrl+D)
+```
+
+### 5️⃣ **Exit status ($?):**
+```bash
+echo $? (debería ser 0 al inicio)
+false
+echo $? (debería ser 1)
+true
+echo $? (debería ser 0)
+```
+
+---
+
+## 📊 SCRIPT DE PRUEBA AUTOMATIZADO
+
+```bash
+#!/bin/bash
+# Crear este script para probar automáticamente
+
+echo "=== PROBANDO BUILT-INS ==="
+echo "Testing echo..."
+echo hello
+echo -n test
+
+echo "Testing pwd..."
+pwd
+
+echo "Testing cd..."
+cd /tmp && pwd
+
+echo "Testing export..."
+export TEST=value
+echo $TEST
+
+echo "Testing env..."
+env | grep TEST
+
+echo "Testing unset..."
+unset TEST
+echo $TEST
+
+echo "=== PROBANDO EXEC ==="
+ls
+cat /etc/passwd | head -3
+
+echo "=== PROBANDO PIPES ==="
+echo hello | cat
+ls | wc -l
+
+echo "=== PROBANDO REDIRECTIONS ==="
+echo test > testfile.txt
+cat testfile.txt
+rm testfile.txt
+
+echo "=== PRUEBAS COMPLETADAS ==="
+```
+
+---
+
+## ✅ LISTA DE VERIFICACIÓN
+
+- [ ] Todos los built-ins funcionan correctamente
+- [ ] Comandos externos se ejecutan
+- [ ] Pipes simples y múltiples funcionan
+- [ ] Todas las redirections funcionan
+- [ ] Variables de entorno se expanden
+- [ ] Errores de sintaxis se detectan
+- [ ] Exit codes son correctos
+- [ ] Señales se manejan apropiadamente
+- [ ] Memory leaks = 0 (valgrind)
+- [ ] Norminette compliance = 100%
+
+¡Usa este archivo para probar sistemáticamente todas las funcionalidades de tu minishell!
