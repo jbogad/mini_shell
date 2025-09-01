@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_quotes_sim_tokens.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/16 12:09:11 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/01 15:17:41 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,18 +109,28 @@ t_token	*extract_sim_quote_token(char *input, int *i)
 {
 	t_token	*token;
 	int		start;
+	char	*before;
+	char	*inside;
+	int		quote_start;
 
-	start = *i + 1;
+	start = *i;
+	while (start > 0 && input[start - 1] != ' ' && input[start - 1] != '\t'
+		&& input[start - 1] != '|' && input[start - 1] != '<' && input[start
+		- 1] != '>')
+		start--;
+	before = ft_strndup(input + start, *i - start);
+	quote_start = *i + 1;
 	(*i)++;
 	while (input[*i] && input[*i] != '\'')
 		(*i)++;
-	if (!input[*i])
-		return (NULL);
+	inside = ft_strndup(input + quote_start, *i - quote_start);
 	token = malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->type = TOKEN_WORD; //he modificado esto [[JAVIER]]
-	token->value = ft_strndup(&input[start], *i - start);
+	token->type = TOKEN_WORD;
+	token->value = ft_strjoin(before, inside);
+	free(before);
+	free(inside);
 	(*i)++;
 	return (token);
 }
+
+

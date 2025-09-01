@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_quotes_dob_tokens.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:47:15 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/16 12:12:17 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/01 14:27:38 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	fill_dob_quote_tokens(char *input, t_token **tokens, t_extract *e)
 			{
 				e->in_dob_quote = 0;
 				new_tkn = malloc(sizeof(t_token));
-				new_tkn->type = TOKEN_WORD;	//he cambiado esto 
+				new_tkn->type = TOKEN_WORD; // he cambiado esto
 				new_tkn->value = ft_strndup(&input[e->start], e->i - e->start);
 				tokens[e->count++] = new_tkn;
 			}
@@ -102,25 +102,33 @@ void	fill_dob_quote_tokens(char *input, t_token **tokens, t_extract *e)
  * y crea un token con el texto entre esas comillas.
  * @param input Línea de entrada.
  * @param i Puntero al índice actual que se irá actualizando.
- * @return Token de tipo TOKEN_DOB_QUOTE o NULL si hay error o no se cierra 
+ * @return Token de tipo TOKEN_DOB_QUOTE o NULL si hay error o no se cierra
  * la comilla.
  */
 t_token	*extract_dob_quote_token(char *input, int *i)
 {
 	t_token	*token;
 	int		start;
+	char	*before;
+	char	*inside;
+	int		quote_start;
 
-	start = *i + 1;
+	start = *i;
+	while (start > 0 && input[start - 1] != ' ' && input[start - 1] != '\t'
+		&& input[start - 1] != '|' && input[start - 1] != '<' && input[start
+		- 1] != '>')
+		start--;
+	before = ft_strndup(input + start, *i - start);
+	quote_start = *i + 1;
 	(*i)++;
 	while (input[*i] && input[*i] != '"')
 		(*i)++;
-	if (!input[*i])
-		return (NULL);
+	inside = ft_strndup(input + quote_start, *i - quote_start);
 	token = malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->type = TOKEN_WORD;	//he cambiado esto {{JAVIER}}
-	token->value = ft_strndup(&input[start], *i - start);
+	token->type = TOKEN_WORD;
+	token->value = ft_strjoin(before, inside);
+	free(before);
+	free(inside);
 	(*i)++;
 	return (token);
 }
