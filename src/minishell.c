@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/08/13 18:25:08 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/01 11:10:30 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,12 @@ int	main(int argc, char **argv, char **envp)
 
             if (!g_skip_next_readline && tokens_ext && tokens_ext[0])
             {
-                if (has_pipes(tokens_ext))
+                int pipe_check = has_pipes(tokens_ext);
+                if (pipe_check == -1)
+                {
+                    // Error de sintaxis, no ejecutar nada
+                }
+                else if (pipe_check == 1)
                     execute_pipes(tokens_ext, &msh);
                 else
                     execute(tokens_ext, &msh);

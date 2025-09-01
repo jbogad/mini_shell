@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:05:47 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/13 21:38:48 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/01 11:10:30 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+/*
+** Valida la sintaxis de pipes en los tokens
+** Devuelve 0 si hay errores de sintaxis, 1 si es válido
+*/
+static int	validate_pipe_syntax(t_token **tokens)
+{
+	int	i;
+
+	if (!tokens || !tokens[0])
+		return (1);
+	if (tokens[0]->type == TOKEN_PIPE)
+		return (0);
+	i = 0;
+	while (tokens[i])
+	{
+		if (tokens[i]->type == TOKEN_PIPE)
+		{
+			if (!tokens[i + 1] || tokens[i + 1]->type == TOKEN_PIPE)
+				return (0);
+		}
+		i++;
+	}
+	return (1);
+}
 
 /*
 ** Verifica si hay pipes (|) en la lista de tokens
@@ -22,6 +47,11 @@ int	has_pipes(t_token **tokens)
 
 	if (!tokens)
 		return (0);
+	if (!validate_pipe_syntax(tokens))
+	{
+		printf("bash: syntax error near unexpected token `|'\n");
+		return (-1);
+	}
 	i = 0;
 	while (tokens[i])
 	{
