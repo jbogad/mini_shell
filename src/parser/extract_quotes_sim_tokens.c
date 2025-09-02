@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/01 15:17:41 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:39:15 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ t_token	*extract_sim_quote_token(char *input, int *i)
 		(*i)++;
 	inside = ft_strndup(input + quote_start, *i - quote_start);
 	token = malloc(sizeof(t_token));
-	token->type = TOKEN_WORD;
+	token->type = TOKEN_SIM_QUOTE;
 	token->value = ft_strjoin(before, inside);
 	free(before);
 	free(inside);

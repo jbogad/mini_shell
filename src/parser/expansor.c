@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/15 15:34:00 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/02 12:40:59 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,19 @@ int	count_env(char **envp)
  * @brief Inicializa la lista de variables de entorno.
  * Recibe el array de cadenas `envp` y crea un arreglo
  * de estructuras `t_env` separando el nombre y valor de cada variable.
- * @param envp Arreglo de cadenas con las variables de entorno en formato 
+ * @param envp Arreglo de cadenas con las variables de entorno en formato
  * "NOMBRE=VALOR".
- * @return Arreglo de estructuras `t_env` con los nombres y valores 
+ * @return Arreglo de estructuras `t_env` con los nombres y valores
  * separados, terminado en NULL.
  */
- t_env	*init_env(char **envp)
+t_env	*init_env(char **envp)
 {
 	t_env	*env_list;
 	t_env	*new_node;
 	char	*equal_sign;
 	int		i;
+	char	*name;
+	char	*value;
 
 	env_list = NULL;
 	i = 0;
@@ -50,9 +52,8 @@ int	count_env(char **envp)
 		equal_sign = ft_strchr(envp[i], '=');
 		if (equal_sign)
 		{
-			char *name = ft_substr(envp[i], 0, equal_sign - envp[i]);
-			char *value = ft_strdup(equal_sign + 1);
-			
+			name = ft_substr(envp[i], 0, equal_sign - envp[i]);
+			value = ft_strdup(equal_sign + 1);
 			new_node = ft_lstnew_env(name, value, 1);
 			if (new_node)
 			{
@@ -61,7 +62,6 @@ int	count_env(char **envp)
 				else
 					ft_lstadd_back_env(&env_list, new_node);
 			}
-			
 			free(name);
 			free(value);
 		}
@@ -78,22 +78,22 @@ int	count_env(char **envp)
  * @param name Nombre de la variable a buscar.
  * @return Valor de la variable si se encuentra, NULL en caso contrario.
  */
-char	*get_env_value(t_env *env, char *name)
+char *get_env_value(t_env *env, char *name)
 {
-	int	i;
+    t_env *tmp = env;
 
-	i = 0;
-	while (env[i].name_env)
-	{
-		if (ft_strcmp(env[i].name_env, name) == 0)
-			return (env[i].val_env);
-		i++;
-	}
-	return (NULL);
+    while (tmp)
+    {
+        if (ft_strcmp(tmp->name_env, name) == 0)
+            return tmp->val_env;
+        tmp = tmp->next;
+    }
+    return NULL;
 }
 
+
 /**
- * @brief Reemplaza el primer '$' en el token con el valor de una variable 
+ * @brief Reemplaza el primer '$' en el token con el valor de una variable
  * de entorno.
  * Toma el token en `tokens[i]`, busca el primer '$' en su valor y lo reemplaza
  * por el contenido de `env`, actualizando el valor del token.

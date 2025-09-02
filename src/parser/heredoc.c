@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:15:45 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/01 12:31:49 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/02 12:55:32 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 {
 	char	*her_input;
 	char	*expanded;
+	int		quoted;
 
 	her_input = NULL;
+	quoted = (token->type == TOKEN_SIM_QUOTE || token->type == TOKEN_DOB_QUOTE);
+	printf("Token a buscar de tipo: [%d]\n", token->type);
 	while (1)
 	{
 		free(her_input);
@@ -50,14 +53,16 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 			msg_ctrld_heredoc(to_search);
 		if (ft_strcmp(her_input, to_search) == 0)
 			break ;
-		if (token->type == TOKEN_WORD)
+		if (!quoted && token->type == TOKEN_WORD)
 		{
 			expanded = expand_all_vars(env_list, her_input);
 			free(her_input);
 			her_input = expanded;
 		}
+
 		ft_printf("Input: %s\n", her_input);
 	}
+
 	free(her_input);
 	free(to_search);
 	exit(0);
@@ -109,10 +114,10 @@ void	heredoc(t_env *env_list, t_token **tokens)
 	i = 0;
 	while (tokens && tokens[i])
 	{
-		if (tokens[i]->type == TOKEN_HEREDOC && tokens[i + 1] && (tokens[i
-					+ 1]->type == TOKEN_WORD || tokens[i
-					+ 1]->type == TOKEN_SIM_QUOTE || tokens[i
-					+ 1]->type == TOKEN_DOB_QUOTE))
+		if (tokens[i]->type == TOKEN_HEREDOC && tokens[i + 1] &&
+			(tokens[i + 1]->type == TOKEN_WORD ||
+			 tokens[i + 1]->type == TOKEN_SIM_QUOTE ||
+			 tokens[i + 1]->type == TOKEN_DOB_QUOTE))
 		{
 			to_search = ft_strdup(tokens[i + 1]->value);
 			ft_printf("A BUSCAR: %s\n", to_search);
