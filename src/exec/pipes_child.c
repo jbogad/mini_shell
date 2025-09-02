@@ -6,69 +6,81 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 10:00:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/31 12:37:37 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static t_token	**get_cmd_tokens(t_token **tokens, int cmd_idx)
+static int	is_builtin(char *cmd)
 {
-	t_token	**cmd_tokens;
-	int		i;
-	int		j;
-	int		pipes_passed;
-	int		cmd_length;
-
-	i = 0;
-	pipes_passed = 0;
-	while (tokens[i] && pipes_passed < cmd_idx)
-	{
-		if (tokens[i]->type == TOKEN_PIPE)
-			pipes_passed++;
-		i++;
-	}
-	j = i;
-	while (tokens[j] && tokens[j]->type != TOKEN_PIPE)
-		j++;
-	cmd_length = j - i;
-	if (cmd_length == 0)
-		return (NULL);
-	cmd_tokens = malloc(sizeof(t_token *) * (cmd_length + 1));
-	if (!cmd_tokens)
-		return (NULL);
-	j = 0;
-	while (j < cmd_length)
-	{
-		cmd_tokens[j] = tokens[i + j];
-		j++;
-	}
-	cmd_tokens[j] = NULL;
-	return (cmd_tokens);
+	if (!cmd)
+		return (0);
+	return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "exit") == 0);
 }
 
-static void	free_cmd_tokens(t_token **tokens)
+static void	execute_builtin_pipe(char *cmd, t_token **cmd_tokens, t_shell *msh)
 {
-	if (tokens)
-		free(tokens);
+	if (ft_strcmp(cmd, "echo") == 0)
+		ft_echo(cmd_tokens);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		ft_cd(msh);
+	else if (ft_strcmp(cmd, "pwd") == 0)
+		ft_pwd();
+	else if (ft_strcmp(cmd, "export") == 0)
+		ft_export(msh);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		ft_unset(msh);
+	else if (ft_strcmp(cmd, "env") == 0)
+		ft_env(msh);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		ft_exit(msh);
 }
 
-void	process_pipe_child(t_token **tokens, int i, int total,
-			int pipes[2][2], t_shell *msh)
+static void	execute_builtin_in_pipe(char **argv, t_token **cmd_tokens,
+			t_pipe_data *data)
+{
+	execute_builtin_pipe(argv[0], cmd_tokens, data->msh);
+	if (cmd_tokens)
+		free(cmd_tokens);
+	exit(0);
+}
+
+static void	execute_pipe_command(t_pipe_data *data)
 {
 	char	**argv;
 	t_token	**cmd_tokens;
 
-	cmd_tokens = get_cmd_tokens(tokens, i);
-	setup_child_pipes(i, total, pipes);
-	if (cmd_tokens && msh)
-		set_redirections(cmd_tokens, msh, -1);
-	argv = build_cmd(tokens, i);
-	if (argv && argv[0] && execvp(argv[0], argv) == -1)
+	cmd_tokens = get_cmd_tokens(data);
+	argv = build_cmd(data->tokens, data->cmd_idx);
+	if (argv && argv[0])
 	{
-		free_cmd_tokens(cmd_tokens);
-		exit(1);
+		if (is_builtin(argv[0]))
+			execute_builtin_in_pipe(argv, cmd_tokens, data);
+		else if (execvp(argv[0], argv) == -1)
+		{
+			if (cmd_tokens)
+				free(cmd_tokens);
+			exit(1);
+		}
 	}
-	free_cmd_tokens(cmd_tokens);
+	if (cmd_tokens)
+		free(cmd_tokens);
 	exit(1);
+}
+
+void	process_pipe_child(t_pipe_data *data)
+{
+	t_token		**cmd_tokens;
+
+	cmd_tokens = get_cmd_tokens(data);
+	setup_child_pipes(data->cmd_idx, data->total, data->pipes);
+	if (cmd_tokens && data->msh)
+		set_redirections(cmd_tokens, data->msh, -1);
+	if (cmd_tokens)
+		free(cmd_tokens);
+	execute_pipe_command(data);
 }

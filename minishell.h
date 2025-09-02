@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/01 16:08:22 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,16 @@ void							free_tokens(t_token **tokens);
 int								ft_strcmp(const char *s1, const char *s2);
 void							free_env(t_env *env_list);
 
+// Pipes helper structure
+typedef struct s_pipe_data
+{
+	t_token	**tokens;
+	int		cmd_idx;
+	int		total;
+	int		pipes[2][2];
+	t_shell	*msh;
+}	t_pipe_data;
+
 /*================JAVIER================*/
 
 /*pwd*/
@@ -158,13 +168,16 @@ void						execute_pipes(t_token **tokens, t_shell *msh);
 int							count_commands(t_token **tokens);
 void						setup_child_pipes(int i, int total, int pipes[2][2]);
 void						close_parent_pipes(int i, int pipes[2][2]);
+void						wait_for_children(void);
 
 /*pipes_cmd*/
 char						**build_cmd(t_token **tokens, int cmd_idx);
 
 /*pipes_child*/
-void						process_pipe_child(t_token **tokens, int i,
-								int total, int pipes[2][2], t_shell *msh);
+void						process_pipe_child(t_pipe_data *data);
+
+/*utils_pipes*/
+t_token						**get_cmd_tokens(t_pipe_data *data);
 
 /*redirections*/
 int							set_infile(t_token **tokens, t_shell *msh, char *cmd_name);
@@ -181,6 +194,7 @@ t_token						*find_redirection_file(t_token **tokens, t_token_type redir_type);
 
 /*Utils_global*/
 /*env*/
+t_env	                    *find_env(t_env *env_list, char *name);
 t_env	                    *ft_lstnew_env(char *name, char *value, int alloc);
 void	                    ft_lstadd_back_env(t_env **lst, t_env *new);
 char	                    *get_env_name(char *fullenv);

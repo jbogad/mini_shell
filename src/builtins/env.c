@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:27 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/06 20:08:48 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/02 12:43:53 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ void	ft_env(t_shell *msh)
 	tmp = msh->env;
 	while (tmp)
 	{
-		if (tmp->name_env && tmp->val_env && tmp->val_env[0] != '\0')
-			ft_printf("%s=%s\n", tmp->name_env, tmp->val_env);
+		if (tmp->name_env && tmp->val_env)
+		{
+			write(1, tmp->name_env, ft_strlen(tmp->name_env));
+			write(1, "=", 1);
+			write(1, tmp->val_env, ft_strlen(tmp->val_env));
+			write(1, "\n", 1);
+		}
 		tmp = tmp->next;
 	}
 }

@@ -103,8 +103,8 @@ SRC_UTILS = src/utils/utils.c
 SRC_BUILTINS = src/builtins/pwd.c src/builtins/echo.c src/builtins/export.c \
                 src/builtins/unset.c src/builtins/cd.c src/builtins/env.c \
                 src/builtins/exit.c src/builtins/utils_export.c
-SRC_UTILS_GLOBAL = src/utils_global/utils_to_env.c src/utils_global/utils_to_free.c
-SRC_EXEC = src/exec/exec.c src/exec/external_exec.c src/exec/pipes.c src/exec/pipes_utils.c src/exec/pipes_cmd.c src/exec/pipes_child.c src/exec/redirections.c src/exec/redirections_utils.c src/exec/redirections_input.c src/exec/redirections_output.c
+SRC_UTILS_GLOBAL = src/utils_global/utils_to_env.c src/utils_global/utils_to_free.c src/utils_global/utils_export_add.c
+SRC_EXEC = src/exec/exec.c src/exec/external_exec.c src/exec/pipes.c src/exec/pipes_utils.c src/exec/pipes_cmd.c src/exec/pipes_child.c src/exec/utils_pipes.c src/exec/redirections.c src/exec/redirections_utils.c src/exec/redirections_input.c src/exec/redirections_output.c
 SRC_PARSER = src/parser/read_input.c src/parser/get_short_path.c src/parser/extract_word_tokens.c \
              src/parser/heredoc.c src/parser/extract_all_tokens.c src/parser/expand_tokens.c \
              src/parser/extract_ops_tokens.c src/parser/extract_quotes_dob_tokens.c \

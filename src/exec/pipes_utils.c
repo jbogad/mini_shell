@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 10:00:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/31 12:37:37 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,10 @@ void	close_parent_pipes(int i, int pipes[2][2])
 		close(pipes[(i - 1) % 2][0]);
 		close(pipes[(i - 1) % 2][1]);
 	}
+}
+
+void	wait_for_children(void)
+{
+	while (waitpid(-1, NULL, 0) != -1)
+		;
 }

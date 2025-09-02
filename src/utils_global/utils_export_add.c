@@ -1,48 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_to_free.c                                    :+:      :+:    :+:   */
+/*   utils_export_add.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/15 12:32:49 by jaboga-d          #+#    #+#             */
+/*   Created: 2025/08/31 16:00:00 by jaboga-d          #+#    #+#             */
 /*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_free_list(t_env **list)
+void	add_env(t_env **env_list, char *name, char *value)
 {
-	t_env	*tmp;
+	t_env	*existing;
+	t_env	*new;
 
-	while (*list)
-	{
-		tmp = (*list)->next;
-		ft_memfree((*list)->name_env);
-		ft_memfree((*list)->val_env);
-		ft_memfree((*list));
-		*list = tmp;
-	}
-	*list = NULL;
-}
-
-void	ft_memfree(void *ptr)
-{
-	if (!ptr)
+	if (!env_list || !name)
 		return ;
-	free(ptr);
-	ptr = NULL;
-}
-
-char	*get_value_of_env(char *fullenv)
-{
-	char	*equal;
-
-	if (!fullenv)
-		return (ft_strdup(""));
-	equal = ft_strchr(fullenv, '=');
-	if (equal)
-		return (ft_strdup(equal + 1));
-	return (ft_strdup(""));
+	existing = find_env(*env_list, name);
+	if (existing)
+	{
+		free(existing->val_env);
+		if (value)
+			existing->val_env = ft_strdup(value);
+		else
+			existing->val_env = ft_strdup("");
+		return ;
+	}
+	new = ft_lstnew_env(name, value, 1);
+	if (new)
+		ft_lstadd_back_env(env_list, new);
 }

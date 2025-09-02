@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:05:47 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/01 11:10:30 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,31 @@ int	has_pipes(t_token **tokens)
 	return (0);
 }
 
+static void	setup_pipe_data(t_pipe_data *data, t_token **tokens,
+		int i, t_shell *msh)
+{
+	data->tokens = tokens;
+	data->cmd_idx = i;
+	data->msh = msh;
+}
+
+static void	handle_child_process(t_pipe_data *data, int pipes[2][2])
+{
+	ft_memcpy(data->pipes, pipes, 2 * 2 * sizeof (int));
+	process_pipe_child(data);
+}
+
 /*
 ** Ejecuta una cadena de comandos conectados por pipes
 ** Crea procesos hijo para cada comando y conecta sus entrada/salida
 */
 void	execute_pipes(t_token **tokens, t_shell *msh)
 {
-	int		pipes[2][2];
-	int		i;
-	int		total;
-	pid_t	pid;
+	int			pipes[2][2];
+	int			i;
+	int			total;
+	pid_t		pid;
+	t_pipe_data	data;
 
 	total = count_commands(tokens);
 	i = 0;
@@ -81,11 +96,14 @@ void	execute_pipes(t_token **tokens, t_shell *msh)
 			return ;
 		pid = fork();
 		if (pid == 0)
-			process_pipe_child(tokens, i, total, pipes, msh);
+		{
+			setup_pipe_data(&data, tokens, i, msh);
+			data.total = total;
+			handle_child_process(&data, pipes);
+		}
 		if (pid > 0)
 			close_parent_pipes(i, pipes);
 		i++;
 	}
-	while (waitpid(-1, NULL, 0) != -1)
-		;
+	wait_for_children();
 }

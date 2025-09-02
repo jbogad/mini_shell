@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   utils_to_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:29:17 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/07/15 15:47:15 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+/**
+ * @brief Busca una variable de entorno por su nombre.
+ * @param env_list Lista de variables de entorno.
+ * @param name Nombre de la variable a buscar.
+ * @return Puntero a la variable encontrada o NULL.
+ */
+t_env	*find_env(t_env *env_list, char *name)
+{
+	t_env	*tmp;
+
+	if (!env_list || !name)
+		return (NULL);
+	tmp = env_list;
+	while (tmp)
+	{
+		if (tmp->name_env && ft_strcmp(tmp->name_env, name) == 0)
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
 
 static void	assign_values(t_env *new_node, char *name, char *value, int alloc);
 
@@ -94,21 +116,4 @@ char	*get_env_name(char *fullenv)
 	while (fullenv[i] && fullenv[i] != '=')
 		i++;
 	return (ft_substr(fullenv, 0, i));
-}
-
-/**
- * @brief Extrae el valor de una variable del formato "NAME=value".
- * @param fullenv String en formato "NAME=value".
- * @return Valor de la variable extraído.
- */
-char	*get_value_of_env(char *fullenv)
-{
-	char	*equal;
-
-	if (!fullenv)
-		return (ft_strdup(""));
-	equal = ft_strchr(fullenv, '=');
-	if (equal)
-		return (ft_strdup(equal + 1));
-	return (ft_strdup(""));
 }

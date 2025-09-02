@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:57 by clalopez          #+#    #+#             */
-/*   Updated: 2025/02/20 11:27:12 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/02 12:43:54 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,13 @@ int	ft_printf(char const *s, ...)
 		{
 			s++;
 			formatter(va, (char *)s, &count);
+			s++;
 		}
 		else
+		{
 			print_char(*s, &count);
-		s++;
+			s++;
+		}
 	}
 	va_end(va);
 	return (count);
