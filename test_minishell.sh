@@ -2,6 +2,7 @@
 
 # 🧪 SCRIPT DE PRUEBAS COMPLETO PARA MINISHELL
 # Prueba automáticamente todas las funcionalidades
+# Actualizado para export con ordenación alfabética
 
 # Colores para output
 RED='\033[0;31m'
@@ -16,6 +17,17 @@ NC='\033[0m' # No Color
 TOTAL_TESTS=0
 PASSED_TESTS=0
 FAILED_TESTS=0
+
+echo -e "${BLUE}🚀 MINISHELL COMPREHENSIVE TEST SUITE 🚀${NC}"
+echo -e "${BLUE}=========================================${NC}"
+echo ""
+
+# Verificar que minishell existe
+if [ ! -f "./minishell" ]; then
+    echo -e "${RED}❌ Error: ./minishell not found!${NC}"
+    echo "Run 'make' first"
+    exit 1
+fi
 
 # Función para imprimir headers
 print_header() {
@@ -137,12 +149,27 @@ fi
 print_header "BUILT-IN: EXPORT"
 # ===================================================================
 
-# Export sin argumentos
+# Export sin argumentos - debe mostrar variables ordenadas alfabéticamente
 export_output=$(run_minishell_test "export")
-if [[ "$export_output" == *"export"* ]]; then
-    print_test_result "export sin argumentos" "Lista variables exportadas" "Output contiene export" "PASS"
+if [[ "$export_output" == *"declare -x"* ]]; then
+    print_test_result "export sin argumentos" "Lista variables exportadas" "Output contiene declare -x" "PASS"
 else
     print_test_result "export sin argumentos" "Lista variables exportadas" "$export_output" "FAIL"
+fi
+
+# Test específico para ordenación alfabética
+echo -e "${YELLOW}🔤 Testing alphabetical order in export...${NC}"
+export_alphabetical=$(run_minishell_test "export" | grep "declare -x" | head -5)
+export_sorted=$(echo "$export_alphabetical" | sort)
+
+if [[ "$export_alphabetical" == "$export_sorted" ]]; then
+    print_test_result "export ordenación alfabética" "Variables ordenadas A-Z" "✅ Orden alfabético correcto" "PASS"
+else
+    print_test_result "export ordenación alfabética" "Variables ordenadas A-Z" "❌ Variables no están ordenadas alfabéticamente" "FAIL"
+    echo -e "${RED}Expected sorted order:${NC}"
+    echo "$export_sorted"
+    echo -e "${RED}Got:${NC}"
+    echo "$export_alphabetical"
 fi
 
 # Export crear variable

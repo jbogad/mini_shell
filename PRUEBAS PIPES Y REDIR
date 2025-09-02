@@ -13,11 +13,14 @@ ERRORES CD
 
 
 VARIABLES DEL PATH
-->Debe de funcionar cualquier variable del path
+->Debe de funcionar cualquier variable del path.  ✅
 
 
 ECHO
-cuando pongo -n -n imprime el -n y el -nnnnnn no deberia de imprimirlo
+cuando pongo -n -n imprime el -n y el -nnnnnn no deberia de imprimirlo 
 
 EXPORT
 ->Export simple -> ordenar alfabéticamente que lo tengo a medias
+
+
+
