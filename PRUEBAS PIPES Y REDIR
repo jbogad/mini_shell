@@ -1,4 +1,3 @@
-cuando hago wc-l con ls, imprime el numero de lineas pero antes un tab -> mirarlo.  
 saltar mensaje de error cuando el comando no exite -> bash: holacomoestas: command not found
 
 cuando tiene un pipe solo no salta por error
@@ -8,19 +7,15 @@ cuando tiene un pipe solo no salta por error
 
 
 ERRORES CD
-->Actualizar el pwd y el oldpwd actualizar el oldpwd que esta en env
+->Actualizar el pwd y el oldpwd actualizar el oldpwd que esta en env.    
 ->Da error 
 
 
 VARIABLES DEL PATH
 ->Debe de funcionar cualquier variable del path.  ✅
 
-
 ECHO
-cuando pongo -n -n imprime el -n y el -nnnnnn no deberia de imprimirlo 
+cuando pongo -n -n imprime el -n y el -nnnnnn no deberia de imprimirlo ✅
 
 EXPORT
-->Export simple -> ordenar alfabéticamente que lo tengo a medias
-
-
-
+->Export simple -> ordenar alfabéticamente que lo tengo a medias.  ✅

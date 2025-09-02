@@ -118,66 +118,157 @@ SRC		= src/minishell.c $(SRC_PARSER) $(SRC_SIGNALS) $(SRC_BUILTINS) $(SRC_EXEC) 
 OBJ_DIR = objects
 OBJS	= $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 
-HEADER = "\n\033[1;36m\
-┌─────────────────────────────────────────────────────────────────────┐\n\
-│  ███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗      │\n\
-│  ████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║      │\n\
-│  ██╔████╔██║██║██╔██╗ ██║██║███████╗███████║█████╗  ██║     ██║      │\n\
-│  ██║╚██╔╝██║██║██║╚██╗██║██║╚════██║██╔══██║██╔══╝  ██║     ██║      │\n\
-│  ██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗ │\n\
-│  ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ │\n\
-└─────────────────────────────────────────────────────────────────────┘\n\
-\033[0m\
-\033[1;32m                    🚀 COMPILANDO PROYECTO... 🚀\033[0m\n\
-\033[1;33m                     ───────────────────────\033[0m\n\
-\033[1;35m                    👑 MASTODONTES DEEEEE 👑\033[0m\n\
-\033[1;94m                  🔥 clalopez && jaboga-d 🔥\033[0m\n\
-\033[1;32m                     ───────────────────────\033[0m\n"
+# 🎨 COLORES Y EFECTOS VISUALES
+RESET		= \033[0m
+BOLD		= \033[1m
+DIM			= \033[2m
+ITALIC		= \033[3m
+UNDERLINE	= \033[4m
+BLINK		= \033[5m
 
-COMPILE_MSG = "\033[1;32m[✓]\033[0m Compilando: \033[1;36m"
-LINK_MSG = "\033[1;33m[🔗]\033[0m Enlazando ejecutable: \033[1;35m"
-SUCCESS_MSG = "\n\033[1;32m┌────────────────────────────────────────┐\n\
-│           ✨ COMPILACIÓN EXITOSA ✨     │\n\
-│                                        │\n\
-│    🎉 Proyecto listo para ejecutar 🎉  │\n\
-│                                        │\n\
-│         Ejecuta: \033[1;36m./minishell\033[1;32m          │\n\
-└────────────────────────────────────────┘\033[0m\n"
+# Colores básicos
+BLACK		= \033[0;30m
+RED			= \033[0;31m
+GREEN		= \033[0;32m
+YELLOW		= \033[0;33m
+BLUE		= \033[0;34m
+MAGENTA		= \033[0;35m
+CYAN		= \033[0;36m
+WHITE		= \033[0;37m
 
-CLEAN_MSG = "\033[1;31m[🧹]\033[0m Limpiando archivos objeto...\033[0m"
-FCLEAN_MSG = "\033[1;31m[🗑️ ]\033[0m Eliminando ejecutable y archivos objeto...\033[0m"
+# Colores brillantes
+BRIGHT_BLACK	= \033[0;90m
+BRIGHT_RED		= \033[0;91m
+BRIGHT_GREEN	= \033[0;92m
+BRIGHT_YELLOW	= \033[0;93m
+BRIGHT_BLUE		= \033[0;94m
+BRIGHT_MAGENTA	= \033[0;95m
+BRIGHT_CYAN		= \033[0;96m
+BRIGHT_WHITE	= \033[0;97m
 
+# Colores con negrita
+B_BLACK		= \033[1;30m
+B_RED		= \033[1;31m
+B_GREEN		= \033[1;32m
+B_YELLOW	= \033[1;33m
+B_BLUE		= \033[1;34m
+B_MAGENTA	= \033[1;35m
+B_CYAN		= \033[1;36m
+B_WHITE		= \033[1;37m
+
+# Fondos
+BG_BLACK	= \033[40m
+BG_RED		= \033[41m
+BG_GREEN	= \033[42m
+BG_YELLOW	= \033[43m
+BG_BLUE		= \033[44m
+BG_MAGENTA	= \033[45m
+BG_CYAN		= \033[46m
+BG_WHITE	= \033[47m
+
+# 🚀 HEADER ÉPICO CON DEGRADADO
+HEADER = "\n$(B_CYAN)\
+╔═══════════════════════════════════════════════════════════════════════╗\n\
+║  $(B_MAGENTA)███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗$(B_CYAN)  ║\n\
+║  $(B_MAGENTA)████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║$(B_CYAN)  ║\n\
+║  $(B_BLUE)██╔████╔██║██║██╔██╗ ██║██║███████╗███████║█████╗  ██║     ██║$(B_CYAN)  ║\n\
+║  $(B_BLUE)██║╚██╔╝██║██║██║╚██╗██║██║╚════██║██╔══██║██╔══╝  ██║     ██║$(B_CYAN)  ║\n\
+║  $(B_GREEN)██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗$(B_CYAN) ║\n\
+║  $(B_GREEN)╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝$(B_CYAN) ║\n\
+╚═══════════════════════════════════════════════════════════════════════╝$(RESET)\n\
+\n\
+$(B_YELLOW)                    � MODO COMPILACIÓN ACTIVADO 🔥$(RESET)\n\
+$(B_GREEN)                      ═══════════════════════════$(RESET)\n\
+$(B_MAGENTA)$(BLINK)                      ⚡ MASTODONTES POWER ⚡$(RESET)\n\
+$(B_CYAN)                     💎 jaboga-d & clalopez �$(RESET)\n\
+$(B_GREEN)                      ═══════════════════════════$(RESET)\n"
+
+# 📊 MENSAJES CON PROGRESS BAR
+COMPILE_MSG = "$(B_GREEN)[$(B_YELLOW)⚡$(B_GREEN)]$(RESET) $(B_CYAN)Compilando$(RESET): $(B_MAGENTA)"
+LIBFT_MSG = "$(B_BLUE)[$(B_YELLOW)📚$(B_BLUE)]$(RESET) $(B_CYAN)Construyendo libft$(RESET)..."
+LINK_MSG = "$(B_YELLOW)[$(B_RED)🔗$(B_YELLOW)]$(RESET) $(B_GREEN)Enlazando ejecutable$(RESET): $(B_MAGENTA)"
+CLEAN_MSG = "$(B_RED)[$(B_YELLOW)🧹$(B_RED)]$(RESET) $(B_YELLOW)Limpiando archivos objeto$(RESET)..."
+FCLEAN_MSG = "$(B_RED)[$(B_YELLOW)🗑️$(B_RED)]$(RESET) $(B_RED)Eliminando todo$(RESET)..."
+
+# 🎉 MENSAJE DE ÉXITO ÉPICO
+SUCCESS_MSG = "\n$(B_GREEN)\
+╔════════════════════════════════════════════════════════════╗\n\
+║                    $(B_YELLOW)✨ COMPILACIÓN EXITOSA ✨$(B_GREEN)                   ║\n\
+║                                                            ║\n\
+║               $(B_CYAN)� Minishell listo para la acción �$(B_GREEN)              ║\n\
+║                                                            ║\n\
+║                   $(B_MAGENTA)🚀 Ejecuta: $(B_WHITE)./minishell$(B_GREEN)                    ║\n\
+║                                                            ║\n\
+║           $(B_YELLOW)💪 Hecho por los MASTODONTES jaboga & clalopez 💪$(B_GREEN)      ║\n\
+╚════════════════════════════════════════════════════════════╝$(RESET)\n"
+
+# 🎯 TARGETS PRINCIPALES
 all: header $(NAME)
 
 header:
 	@echo $(HEADER)
+	@sleep 0.5
 
 $(NAME): $(LIBFT_LIB) $(OBJS)
-	@echo $(LINK_MSG)$(NAME)\033[0m
+	@echo $(LINK_MSG)$(NAME)$(RESET)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) $(LIBS) -o $(NAME)
 	@echo $(SUCCESS_MSG)
+	@echo "$(B_GREEN)🎊 ¡Build completado en $$(date +%T)! 🎊$(RESET)"
 
 $(LIBFT_LIB):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@echo $(LIBFT_MSG)
+	@$(MAKE) -s -C $(LIBFT_DIR)
+	@echo "$(B_GREEN)[✅] Libft construida exitosamente$(RESET)"
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@mkdir -p $(dir $@)
-	@echo $(COMPILE_MSG)$<\033[0m
+	@echo $(COMPILE_MSG)$(notdir $<)$(RESET)
 	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "$(DIM)$(GREEN)   └─ $(notdir $@) generado$(RESET)"
 
 clean:
 	@echo $(CLEAN_MSG)
 	@rm -rf $(OBJ_DIR)
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -s -C $(LIBFT_DIR) clean
+	@echo "$(B_GREEN)[✅] Limpieza completada$(RESET)"
 
 fclean: clean
 	@echo $(FCLEAN_MSG)
 	@rm -f $(NAME)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -s -C $(LIBFT_DIR) fclean
+	@echo "$(B_GREEN)[✅] Limpieza total completada$(RESET)"
 
-re: fclean all
+# 🔄 REBUILD CON ESTILO
+re: 
+	@echo "$(B_YELLOW)🔄 Iniciando rebuild completo...$(RESET)"
+	@$(MAKE) -s fclean
+	@echo "$(B_CYAN)🔧 Reconstruyendo desde cero...$(RESET)"
+	@$(MAKE) -s all
 
-.PHONY: all clean fclean re header
+# 🧪 TARGET PARA TESTING
+test: $(NAME)
+	@echo "$(B_CYAN)🧪 Ejecutando tests...$(RESET)"
+	@./test_minishell.sh || true
+
+# 📋 TARGET PARA NORMINETTE
+norm:
+	@echo "$(B_MAGENTA)📋 Verificando norminette...$(RESET)"
+	@norminette $(SRC) | grep -v "OK!" || echo "$(B_GREEN)[✅] ¡Todo OK con norminette!$(RESET)"
+
+# 🎯 HELP CON ESTILO
+help:
+	@echo "$(B_CYAN)╔══════════════════════════════════════╗$(RESET)"
+	@echo "$(B_CYAN)║$(B_YELLOW)          COMANDOS DISPONIBLES          $(B_CYAN)║$(RESET)"
+	@echo "$(B_CYAN)╠══════════════════════════════════════╣$(RESET)"
+	@echo "$(B_CYAN)║$(RESET) $(B_GREEN)make$(RESET)       - Compilar el proyecto    $(B_CYAN)║$(RESET)"
+	@echo "$(B_CYAN)║$(RESET) $(B_GREEN)make clean$(RESET) - Limpiar objetos         $(B_CYAN)║$(RESET)"
+	@echo "$(B_CYAN)║$(RESET) $(B_GREEN)make fclean$(RESET)- Limpieza total          $(B_CYAN)║$(RESET)"
+	@echo "$(B_CYAN)║$(RESET) $(B_GREEN)make re$(RESET)    - Recompilar todo         $(B_CYAN)║$(RESET)"
+	@echo "$(B_CYAN)║$(RESET) $(B_GREEN)make test$(RESET)  - Ejecutar tests          $(B_CYAN)║$(RESET)"
+	@echo "$(B_CYAN)║$(RESET) $(B_GREEN)make norm$(RESET)  - Verificar norminette     $(B_CYAN)║$(RESET)"
+	@echo "$(B_CYAN)╚══════════════════════════════════════╝$(RESET)"
+
+.PHONY: all clean fclean re header test norm help
