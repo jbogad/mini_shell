@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:33 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/01 12:34:12 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/02 15:15:05 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static void		ft_export_without_arg(t_shell *msh);
 static int		check_export_and_validate(char *arg);
-static int		is_valid_name(char *name);
 static t_env	*copy_list_for_export(t_env *lst);
 
 void	ft_export(t_shell *msh)
@@ -85,20 +84,32 @@ static int	check_export_and_validate(char *arg)
 	return (result);
 }
 
-static int	is_valid_name(char *name)
+static void	sort_env_copy(t_env *cpy)
 {
-	int	i;
+	t_env	*current;
+	t_env	*next;
+	char	*temp_name;
+	char	*temp_val;
 
-	if (!name || !name[0] || ft_isdigit(name[0]))
-		return (0);
-	i = 0;
-	while (name[i])
+	current = cpy;
+	while (current && current->next)
 	{
-		if (!ft_isalnum(name[i]) && name[i] != '_')
-			return (0);
-		i++;
+		next = current->next;
+		while (next)
+		{
+			if (ft_strcmp(current->name_env, next->name_env) > 0)
+			{
+				temp_name = current->name_env;
+				temp_val = current->val_env;
+				current->name_env = next->name_env;
+				current->val_env = next->val_env;
+				next->name_env = temp_name;
+				next->val_env = temp_val;
+			}
+			next = next->next;
+		}
+		current = current->next;
 	}
-	return (1);
 }
 
 static t_env	*copy_list_for_export(t_env *lst)
@@ -122,5 +133,6 @@ static t_env	*copy_list_for_export(t_env *lst)
 		}
 		tmp = tmp->next;
 	}
+	sort_env_copy(cpy);
 	return (cpy);
 }

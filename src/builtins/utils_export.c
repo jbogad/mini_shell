@@ -6,11 +6,27 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:19:22 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/02 15:15:05 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+int	is_valid_name(char *name)
+{
+	int	i;
+
+	if (!name || !name[0] || ft_isdigit(name[0]))
+		return (0);
+	i = 0;
+	while (name[i])
+	{
+		if (!ft_isalnum(name[i]) && name[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 static void	update_existing_env(t_env *existing, char *value)
 {

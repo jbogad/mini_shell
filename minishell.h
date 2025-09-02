@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/02 15:15:05 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ void	                    ft_export(t_shell *msh);
 
 /*utils_export*/
 void	                    add_arg_to_env(char *var, t_shell *msh);
+int		                    is_valid_name(char *name);
 
 /*exit*/
 void                        ft_exit(t_shell *msh);
