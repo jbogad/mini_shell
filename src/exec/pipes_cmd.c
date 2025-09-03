@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 10:00:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/31 12:37:37 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/03 14:51:19 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ static int	find_cmd_start(t_token **tokens, int cmd_idx)
 	while (tokens[i] && pipes_passed < cmd_idx)
 	{
 		if (tokens[i]->type == TOKEN_PIPE)
+		{
 			pipes_passed++;
+			while (tokens[i] && tokens[i]->type == TOKEN_PIPE)
+				i++;
+			i--;
+		}
 		i++;
 	}
 	return (i);

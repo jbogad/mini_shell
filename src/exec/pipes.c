@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:05:47 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/03 14:51:19 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@ static int	validate_pipe_syntax(t_token **tokens)
 	{
 		if (tokens[i]->type == TOKEN_PIPE)
 		{
-			if (!tokens[i + 1] || tokens[i + 1]->type == TOKEN_PIPE)
+			while (tokens[i] && tokens[i]->type == TOKEN_PIPE)
+				i++;
+			if (!tokens[i])
 				return (0);
+			i--;
 		}
 		i++;
 	}

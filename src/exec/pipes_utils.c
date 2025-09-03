@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 10:00:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/03 14:51:19 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ int	count_commands(t_token **tokens)
 	while (tokens[i])
 	{
 		if (tokens[i]->type == TOKEN_PIPE)
+		{
 			count++;
+			while (tokens[i] && tokens[i]->type == TOKEN_PIPE)
+				i++;
+			i--;
+		}
 		i++;
 	}
 	return (count);

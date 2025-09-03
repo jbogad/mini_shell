@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 15:00:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/03 14:51:16 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,12 @@ static int	count_cmd_tokens(t_pipe_data *data)
 	while (data->tokens[i] && pipes_passed < data->cmd_idx)
 	{
 		if (data->tokens[i]->type == TOKEN_PIPE)
+		{
 			pipes_passed++;
+			while (data->tokens[i] && data->tokens[i]->type == TOKEN_PIPE)
+				i++;
+			i--;
+		}
 		i++;
 	}
 	j = i;
@@ -59,7 +64,12 @@ t_token	**get_cmd_tokens(t_pipe_data *data)
 	while (data->tokens[i] && pipes_passed < data->cmd_idx)
 	{
 		if (data->tokens[i]->type == TOKEN_PIPE)
+		{
 			pipes_passed++;
+			while (data->tokens[i] && data->tokens[i]->type == TOKEN_PIPE)
+				i++;
+			i--;
+		}
 		i++;
 	}
 	count = count_cmd_tokens(data);
