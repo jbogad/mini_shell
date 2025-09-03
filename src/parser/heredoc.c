@@ -6,37 +6,42 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:15:45 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/02 12:55:32 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/03 15:30:49 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../minishell.h"
 
 volatile sig_atomic_t	g_skip_next_readline = 0;
 
 /**
- * @brief Funcion para mostrar el mensaje fr warning de bash
- * @param to_search caracter a encontrar
+ * @brief Muestra un aviso si un heredoc termina por EOF (Ctrl+D).
+ * @param to_search Delimitador esperado del heredoc.
  */
 void	msg_ctrld_heredoc(char *to_search)
 {
 	ft_printf("warning: here-document delimited by end-of-file"
-		"(wanted `%s')\n", to_search);
+				" (wanted `%s')\n",
+				to_search);
 	free(to_search);
 	exit(1);
 }
 
 /**
- * @brief Funcion para correr el heredoc hasta que sea nulo(ctrl+d)
- * o se encuntre la palabra, tb  expande los tokens  de tipo
- * word como en bash para cuando se hace por ejemplo con
- * un cat (cat << hola)
- * @param to_search Caracter a encontrar
- * @param env_list Lista de las variable globales del env con nombre y vaolr.
- * @param token Estructura de los tokens
+ * @brief Ejecuta el bucle principal de un heredoc.
+ *
+ * Lee líneas del usuario hasta que se introduzca el delimitador
+ * o se reciba EOF (Ctrl+D). Si el delimitador no está entre comillas,
+ * expande las variables de entorno. Escribe la entrada resultante en
+ * el descriptor de escritura y luego termina el proceso.
+ *
+ * @param to_search Delimitador del heredoc.
+ * @param env_list Lista de variables de entorno.
+ * @param token Token que contiene el tipo de delimitador (citado o no).
+ * @param write_fd Descriptor de escritura donde se vuelca la entrada.
  */
-void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
+void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token,
+		int write_fd)
 {
 	char	*her_input;
 	char	*expanded;
@@ -44,13 +49,12 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 
 	her_input = NULL;
 	quoted = (token->type == TOKEN_SIM_QUOTE || token->type == TOKEN_DOB_QUOTE);
-	printf("Token a buscar de tipo: [%d]\n", token->type);
 	while (1)
 	{
 		free(her_input);
-		her_input = readline("> "); 
+		her_input = readline("> ");
 		if (!her_input)
-			msg_ctrld_heredoc(to_search);
+			msg_ctrld_heredoc(ft_strdup(to_search));
 		if (ft_strcmp(her_input, to_search) == 0)
 			break ;
 		if (!quoted && token->type == TOKEN_WORD)
@@ -59,30 +63,40 @@ void	run_heredoc_loop(char *to_search, t_env *env_list, t_token *token)
 			free(her_input);
 			her_input = expanded;
 		}
-
-		ft_printf("Input: %s\n", her_input);
+		write(write_fd, her_input, ft_strlen(her_input));
+		write(write_fd, "\n", 1);
 	}
-
 	free(her_input);
-	free(to_search);
+	close(write_fd);
 	exit(0);
 }
 
-void	run_heredoc(char *to_search, t_env *env_list, t_token *next_token)
+/**
+ * @brief Inicia la ejecución de un heredoc.
+ *
+ * Restaura el manejo por defecto de SIGINT y llama al bucle
+ * principal del heredoc.
+ *
+ * @param to_search Delimitador del heredoc.
+ * @param env_list Lista de variables de entorno.
+ * @param token Token que contiene el tipo de delimitador.
+ * @param write_fd Descriptor de escritura donde se vuelca la entrada.
+ */
+void	run_heredoc(char *to_search, t_env *env_list, t_token *token,
+		int write_fd)
 {
 	signal(SIGINT, SIG_DFL);
-	run_heredoc_loop(to_search, env_list, next_token);
+	run_heredoc_loop(to_search, env_list, token, write_fd);
 }
 
 /**
- * @brief Espera a que acabe el proceso hijo encargado del heredoc.
- * Esta función se encarga de esperar al proceso hijo que ejecuta el heredoc
- * gestionando las señales. Ignora ctrl+c mientras 
- * espera, y después restaura las señales de la minishell. 
- * Si el heredoc termina con ctrl+c o ctrl+d actualiza la variable global
- * para decirle que ahora esta en la parte de minishell y no heredoc
- * @param pid pid del proceso hijo que está ejecutando el heredoc
- * @param status puntero a la variable donde se guardara el codigo de salida
+ * @brief Espera a que termine el proceso del heredoc.
+ *
+ * Ignora SIGINT mientras espera, restaura las señales
+ * y marca si se debe saltar la siguiente lectura.
+ *
+ * @param pid PID del proceso heredoc.
+ * @param status Estado de salida del proceso.
  */
 void	exit_heredoc(pid_t pid, int *status)
 {
@@ -99,10 +113,15 @@ void	exit_heredoc(pid_t pid, int *status)
 }
 
 /**
- * @brief Esta funcion recorre los tokens y si encuentra un heredoc seguido
- * de comillas o palabra, empieza a correr el heredoc
- * @param env_list Lista de las variable globales del env con nombre y vaolr.
- * @param token Estructura de los tokens
+ * @brief Gestiona todos los heredocs en la lista de tokens.
+ *
+ * Recorre los tokens buscando operadores heredoc (<<).
+ * Cuando encuentra uno, crea un pipe y un proceso hijo para
+ * leer la entrada del heredoc. El padre espera al hijo y
+ * guarda el descriptor en el token correspondiente.
+ *
+ * @param env_list Lista de variables de entorno.
+ * @param tokens Lista de tokens del comando.
  */
 void	heredoc(t_env *env_list, t_token **tokens)
 {
@@ -110,24 +129,54 @@ void	heredoc(t_env *env_list, t_token **tokens)
 	char	*to_search;
 	pid_t	pid;
 	int		status;
+	int		fd[2];
 
 	i = 0;
 	while (tokens && tokens[i])
 	{
-		if (tokens[i]->type == TOKEN_HEREDOC && tokens[i + 1] &&
-			(tokens[i + 1]->type == TOKEN_WORD ||
-			 tokens[i + 1]->type == TOKEN_SIM_QUOTE ||
-			 tokens[i + 1]->type == TOKEN_DOB_QUOTE))
+		if (tokens[i]->type == TOKEN_HEREDOC && tokens[i + 1] && (tokens[i
+				+ 1]->type == TOKEN_WORD || tokens[i
+				+ 1]->type == TOKEN_SIM_QUOTE || tokens[i
+				+ 1]->type == TOKEN_DOB_QUOTE))
 		{
 			to_search = ft_strdup(tokens[i + 1]->value);
-			ft_printf("A BUSCAR: %s\n", to_search);
+			if (pipe(fd) == -1)
+			{
+				perror("pipe");
+				free(to_search);
+				return ;
+			}
 			pid = fork();
 			if (pid == 0)
-				run_heredoc(to_search, env_list, tokens[i + 1]);
-			else
+			{
+				close(fd[0]);
+				signal(SIGINT, SIG_DFL);
+				run_heredoc_loop(to_search, env_list, tokens[i + 1], fd[1]);
+				exit(0);
+			}
+			else if (pid > 0)
+			{
+				close(fd[1]);
 				exit_heredoc(pid, &status);
+				if (!g_skip_next_readline)
+				{
+					if (i > 0)
+						tokens[i - 1]->heredoc_fd = fd[0];
+					else
+						close(fd[0]);
+				}
+				else
+					close(fd[0]);
+			}
+			else
+			{
+				perror("fork");
+				free(to_search);
+				return ;
+			}
 			free(to_search);
-			i++;
+			i += 2;
+			continue ;
 		}
 		i++;
 	}

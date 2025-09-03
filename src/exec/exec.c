@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/01 16:08:22 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/03 14:54:38 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@ void	execute(t_token **tokens, t_shell *msh)
 		return ;
 	stdin_backup = dup(STDIN_FILENO);
 	stdout_backup = dup(STDOUT_FILENO);
+
+	/*Claudio 
+		He tenido que poner este if
+		Esto redirige la entrada del comando si tiene un heredoc(cat << hola)
+		y cierra el fd para que cierre el heedoc sin cerrar la minishell
+	*/
+	if (tokens[0]->heredoc_fd != -1)
+    {
+        dup2(tokens[0]->heredoc_fd, STDIN_FILENO);
+        close(tokens[0]->heredoc_fd);
+    }
 	status = set_redirections(tokens, msh, -1);
 	if (status == 1)
 	{

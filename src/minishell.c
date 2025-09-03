@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/01 15:44:36 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/03 11:59:53 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	main(int argc, char **argv, char **envp)
         }
 
         input = gen_shell(argc, argv);
-        
         if (!input)
         {
             ft_printf("exit\n");
@@ -82,7 +81,6 @@ int	main(int argc, char **argv, char **envp)
         {
             tokens_ext = extract_all_tokens(input);
             heredoc(msh.env, tokens_ext);
-
             if (!g_skip_next_readline && tokens_ext && tokens_ext[0])
             {
                 int pipe_check = has_pipes(tokens_ext);

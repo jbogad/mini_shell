@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/02 15:15:05 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/03 15:04:49 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
-# define RED_BRIGHT "\001\033[1;31m\002"
+# define GREEN_BRIGHT "\001\033[1;32m\002"
 # define RESET "\001\033[0m\002"
 
 // Variable global para manejar las señales del heredoc y minishell
@@ -56,6 +56,7 @@ typedef struct s_token
 	t_token_type				type;	//tipo de token (pipe, word)
 	char						*value;	//contenido del token (echo, ls, etc)
 	int							index;	//indice del token (añadido de t_lexer)
+	int							heredoc_fd;
 	struct s_token				*next;	//puntero al siguiente (añadido de t_lexer)
 }								t_token;
 
