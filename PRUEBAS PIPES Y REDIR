@@ -1,9 +1,5 @@
-saltar mensaje de error cuando el comando no exite -> bash: holacomoestas: command not found
 
-cuando tiene un pipe solo no salta por error
-
-
-
+cuando tiene un pipe solo no salta por error✅
 
 
 ERRORES CD
@@ -19,3 +15,9 @@ cuando pongo -n -n imprime el -n y el -nnnnnn no deberia de imprimirlo ✅
 
 EXPORT
 ->Export simple -> ordenar alfabéticamente que lo tengo a medias.  ✅
+
+
+
+WC -L
+-> cuando el comando va solo, salta por error cuando debería de contar la linea hasta que yo haga cntrl d 
+

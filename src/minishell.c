@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/03 11:59:53 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/04 11:36:34 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,31 @@ char	*gen_shell(int argc, char **argv)
     }
     return (read_input());
 }
+//fumadita para el shell level
+static void	increment_shlvl(t_env **env_list)
+{
+	t_env	*shlvl_node;
+	int		current_level;
+	char	*new_level_str;
+
+	shlvl_node = *env_list;
+	while (shlvl_node && ft_strcmp(shlvl_node->name_env, "SHLVL") != 0)
+		shlvl_node = shlvl_node->next;
+	if (shlvl_node)
+	{
+		current_level = ft_atoi(shlvl_node->val_env);
+		free(shlvl_node->val_env);
+		new_level_str = ft_itoa(current_level + 1);
+		shlvl_node->val_env = new_level_str;
+	}
+	else
+	{
+		new_level_str = ft_strdup("1");
+		shlvl_node = ft_lstnew_env("SHLVL", new_level_str, 1);
+		ft_lstadd_back_env(env_list, shlvl_node);
+		free(new_level_str);
+	}
+}
 
 /*Main para probar que se genera la shell y que la call_signals
 funcionan*/
@@ -53,6 +78,7 @@ int	main(int argc, char **argv, char **envp)
     // Inicializar la estructura t_shell
     ft_memset(&msh, 0, sizeof(t_shell));
     msh.env = init_env(envp);
+    increment_shlvl(&msh.env);
     msh.exit_status = 0;
     msh.cmd_args = NULL;
     msh.count_cmd_args = 0;

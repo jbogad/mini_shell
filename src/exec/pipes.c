@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:05:47 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/03 14:51:19 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/04 10:51:08 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	has_pipes(t_token **tokens)
 		return (0);
 	if (!validate_pipe_syntax(tokens))
 	{
-		printf("bash: syntax error near unexpected token `|'\n");
+		printf("minishell: syntax error near unexpected token `|'\n");
 		return (-1);
 	}
 	i = 0;
