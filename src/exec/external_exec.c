@@ -6,13 +6,10 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/09/04 12:14:13 by clalopez         ###   ########.fr       */
-=======
-/*   Updated: 2025/09/04 12:17:49 by jbogad           ###   ########.fr       */
->>>>>>> 67a98c20ad31015489a8ae18fc3743014f416dc8
+/*   Updated: 2025/09/04 15:07:16 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../minishell.h"
 #include <sys/wait.h>
@@ -130,7 +127,7 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 	char	**envp;
 	char	**argv;
 
-	printf("DEBUG: Trying to execute: %s\n", tokens[0]->value);
+	//printf("DEBUG: Trying to execute: %s\n", tokens[0]->value);
 	cmd_path = find_path(tokens[0]->value, msh->env);
 	if (!cmd_path)
 	{
