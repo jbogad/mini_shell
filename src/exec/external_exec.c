@@ -6,55 +6,101 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/09/04 12:14:13 by clalopez         ###   ########.fr       */
+=======
+/*   Updated: 2025/09/04 12:17:49 by jbogad           ###   ########.fr       */
+>>>>>>> 67a98c20ad31015489a8ae18fc3743014f416dc8
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 #include <sys/wait.h>
 
-static void	free_paths(char **paths)
+static char	**create_argv_array(t_token **tokens)
+{
+	char	**argv;
+	int		count;
+	int		i;
+
+	count = 0;
+	while (tokens[count] && tokens[count]->type == TOKEN_WORD)
+		count++;
+	argv = malloc(sizeof(char *) * (count + 1));
+	if (!argv)
+		return (NULL);
+	i = 0;
+	while (i < count)
+	{
+		argv[i] = ft_strdup(tokens[i]->value);
+		i++;
+	}
+	argv[i] = NULL;
+	return (argv);
+}
+
+static char	**create_env_array(t_env *env_list)
+{
+	char	**envp;
+	char	*temp;
+	int		count;
+	t_env	*current;
+
+	count = 0;
+	current = env_list;
+	while (current && ++count)
+		current = current->next;
+	envp = malloc(sizeof(char *) * (count + 1));
+	if (!envp)
+		return (NULL);
+	count = 0;
+	current = env_list;
+	while (current)
+	{
+		temp = ft_strjoin(current->name_env, "=");
+		envp[count] = ft_strjoin(temp, current->val_env);
+		free(temp);
+		current = current->next;
+		count++;
+	}
+	envp[count] = NULL;
+	return (envp);
+}
+
+static void	free_arrays(char **argv, char **envp)
 {
 	int	i;
 
-	i = 0;
-	while (paths[i])
-		free(paths[i++]);
-	free(paths);
-}
-
-static char	*build_cmd_path(char **paths, char *cmd)
-{
-	char	*full_path;
-	char	*temp;
-	int		i;
-
-	i = 0;
-	while (paths[i])
+	if (argv)
 	{
-		temp = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(temp, cmd);
-		free(temp);
-		if (access(full_path, X_OK) == 0)
-		{
-			free_paths(paths);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
+		i = 0;
+		while (argv[i])
+			free(argv[i++]);
+		free(argv);
 	}
-	free_paths(paths);
-	return (NULL);
+	if (envp)
+	{
+		i = 0;
+		while (envp[i])
+			free(envp[i++]);
+		free(envp);
+	}
 }
 
-/**
- * @brief Busca comando en PATH y retorna ruta completa
- */
 char	*find_path(char *cmd, t_env *env)
 {
 	char	*path_env;
 	char	**paths;
+	char	*temp;
+	char	*full_path;
+	int		i;
 
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	while (env && ft_strcmp(env->name_env, "PATH") != 0)
 		env = env->next;
 	if (!env)
@@ -63,25 +109,28 @@ char	*find_path(char *cmd, t_env *env)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
-	return (build_cmd_path(paths, cmd));
+	i = -1;
+	while (paths[++i])
+	{
+		temp = ft_strjoin(paths[i], "/");
+		full_path = ft_strjoin(temp, cmd);
+		free(temp);
+		if (access(full_path, X_OK) == 0)
+			return (free_arrays(paths, NULL), full_path);
+		free(full_path);
+	}
+	return (free_arrays(paths, NULL), NULL);
 }
 
-static void	exec_child_process(char *cmd_path, t_shell *msh)
-{
-	execve(cmd_path, msh->cmd_args, NULL);
-	perror("execve");
-	exit(127);
-}
-
-/**
- * @brief Ejecuta comando externo
- */
 void	execute_external_command(t_token **tokens, t_shell *msh)
 {
 	char	*cmd_path;
 	pid_t	pid;
 	int		status;
+	char	**envp;
+	char	**argv;
 
+	printf("DEBUG: Trying to execute: %s\n", tokens[0]->value);
 	cmd_path = find_path(tokens[0]->value, msh->env);
 	if (!cmd_path)
 	{
@@ -89,12 +138,32 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 		msh->exit_status = 127;
 		return ;
 	}
+	printf("DEBUG: Found path: %s\n", cmd_path);
 	pid = fork();
 	if (pid == 0)
-		exec_child_process(cmd_path, msh);
+	{
+		printf("DEBUG: Child process starting...\n");
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		if (ft_strcmp(tokens[0]->value, "./minishell") == 0)
+		{
+			printf("DEBUG: Child - setting up terminal for minishell\n");
+			close(STDIN_FILENO);
+			open("/dev/tty", O_RDONLY);
+		}
+		envp = create_env_array(msh->env);
+		argv = create_argv_array(tokens);
+		printf("DEBUG: Child calling execve...\n");
+		execve(cmd_path, argv, envp);
+		printf("DEBUG: execve failed!\n");
+		free_arrays(argv, envp);
+		exit(127);
+	}
 	else if (pid > 0)
 	{
+		printf("DEBUG: Parent waiting for child %d\n", pid);
 		waitpid(pid, &status, 0);
+		printf("DEBUG: Child exited with status: %d\n", WEXITSTATUS(status));
 		msh->exit_status = WEXITSTATUS(status);
 	}
 	else
