@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:24 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/02 15:48:10 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/04 11:05:34 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ void	ft_echo(t_token **tokens)
 
 	i = 1;
 	new_line = 1;
-	while (tokens[i] && tokens[i]->type == TOKEN_WORD
+	while (tokens[i] && (tokens[i]->type == TOKEN_WORD
+			|| tokens[i]->type == TOKEN_DOB_QUOTE
+			|| tokens[i]->type == TOKEN_SIM_QUOTE)
 		&& is_valid_n_option(tokens[i]->value))
 	{
 		new_line = 0;
 		i++;
 	}
-	while (tokens[i] && tokens[i]->type == TOKEN_WORD)
+	while (tokens[i] && (tokens[i]->type == TOKEN_WORD
+			|| tokens[i]->type == TOKEN_DOB_QUOTE
+			|| tokens[i]->type == TOKEN_SIM_QUOTE))
 	{
 		ft_printf("%s", tokens[i]->value);
 		if (tokens[i + 1])

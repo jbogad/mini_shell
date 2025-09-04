@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/03 14:54:38 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/04 12:33:24 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,18 @@
 static void	fill_cmd_args(t_token **tokens, t_shell *msh);
 void		free_cmd_args(t_shell *msh);
 static void	execute_builtin(t_token **tokens, t_shell *msh);
+
+void first_env_var(t_token **token, t_env *env)
+{
+	char *name_var;
+	name_var = token[0]->value;
+	
+	if (name_var[0] == "$")
+	{
+		find_env(env, name_var);
+	}
+	
+}
 
 /**
  * @brief Ejecuta un comando con sus argumentos y redirecciones.
