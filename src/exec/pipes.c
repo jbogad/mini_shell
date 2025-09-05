@@ -29,11 +29,8 @@ static int	validate_pipe_syntax(t_token **tokens)
 	{
 		if (tokens[i]->type == TOKEN_PIPE)
 		{
-			while (tokens[i] && tokens[i]->type == TOKEN_PIPE)
-				i++;
-			if (!tokens[i])
+			if (!tokens[i + 1] || tokens[i + 1]->type == TOKEN_PIPE)
 				return (0);
-			i--;
 		}
 		i++;
 	}

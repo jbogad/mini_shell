@@ -22,12 +22,7 @@ int	count_commands(t_token **tokens)
 	while (tokens[i])
 	{
 		if (tokens[i]->type == TOKEN_PIPE)
-		{
 			count++;
-			while (tokens[i] && tokens[i]->type == TOKEN_PIPE)
-				i++;
-			i--;
-		}
 		i++;
 	}
 	return (count);

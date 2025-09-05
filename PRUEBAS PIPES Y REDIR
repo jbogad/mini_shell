@@ -21,3 +21,12 @@ EXPORT
 WC -L
 -> cuando el comando va solo, salta por error cuando debería de contar la linea hasta que yo haga cntrl d 
 
+
+
+CD 
+si borro el home, debe saltar por error
+si alguien me borra el directorio donde estoy al hacer cd..
+
+
+./minishell
+cuando hago control c hace doble salto de linea

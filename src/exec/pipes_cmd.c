@@ -22,12 +22,7 @@ static int	find_cmd_start(t_token **tokens, int cmd_idx)
 	while (tokens[i] && pipes_passed < cmd_idx)
 	{
 		if (tokens[i]->type == TOKEN_PIPE)
-		{
 			pipes_passed++;
-			while (tokens[i] && tokens[i]->type == TOKEN_PIPE)
-				i++;
-			i--;
-		}
 		i++;
 	}
 	return (i);

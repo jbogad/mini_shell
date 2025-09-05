@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/04 15:07:16 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/05 12:57:59 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,15 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 			printf("DEBUG: Child - setting up terminal for minishell\n");
 			close(STDIN_FILENO);
 			open("/dev/tty", O_RDONLY);
+		}
+		else
+		{
+			printf("DEBUG: Child - ensuring stdin is connected\n");
+			if (!isatty(STDIN_FILENO)) //fumadita del subject que verifica si el stdin es un terminal
+			{
+				close(STDIN_FILENO);
+				open("/dev/tty", O_RDONLY); //aunque este redirigido, lo conecta a /dev/tty para que pueda leer
+			}
 		}
 		envp = create_env_array(msh->env);
 		argv = create_argv_array(tokens);
