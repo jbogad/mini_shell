@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/05 12:57:59 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/05 15:28:34 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 	cmd_path = find_path(tokens[0]->value, msh->env);
 	if (!cmd_path)
 	{
-		ft_printf("bash: %s: command not found\n", tokens[0]->value);
+		ft_printf("minishell: %s: command not found\n", tokens[0]->value);
 		msh->exit_status = 127;
 		return ;
 	}

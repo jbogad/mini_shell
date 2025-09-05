@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/04 15:35:39 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/05 15:17:54 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ int	first_env_var(t_token **token, t_env *env)
 	if (name_var[0] == '$' && (token[0]->type == TOKEN_WORD
 			|| token[0]->type == TOKEN_DOB_QUOTE))
 	{
+		if (!find_env(env, name_var + 1))
+			return (1);
 		expanded = expand_all_vars(env, name_var);
+		if (!expanded)
+			return (1);
 		while (expanded[i])
 		{
 			if (expanded[i] == '/')
@@ -74,14 +78,24 @@ void	execute(t_token **tokens, t_shell *msh)
 	if (status == 1)
 	{
 		if (first_env_var(tokens, msh->env) == 1)
+		{
+			if (dup2(stdin_backup, STDIN_FILENO) == -1)
+				perror("dup2 stdin");
+			if (dup2(stdout_backup, STDOUT_FILENO) == -1)
+				perror("dup2 stdout");
+			close(stdin_backup);
+			close(stdout_backup);
 			return ;
+		}
 		fill_cmd_args(tokens, msh);
 		execute_builtin(tokens, msh);
 	}
 	else
 		msh->exit_status = 1;
-	dup2(stdin_backup, STDIN_FILENO);
-	dup2(stdout_backup, STDOUT_FILENO);
+	if (dup2(stdin_backup, STDIN_FILENO) == -1)
+		perror("dup2 stdin");
+	if (dup2(stdout_backup, STDOUT_FILENO) == -1)
+		perror("dup2 stdout");
 	close(stdin_backup);
 	close(stdout_backup);
 }
