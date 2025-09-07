@@ -1,0 +1,11 @@
+la
+Makefile
+minishell
+minishell.h
+objects
+PRUEBAS_COMPLETAS_MINISHELL.txt
+PRUEBAS_PIPES_REDIRECTIONS.md
+PRUEBAS PIPES Y REDIR
+src
+test_export_simple.sh
+test_minishell.sh

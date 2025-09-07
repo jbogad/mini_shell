@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/04 12:09:20 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/07 13:26:29 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct s_shell
 	t_token *tokens;        // CAMBIADO: ahora usa t_token unificado
 	t_parser *parser;       // lista de nodos que separa los comandos
 	int exit_status;        // entero que representa el estado de salida
+	int shell_pid;			// pid de la minishell cuando se inicia
 } t_shell;
 
 // Utils
@@ -118,6 +119,8 @@ char							*ft_strndup(const char *s, size_t n);
 void							free_tokens(t_token **tokens);
 int								ft_strcmp(const char *s1, const char *s2);
 void							free_env(t_env *env_list);
+int								get_shell_pid(void);
+
 
 // Pipes helper structure
 typedef struct s_pipe_data
@@ -227,11 +230,6 @@ int								count_quotes_dob_tokens(char *input);
 int								count_quotes_sim_tokens(char *input);
 int								count_operator_tokens(char *input);
 int								count_word_token(char *input);
-/* t_token				**extract_word_token(char *input);
-t_token							**extract_ops_tokens(char *input);
-t_token							**extract_dob_quote_tokens(char *input);
-t_token							**extract_sim_quote_tokens(char *input);
-t_token	**extract_all_tokens(char *input); */
 t_token							*extract_sim_quote_token(char *input, int *i);
 t_token							*extract_dob_quote_token(char *input, int *i);
 t_token							*extract_word_token_inline(char *input, int *i);

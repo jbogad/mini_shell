@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 14:25:47 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/05 11:22:29 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/07 11:56:14 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,14 @@ int	main(int argc, char **argv, char **envp)
     msh.count_cmd_args = 0;
     msh.tokens = NULL;
     msh.parser = NULL;
+    // Al iniciar la shell
+    msh.shell_pid = get_shell_pid();
+    if (msh.shell_pid == -1)
+    {
+        perror("Failed to get shell PID");
+        return (1);
+    }
+
 
     call_signals();
 

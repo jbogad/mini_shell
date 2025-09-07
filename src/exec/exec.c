@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/05 15:17:54 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/07 13:24:00 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	fill_cmd_args(t_token **tokens, t_shell *msh);
 void		free_cmd_args(t_shell *msh);
 static void	execute_builtin(t_token **tokens, t_shell *msh);
 
-int	first_env_var(t_token **token, t_env *env)
+int	first_env_var(t_token **token, t_shell *msh)
 {
 	char	*name_var;
 	char	*expanded;
@@ -24,12 +24,27 @@ int	first_env_var(t_token **token, t_env *env)
 
 	i = 0;
 	name_var = token[0]->value;
+	if (name_var[0] == '$' && name_var[1] == '$' && (token[0]->type == TOKEN_WORD
+			|| token[0]->type == TOKEN_DOB_QUOTE))
+	{
+		printf("%d", msh->shell_pid);
+		while (name_var[i] == '$')
+			i++;
+		while (name_var[i])
+		{
+			printf("%c", name_var[i++]);
+			if (name_var[i] == '$')
+				break;
+		}
+		printf(": command not found\n");
+		return (1);
+	}
 	if (name_var[0] == '$' && (token[0]->type == TOKEN_WORD
 			|| token[0]->type == TOKEN_DOB_QUOTE))
 	{
-		if (!find_env(env, name_var + 1))
+		if (!find_env(msh->env, name_var + 1))
 			return (1);
-		expanded = expand_all_vars(env, name_var);
+		expanded = expand_all_vars(msh->env, name_var);
 		if (!expanded)
 			return (1);
 		while (expanded[i])
@@ -77,7 +92,7 @@ void	execute(t_token **tokens, t_shell *msh)
 	status = set_redirections(tokens, msh, -1);
 	if (status == 1)
 	{
-		if (first_env_var(tokens, msh->env) == 1)
+		if (first_env_var(tokens, msh) == 1)
 		{
 			if (dup2(stdin_backup, STDIN_FILENO) == -1)
 				perror("dup2 stdin");
