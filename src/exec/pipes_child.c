@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_child.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 10:00:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/02 14:20:26 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/08 13:00:05 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	is_builtin(char *cmd)
 static void	execute_builtin_pipe(char *cmd, t_token **cmd_tokens, t_shell *msh)
 {
 	if (ft_strcmp(cmd, "echo") == 0)
-		ft_echo(cmd_tokens);
+		ft_echo(cmd_tokens, msh);
 	else if (ft_strcmp(cmd, "cd") == 0)
 		ft_cd(msh);
 	else if (ft_strcmp(cmd, "pwd") == 0)

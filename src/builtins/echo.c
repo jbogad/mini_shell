@@ -6,12 +6,33 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:24 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/04 11:05:34 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/08 15:40:25 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+//(Claudio) Funcion para expandir las variables
+static char	*expand_arg(char *arg, t_shell *msh)
+{
+	char	*value;
+
+	if (!arg)
+		return (ft_strdup(""));
+	if (ft_strcmp(arg, "$$") == 0)
+		return (ft_itoa(msh->shell_pid));
+	if (ft_strcmp(arg, "$?") == 0)
+		return (ft_itoa(msh->exit_status));
+	if (arg[0] == '$')
+	{
+		value = get_env_value(msh->env, arg + 1);
+		if (value)
+			return (ft_strdup(value));
+		else
+			return (ft_strdup(""));
+	}
+	return (ft_strdup(arg));
+}
 /*
 funcion para echo
 acepta echo y echo -n, de norma imprime salto de linea
@@ -35,10 +56,11 @@ static int	is_valid_n_option(char *str)
 	return (1);
 }
 
-void	ft_echo(t_token **tokens)
+void	ft_echo(t_token **tokens, t_shell *msh)
 {
-	int	i;
-	int	new_line;
+	int		i;
+	int		new_line;
+	char	*expanded;
 
 	i = 1;
 	new_line = 1;
@@ -54,7 +76,15 @@ void	ft_echo(t_token **tokens)
 			|| tokens[i]->type == TOKEN_DOB_QUOTE
 			|| tokens[i]->type == TOKEN_SIM_QUOTE))
 	{
-		ft_printf("%s", tokens[i]->value);
+		//(Claudio) He añadido esto para hacer la expansion de variables
+		if (tokens[i]->type != TOKEN_SIM_QUOTE)
+		{
+			expanded = expand_arg(tokens[i]->value, msh);
+			ft_printf("%s", expanded);
+			free(expanded);
+		}
+		else
+			ft_printf("%s", tokens[i]->value);
 		if (tokens[i + 1])
 			ft_printf(" ");
 		i++;

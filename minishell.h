@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/07 13:26:29 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:58:31 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ typedef struct s_pipe_data
 void							ft_pwd(void);
 
 /*echo*/
-void							ft_echo(t_token **tokens);
+void							ft_echo(t_token **tokens, t_shell *msh);
 
 /*exec*/
 void                        execute(t_token **tokens, t_shell *msh);
