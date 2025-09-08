@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/07 13:24:00 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/08 10:48:20 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,22 @@ int	first_env_var(t_token **token, t_shell *msh)
 		printf(": command not found\n");
 		return (1);
 	}
+	if (name_var[0] == '$' && name_var[1] == '?' && (token[0]->type == TOKEN_WORD
+			|| token[0]->type == TOKEN_DOB_QUOTE))
+	{
+		printf("%d", msh->exit_status);
+		while (name_var[i] == '$')
+			i++;
+		i++;
+		while (name_var[i])
+		{
+			printf("%c", name_var[i++]);
+			if (name_var[i] == '$')
+				break;
+		}
+		printf(": command not found\n");
+		return (1);
+	}	
 	if (name_var[0] == '$' && (token[0]->type == TOKEN_WORD
 			|| token[0]->type == TOKEN_DOB_QUOTE))
 	{
