@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:24 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/08 15:40:25 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/09 11:02:02 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ static char	*expand_arg(char *arg, t_shell *msh)
 
 	if (!arg)
 		return (ft_strdup(""));
-	if (ft_strcmp(arg, "$$") == 0)
-		return (ft_itoa(msh->shell_pid));
-	if (ft_strcmp(arg, "$?") == 0)
+	if (ft_strcmp(arg, "$?") == 0 || ft_strcmp(arg, "?") == 0)
 		return (ft_itoa(msh->exit_status));
 	if (arg[0] == '$')
 	{
@@ -33,6 +31,7 @@ static char	*expand_arg(char *arg, t_shell *msh)
 	}
 	return (ft_strdup(arg));
 }
+
 /*
 funcion para echo
 acepta echo y echo -n, de norma imprime salto de linea

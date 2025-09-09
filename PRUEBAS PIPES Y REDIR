@@ -15,6 +15,7 @@ cuando pongo -n -n imprime el -n y el -nnnnnn no deberia de imprimirlo ✅
 
 EXPORT
 ->Export simple -> ordenar alfabéticamente que lo tengo a medias.  ✅
+Cuando se hace export aa="Hola"/'hola' se crea la var pero si el contenido ✅
 
 
 
@@ -26,7 +27,11 @@ WC -L
 CD 
 si borro el home, debe saltar por error
 si alguien me borra el directorio donde estoy al hacer cd..
+cuando se hace cd solo, llevar al home
+expandir variables. Ej cd $HOME
 
+HEREDOC
+cuando se hace (cat << hola) no se cierra
 
 ./minishell
 cuando hago control c hace doble salto de linea

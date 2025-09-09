@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/08 14:55:36 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:01:36 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,25 +104,32 @@ void	execute(t_token **tokens, t_shell *msh)
 
 static void	fill_cmd_args(t_token **tokens, t_shell *msh)
 {
-	int	count;
-	int	i;
+	int		i = 0, j;
+	int		count;
+	char	*arg;
+	char	*tmp;
 
-	count = 0;
-	i = 0;
-	if (!msh)
+	i = 0, j = 0;
+	if (!tokens || !msh)
 		return ;
 	free_cmd_args(msh);
-	if (!tokens || !tokens[0])
-		return ;
-	while (tokens[count] && tokens[count]->type == TOKEN_WORD)
+	count = 0;
+	while (tokens[count])
 		count++;
-	if (count == 0)
-		return ;
 	msh->cmd_args = ft_calloc(count + 1, sizeof(char *));
 	msh->count_cmd_args = count;
-	while (i < count)
+	while (tokens[i])
 	{
-		msh->cmd_args[i] = ft_strdup(tokens[i]->value);
+		arg = ft_strdup(tokens[i]->value);
+		while (tokens[i + 1] && (tokens[i + 1]->type == TOKEN_DOB_QUOTE
+				|| tokens[i + 1]->type == TOKEN_SIM_QUOTE))
+		{
+			tmp = ft_strjoin("", tokens[i + 1]->value);
+			free(arg);
+			arg = tmp;
+			i++;
+		}
+		msh->cmd_args[j++] = arg;
 		i++;
 	}
 }
