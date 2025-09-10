@@ -27,8 +27,8 @@ WC -L
 CD 
 si borro el home, debe saltar por error
 si alguien me borra el directorio donde estoy al hacer cd..
-cuando se hace cd solo, llevar al home
-expandir variables. Ej cd $HOME
+cuando se hace cd solo, llevar al home ✅
+expandir variables. Ej cd $HOME ✅
 
 HEREDOC
 cuando se hace (cat << hola) no se cierra

@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:34:02 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/01 12:17:37 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/10 14:16:30 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	count_chars_after_second_slash(char *route)
 	{
 		if (route[i] == '/')
 			count++;
-		if (count > 2)
+		if (count > 0)
 			j++;
 		i++;
 	}
@@ -61,7 +61,7 @@ char	*extract_short_path(char *route, int len)
 	{
 		if (route[i] == '/')
 			count++;
-		if (count > 2)
+		if (count > 0)
 			aux[k++] = route[i];
 		i++;
 	}
