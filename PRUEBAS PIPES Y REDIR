@@ -20,7 +20,7 @@ Cuando se hace export aa="Hola"/'hola' se crea la var pero si el contenido ✅
 
 
 WC -L
--> cuando el comando va solo, salta por error cuando debería de contar la linea hasta que yo haga cntrl d 
+-> cuando el comando va solo, salta por error cuando debería de contar la linea 
 
 
 

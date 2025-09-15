@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/16 11:38:35 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/15 21:27:55 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,9 +148,6 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 			close(STDIN_FILENO);
 			open("/dev/tty", O_RDONLY);
 		}
-		//Este else impide que (cat << hola) funcione porque el STDIN ya apunta al pipe de heredoc
-		//y esti lo cierra y lo conecta a /dev/tty, vamos que hace que el cat lea de la terminal
-		//en vez del pipe. No se si es necesario, pero si se quita funciona el heredoc
 		else
 		{
 			printf("DEBUG: Child - ensuring stdin is connected\n");
@@ -170,7 +167,7 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 	}
 	else if (pid > 0)
 	{
-		printf("DEBUG: Paffffrent waiting for child %d\n", pid);
+		printf("DEBUG: Parent waiting for child %d\n", pid);
 		waitpid(pid, &status, 0);
 		printf("DEBUG: Child exited with status: %d\n", WEXITSTATUS(status));
 		msh->exit_status = WEXITSTATUS(status);
