@@ -3,21 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:21 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/15 12:53:09 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 12:34:49 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-/**
- * @brief Obtiene el valor de una variable de entorno desde msh->env.
- * @param var_name Nombre de la variable (ej: "HOME").
- * @param msh Estructura principal del shell.
- * @return Valor de la variable o NULL si no existe.
- */
 static char	*get_var_val(char *var_name, t_shell *msh)
 {
 	t_env	*tmp;
@@ -41,103 +35,98 @@ static char	*get_var_val(char *var_name, t_shell *msh)
 	return (NULL);
 }
 
-/**
- * @brief Cambia al directorio especificado.
- * @param msh Estructura principal del shell.
- * @return 0 si éxito, código de error si falla.
- */
-static int	go_there(t_shell *msh)
+static void	update_pwd_vars(t_shell *msh)
 {
-	char	*path;
+	char	*current_pwd;
+	char	*new_pwd;
 
-	path = msh->cmd_args[1];
-	if (access(path, F_OK) != 0)
+	current_pwd = get_var_val("PWD", msh);
+	if (current_pwd)
+		add_env(&(msh->env), "OLDPWD", current_pwd);
+	new_pwd = getcwd(NULL, 0);
+	if (new_pwd)
 	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (2);
+		add_env(&(msh->env), "PWD", new_pwd);
+		free(new_pwd);
 	}
-	if (chdir(path) != 0)
+	if (current_pwd)
+		free(current_pwd);
+}
+
+static int	go_oldpwd(t_shell *msh)
+{
+	char	*oldpwd;
+
+	oldpwd = get_var_val("OLDPWD", msh);
+	if (!oldpwd || ft_strlen(oldpwd) == 0)
 	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(": Permission denied\n", 2);
+		ft_putstr_fd("cd: OLDPWD not set\n", 2);
+		if (oldpwd)
+			free(oldpwd);
 		return (1);
 	}
+	if (chdir(oldpwd) != 0)
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(oldpwd, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		free(oldpwd);
+		return (1);
+	}
+	ft_putstr_fd(oldpwd, 1);
+	ft_putstr_fd("\n", 1);
+	free(oldpwd);
 	return (0);
 }
 
-/**
- * @brief Cambia al directorio HOME.
- * @param msh Estructura principal del shell.
- * @return 0 si éxito, código de error si falla.
- */
-static int	go_home(t_shell *msh)
+static int	go_home_or_there(t_shell *msh)
 {
 	char	*home;
 
-	home = get_var_val("HOME", msh);
-	if (!home)
+	if (msh->cmd_args[1] == NULL)
 	{
-		home = getenv("HOME");
+		home = get_var_val("HOME", msh);
 		if (!home)
+			home = ft_strdup(getenv("HOME"));
+		if (!home)
+			return (ft_putstr_fd("cd: HOME not set\n", 2), 1);
+		if (chdir(home) != 0)
 		{
-			ft_putstr_fd("cd: HOME not set\n", 2);
+			ft_putstr_fd("cd: Permission denied\n", 2);
+			free(home);
 			return (1);
 		}
-		home = ft_strdup(home);
-	}
-	if (chdir(home) != 0)
-	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(home, 2);
-		ft_putstr_fd(": Permission denied\n", 2);
 		free(home);
-		return (1);
+		return (0);
 	}
-	free(home);
+	if (access(msh->cmd_args[1], F_OK) != 0)
+		return (ft_putstr_fd("cd: No such file or directory\n", 2), 2);
+	if (chdir(msh->cmd_args[1]) != 0)
+		return (ft_putstr_fd("cd: Permission denied\n", 2), 1);
 	return (0);
 }
 
-
-/**
- * @brief Ejecuta el comando cd.
- * @param msh Estructura principal del shell.
- */
 void	ft_cd(t_shell *msh)
 {
-	printf("[DEBUG] ft_cd INICIO\n");
-	
+	int	result;
+
 	if (!msh || !msh->cmd_args)
 	{
-		printf("[DEBUG] msh o cmd_args es NULL - RETORNANDO\n");
 		if (msh)
 			msh->exit_status = 1;
 		return ;
 	}
-	
-	printf("[DEBUG] cmd_args[0]: '%s'\n", msh->cmd_args[0]);
-	printf("[DEBUG] cmd_args[1]: %s\n", msh->cmd_args[1] ? msh->cmd_args[1] : "NULL");
-	
-	if (msh->cmd_args[1] == NULL)
-	{
-		printf("[DEBUG] Sin argumentos, llamando go_home\n");
-		msh->exit_status = go_home(msh);
-		printf("[DEBUG] go_home retornó: %d\n", msh->exit_status);
-		printf("[DEBUG] ft_cd TERMINANDO - SIN ARGS\n");
-		return ;
-	}
 	if (msh->cmd_args[2] != NULL)
 	{
-		printf("[DEBUG] Demasiados argumentos\n");
 		write(2, "cd: too many arguments\n", 23);
 		msh->exit_status = 1;
-		printf("[DEBUG] ft_cd TERMINANDO - MUCHOS ARGS\n");
 		return ;
 	}
-	printf("[DEBUG] Con argumentos, llamando go_there\n");
-	msh->exit_status = go_there(msh);
-	printf("[DEBUG] go_there retornó: %d\n", msh->exit_status);
-	printf("[DEBUG] ft_cd TERMINANDO - CON ARGS\n");
+	if (msh->cmd_args[1] && ft_strcmp(msh->cmd_args[1], "-") == 0)
+		result = go_oldpwd(msh);
+	else
+		result = go_home_or_there(msh);
+	if (result == 0)
+		update_pwd_vars(msh);
+	msh->exit_status = result;
 }

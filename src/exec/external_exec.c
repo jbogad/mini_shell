@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/15 21:27:55 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/16 14:52:15 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 	char	**envp;
 	char	**argv;
 
-	//printf("DEBUG: Trying to execute: %s\n", tokens[0]->value);
 	cmd_path = find_path(tokens[0]->value, msh->env);
 	if (!cmd_path)
 	{
@@ -148,15 +147,15 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 			close(STDIN_FILENO);
 			open("/dev/tty", O_RDONLY);
 		}
-		else
-		{
-			printf("DEBUG: Child - ensuring stdin is connected\n");
-			if (!isatty(STDIN_FILENO)) //fumadita del subject que verifica si el stdin es un terminal
-			{
-				close(STDIN_FILENO);
-				open("/dev/tty", O_RDONLY); //aunque este redirigido, lo conecta a /dev/tty para que pueda leer
-			}
-		}
+		// else
+		// {
+		// 	printf("DEBUG: Child - ensuring stdin is connected\n");
+		// 	if (!isatty(STDIN_FILENO)) //fumadita del subject que verifica si el stdin es un terminal
+		// 	{
+		// 		close(STDIN_FILENO);
+		// 		open("/dev/tty", O_RDONLY); //aunque este redirigido, lo conecta a /dev/tty para que pueda leer
+		// 	}
+		// }
 		envp = create_env_array(msh->env);
 		argv = create_argv_array(tokens);
 		printf("DEBUG: Child calling execve...\n");

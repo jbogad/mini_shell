@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:24 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/09 11:02:02 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 15:00:54 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	ft_echo(t_token **tokens, t_shell *msh)
 			|| tokens[i]->type == TOKEN_DOB_QUOTE
 			|| tokens[i]->type == TOKEN_SIM_QUOTE))
 	{
-		//(Claudio) He añadido esto para hacer la expansion de variables
 		if (tokens[i]->type != TOKEN_SIM_QUOTE)
 		{
 			expanded = expand_arg(tokens[i]->value, msh);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/16 10:43:03 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 12:05:49 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ void							ft_unset(t_shell *msh);
 
 /*cd*/
 void							ft_cd(t_shell *msh);
+void							add_env(t_env **env, char *name, char *value);
 
 /*pipes*/
 int								has_pipes(t_token **tokens);
