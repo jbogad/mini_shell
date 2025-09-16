@@ -34,4 +34,6 @@ HEREDOC
 cuando se hace (cat << hola) no se cierra
 
 ./minishell
-cuando hago control c hace doble salto de linea
+cuando hago control c hace doble salto de linea  HACER
+
+PWD OLDPWD  

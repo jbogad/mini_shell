@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/02 12:40:59 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:25:15 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,19 @@ t_env	*init_env(char **envp)
  * @param name Nombre de la variable a buscar.
  * @return Valor de la variable si se encuentra, NULL en caso contrario.
  */
-char *get_env_value(t_env *env, char *name)
+char	*get_env_value(t_env *env, char *name)
 {
-    t_env *tmp = env;
+	t_env	*tmp;
 
-    while (tmp)
-    {
-        if (ft_strcmp(tmp->name_env, name) == 0)
-            return tmp->val_env;
-        tmp = tmp->next;
-    }
-    return NULL;
+	tmp = env;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->name_env, name) == 0)
+			return (tmp->val_env);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
-
 
 /**
  * @brief Reemplaza el primer '$' en el token con el valor de una variable

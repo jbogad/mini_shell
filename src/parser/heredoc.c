@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:15:45 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/09 11:48:36 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:31:59 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ volatile sig_atomic_t	g_skip_next_readline = 0;
 void	msg_ctrld_heredoc(char *to_search)
 {
 	ft_printf("warning: here-document delimited by end-of-file"
-				" (wanted `%s')\n",
-				to_search);
+		" (wanted `%s')\n", to_search);
 	free(to_search);
 	exit(1);
 }
@@ -135,9 +134,9 @@ void	heredoc(t_env *env_list, t_token **tokens)
 	while (tokens && tokens[i])
 	{
 		if (tokens[i]->type == TOKEN_HEREDOC && tokens[i + 1] && (tokens[i
-				+ 1]->type == TOKEN_WORD || tokens[i
-				+ 1]->type == TOKEN_SIM_QUOTE || tokens[i
-				+ 1]->type == TOKEN_DOB_QUOTE))
+					+ 1]->type == TOKEN_WORD || tokens[i
+					+ 1]->type == TOKEN_SIM_QUOTE || tokens[i
+					+ 1]->type == TOKEN_DOB_QUOTE))
 		{
 			to_search = ft_strdup(tokens[i + 1]->value);
 			if (pipe(fd) == -1)

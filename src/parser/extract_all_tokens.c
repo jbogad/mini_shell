@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_all_tokens.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:47:31 by clalopez          #+#    #+#             */
-/*   Updated: 2025/07/16 12:29:45 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:27:40 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,13 @@ void	loop_add_tokens(t_token **tmp, t_token **tokens, int *index)
 
 /**
  * @brief Obtiene el siguiente token de operador en la entrada.
- * Intenta extraer un token de redirección doble, simple o de pipe, 
+ * Intenta extraer un token de redirección doble, simple o de pipe,
  * en ese orden.
  * Avanza el índice `i` según corresponda si se encuentra un token.
  * @param input Cadena de entrada a analizar.
- * @param i Puntero al índice actual en la cadena; se actualiza al 
+ * @param i Puntero al índice actual en la cadena; se actualiza al
  * extraer un token.
- * @return El token extraído o NULL si no se encontró ningún token 
+ * @return El token extraído o NULL si no se encontró ningún token
  * de operador.
  */
 t_token	*get_next_ops_token(char *input, int *i)
@@ -107,90 +107,38 @@ t_token	*get_next_token(char *input, int *i)
 	return (NULL);
 }
 
-
-/*============================================================*/
-
-
-/*PARA MI EL ERROR ESTA AQUI, CON LA FUNCIÓN DE ABAJO SI QUE 
-FUNCIONAN LAS DOBLES COMILLAS Y LAS SIMPLES*/
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * @brief Extrae todos los tokens de la cadena de entrada.
- * Recorre la cadena `input`, saltando espacios y tabulaciones, 
- * y extrae tokens usando `get_next_token`.
- * @param input Cadena de entrada a tokenizar.
- * @return Arreglo terminado en NULL con todos los tokens extraídos,
- *  o NULL en error.
- */
-// t_token	**extract_all_tokens(char *input)
-// {
-// 	t_token	**tokens;
-// 	t_token	*token;
-// 	int		i;
-// 	int		token_count;
-// 	int		len;
-
-// 	i = 0;
-// 	token_count = 0;
-// 	len = ft_strlen(input);
-// 	tokens = malloc(sizeof(t_token *) * (len + 1));
-// 	if (!tokens)
-// 		return (NULL);
-// 	while (input[i])
-// 	{
-// 		while (input[i] == ' ' || input[i] == '\t')
-// 			i++;
-// 		if (!input[i])
-// 			break ;
-// 		token = get_next_token(input, &i);
-// 		if (token)
-// 			tokens[token_count++] = token;
-// 	}
-// 	tokens[token_count] = NULL;
-// 	return (tokens);
-// }
-
 t_token	**extract_all_tokens(char *input)
 {
-    t_token	**tokens;
-    t_token	*token;
-    int		vars[3];
+	t_token	**tokens;
+	t_token	*token;
+	int		vars[3];
 
-    vars[0] = 0;
-    vars[1] = 0;
-    vars[2] = ft_strlen(input);
-    tokens = malloc(sizeof(t_token *) * (vars[2] + 1));
-    if (!tokens)
-        return (NULL);
-    while (input[vars[0]])
-    {
-        while (input[vars[0]] == ' ' || input[vars[0]] == '\t')
-            vars[0]++;
-        if (!input[vars[0]])
-            break ;
-        token = get_next_token(input, &vars[0]);
-        if (!token)
-        {
-            free(tokens);
-            return (NULL);
-        }
-        if (token->value && token->value[0] != '\0')
-            tokens[vars[1]++] = token;
-        else
-            free(token->value), free(token);
-    }
-    tokens[vars[1]] = NULL;
-    return (tokens);
+	vars[0] = 0;
+	vars[1] = 0;
+	vars[2] = ft_strlen(input);
+	tokens = malloc(sizeof(t_token *) * (vars[2] + 1));
+	if (!tokens)
+		return (NULL);
+	while (input[vars[0]])
+	{
+		while (input[vars[0]] == ' ' || input[vars[0]] == '\t')
+			vars[0]++;
+		if (!input[vars[0]])
+			break ;
+		token = get_next_token(input, &vars[0]);
+		if (!token)
+		{
+			free(tokens);
+			return (NULL);
+		}
+		if (token->value && token->value[0] != '\0')
+			tokens[vars[1]++] = token;
+		else
+		{
+			free(token->value);
+			free(token);
+		}
+	}
+	tokens[vars[1]] = NULL;
+	return (tokens);
 }
-

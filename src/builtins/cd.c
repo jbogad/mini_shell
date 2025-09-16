@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:21 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/10 14:23:51 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/15 12:53:09 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ static int	go_home(t_shell *msh)
 	free(home);
 	return (0);
 }
+
 
 /**
  * @brief Ejecuta el comando cd.

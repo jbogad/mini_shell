@@ -6,17 +6,11 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:23:52 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/08 12:59:13 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:26:05 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../minishell.h"
-
-/*
-	PARTE DE JAVIER
-
-*/
 
 /**
  * @brief Funcion join pero libera memoria de los strings

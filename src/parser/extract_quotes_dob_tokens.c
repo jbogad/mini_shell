@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:47:15 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/02 14:37:18 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:30:08 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	fill_dob_quote_tokens(char *input, t_token **tokens, t_extract *e)
 			{
 				e->in_dob_quote = 0;
 				new_tkn = malloc(sizeof(t_token));
-				new_tkn->type = TOKEN_DOB_QUOTE; // he cambiado esto
+				new_tkn->type = TOKEN_DOB_QUOTE;
 				new_tkn->value = ft_strndup(&input[e->start], e->i - e->start);
 				tokens[e->count++] = new_tkn;
 			}
@@ -116,7 +116,7 @@ t_token	*extract_dob_quote_token(char *input, int *i)
 	start = *i;
 	while (start > 0 && input[start - 1] != ' ' && input[start - 1] != '\t'
 		&& input[start - 1] != '|' && input[start - 1] != '<' && input[start
-		- 1] != '>')
+			- 1] != '>')
 		start--;
 	before = ft_strndup(input + start, *i - start);
 	quote_start = *i + 1;

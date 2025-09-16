@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:21:51 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/02 14:39:15 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:30:42 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_token	*extract_sim_quote_token(char *input, int *i)
 	start = *i;
 	while (start > 0 && input[start - 1] != ' ' && input[start - 1] != '\t'
 		&& input[start - 1] != '|' && input[start - 1] != '<' && input[start
-		- 1] != '>')
+			- 1] != '>')
 		start--;
 	before = ft_strndup(input + start, *i - start);
 	quote_start = *i + 1;
@@ -132,5 +132,3 @@ t_token	*extract_sim_quote_token(char *input, int *i)
 	(*i)++;
 	return (token);
 }
-
-
