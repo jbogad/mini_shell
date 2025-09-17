@@ -6,7 +6,7 @@
 /*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:24 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/16 15:00:54 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/17 12:33:28 by jbogad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,24 @@ void	ft_echo(t_token **tokens, t_shell *msh)
 			|| tokens[i]->type == TOKEN_DOB_QUOTE
 			|| tokens[i]->type == TOKEN_SIM_QUOTE))
 	{
+		// if (tokens[i]->type != TOKEN_SIM_QUOTE)
+		// {
+		// 	expanded = expand_arg(tokens[i]->value, msh);
+		// 	ft_printf("%s", expanded);
+		// 	free(expanded);
+		// }
+		// else
+		// 	ft_printf("%s", tokens[i]->value);
+		
+		if (tokens[i + 1])
+			ft_printf(" ");
+		i++;
+	}
+	if (new_line)
+		ft_printf("\n");
+}
+
+
 		if (tokens[i]->type != TOKEN_SIM_QUOTE)
 		{
 			expanded = expand_arg(tokens[i]->value, msh);
@@ -83,10 +101,3 @@ void	ft_echo(t_token **tokens, t_shell *msh)
 		}
 		else
 			ft_printf("%s", tokens[i]->value);
-		if (tokens[i + 1])
-			ft_printf(" ");
-		i++;
-	}
-	if (new_line)
-		ft_printf("\n");
-}
