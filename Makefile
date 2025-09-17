@@ -60,7 +60,7 @@ SRC = src/minishell.c \
       src/exec/pipes_child.c src/exec/utils_pipes.c src/exec/redirections.c src/exec/redirections_utils.c \
       src/exec/redirections_input.c src/exec/redirections_output.c \
       src/utils/utils.c \
-      src/utils_global/utils_to_env.c src/utils_global/utils_to_free.c src/utils_global/utils_export_add.c
+      src/utils_global/utils_to_env.c src/utils_global/utils_to_free.c src/utils_global/utils_export_add.c src/utils_global/heredoc_utils.c src/utils_global/tokens_utils.c
 
 OBJ_DIR = objects
 OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))

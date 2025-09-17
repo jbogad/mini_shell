@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:47:31 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/16 10:27:40 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/17 11:12:53 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,6 @@ int	count_total_tokens(char *input)
 	word_tokens = count_word_token(input);
 	total = ops_tokens + dob_quotes_tokens + sim_quotes_tokens + word_tokens;
 	return (total);
-}
-
-/**
- * @brief Añade tokens de un array temporal a otro array principal.
- * @param tmp Array temporal de tokens para agregar.
- * @param tokens Array principal donde se añaden los tokens.
- * @param index Puntero al índice actual en `tokens`; se incrementa c
- * on cada token añadido.
- */
-void	loop_add_tokens(t_token **tmp, t_token **tokens, int *index)
-{
-	int	j;
-
-	j = 0;
-	while (tmp && tmp[j])
-	{
-		tokens[*index] = tmp[j];
-		j++;
-		(*index)++;
-	}
-	free(tmp);
 }
 
 /**
@@ -111,34 +90,25 @@ t_token	**extract_all_tokens(char *input)
 {
 	t_token	**tokens;
 	t_token	*token;
-	int		vars[3];
+	int		pos;
+	int		count;
+	int		len;
 
-	vars[0] = 0;
-	vars[1] = 0;
-	vars[2] = ft_strlen(input);
-	tokens = malloc(sizeof(t_token *) * (vars[2] + 1));
+	pos = 0;
+	count = 0;
+	len = ft_strlen(input);
+	tokens = malloc(sizeof(t_token *) * (len + 1));
 	if (!tokens)
 		return (NULL);
-	while (input[vars[0]])
+	while (input[pos])
 	{
-		while (input[vars[0]] == ' ' || input[vars[0]] == '\t')
-			vars[0]++;
-		if (!input[vars[0]])
+		while (input[pos] == ' ' || input[pos] == '\t')
+			pos++;
+		if (!input[pos])
 			break ;
-		token = get_next_token(input, &vars[0]);
-		if (!token)
-		{
-			free(tokens);
-			return (NULL);
-		}
-		if (token->value && token->value[0] != '\0')
-			tokens[vars[1]++] = token;
-		else
-		{
-			free(token->value);
-			free(token);
-		}
+		token = get_next_token(input, &pos);
+		add_or_free_token(token, tokens, &count);
 	}
-	tokens[vars[1]] = NULL;
+	tokens[count] = NULL;
 	return (tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:02:34 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/16 10:25:15 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/16 12:27:37 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,24 @@ int	count_env(char **envp)
  * @return Arreglo de estructuras `t_env` con los nombres y valores
  * separados, terminado en NULL.
  */
+
+void	add_env_node(char *name, char *value, t_env **env_list)
+{
+	t_env	*new_node;
+
+	new_node = ft_lstnew_env(name, value, 1);
+	if (new_node)
+	{
+		if (!*env_list)
+			*env_list = new_node;
+		else
+			ft_lstadd_back_env(env_list, new_node);
+	}
+}
+
 t_env	*init_env(char **envp)
 {
 	t_env	*env_list;
-	t_env	*new_node;
 	char	*equal_sign;
 	int		i;
 	char	*name;
@@ -54,14 +68,7 @@ t_env	*init_env(char **envp)
 		{
 			name = ft_substr(envp[i], 0, equal_sign - envp[i]);
 			value = ft_strdup(equal_sign + 1);
-			new_node = ft_lstnew_env(name, value, 1);
-			if (new_node)
-			{
-				if (!env_list)
-					env_list = new_node;
-				else
-					ft_lstadd_back_env(&env_list, new_node);
-			}
+			add_env_node(name, value, &env_list);
 			free(name);
 			free(value);
 		}

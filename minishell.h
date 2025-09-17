@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/16 12:05:49 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/17 11:14:18 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,15 @@ typedef struct s_shell
 	int			exit_status;// entero que representa el estado de salida
 	int			shell_pid;// pid de la minishell cuando se inicia
 }								t_shell;
+
+typedef struct s_heredoc
+{
+	int		fd[2];//Pipe para leer o escribir
+	pid_t	pid;//pid del proceso del heredoc
+	char	*to_search;//Palabra a buscar
+	t_env	*env_list;//Lista de las vars de entorno a expandir
+	t_token	*token;//Tipo de token del heredoc
+}	t_heredoc;
 
 // Utils
 char							*ft_strndup(const char *s, size_t n);
@@ -238,6 +247,14 @@ t_token							**extract_all_tokens(char *input);
 
 // Heredoc
 void							heredoc(t_env *env_list, t_token **tokens);
+void							msg_ctrld_heredoc(char *to_search);
+void							run_heredoc(char *to_search, t_env *env_list,
+									t_token *token, int write_fd);
+void							exit_heredoc(pid_t pid, int *status);
+int								is_valid_heredoc(t_token **tokens, int i);
+void							run_heredoc_loop(char *to_search,
+									t_env *env_list, t_token *token,
+									int write_fd);
 
 // Expansor
 t_env							*init_env(char **envp);
@@ -247,6 +264,10 @@ void							get_value_expanded(char *new_value,
 void							expand_env_values(t_env *env_list,
 									t_token **tokens);
 char							*expand_all_vars(t_env *env_list, char *value);
+void							add_or_free_token(t_token *token,
+									t_token **tokens, int *count);
+void							loop_add_tokens(t_token **tmp,
+									t_token **tokens, int *index);
 
 // Signals
 void							call_signals(void);
