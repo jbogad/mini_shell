@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_pipes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 15:00:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/04 15:25:47 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/17 15:31:36 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,13 @@ static void	fill_cmd_tokens(t_pipe_data *data, t_token **cmd_tokens, int start)
 	cmd_tokens[i] = NULL;
 }
 
+static int	skip_pipes(t_token **tokens, int i)
+{
+	while (tokens[i] && tokens[i]->type == TOKEN_PIPE)
+		i++;
+	return (i - 1);
+}
+
 t_token	**get_cmd_tokens(t_pipe_data *data)
 {
 	t_token	**cmd_tokens;
@@ -66,9 +73,7 @@ t_token	**get_cmd_tokens(t_pipe_data *data)
 		if (data->tokens[i]->type == TOKEN_PIPE)
 		{
 			pipes_passed++;
-			while (data->tokens[i] && data->tokens[i]->type == TOKEN_PIPE)
-				i++;
-			i--;
+			i = skip_pipes(data->tokens, i);
 		}
 		i++;
 	}

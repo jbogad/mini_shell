@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_input.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaboga-d <jaboga-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:30:00 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/08/30 10:30:00 by jaboga-d         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:24:52 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ static int	setup_input_redirect(int fd, char *file_name)
 	return (1);
 }
 
+int	free_file_name_return(char *file_name)
+{
+	free(file_name);
+	return (0);
+}
+
 int	set_infile(t_token **tokens, t_shell *msh, char *cmd_name)
 {
 	char	*file_name;
@@ -57,15 +63,9 @@ int	set_infile(t_token **tokens, t_shell *msh, char *cmd_name)
 	}
 	fd = open_input_file(file_name);
 	if (fd < 0)
-	{
-		free(file_name);
-		return (0);
-	}
+		return (free_file_name_return(file_name));
 	if (!setup_input_redirect(fd, file_name))
-	{
-		free(file_name);
-		return (0);
-	}
+		return (free_file_name_return(file_name));
 	free(file_name);
 	return (1);
 }

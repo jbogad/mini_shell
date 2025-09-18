@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/11 12:13:05 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:58:47 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ int	first_env_var(t_token **tokens, t_shell *msh)
 	char	*name_var;
 	char	*expanded;
 	int		i;
+	char	**split_tokens;
+	int		j;
+	int		k;
 
 	i = 0;
 	if (!tokens || !tokens[0])
@@ -41,18 +44,29 @@ int	first_env_var(t_token **tokens, t_shell *msh)
 		expanded = expand_all_vars(msh->env, name_var);
 		if (!expanded)
 			return (1);
-		while (expanded[i])
+		split_tokens = ft_split(expanded, ' ');
+		if (!split_tokens)
 		{
-			if (expanded[i] == '/')
-			{
-				printf("minishell: %s: Is a directory\n", expanded);
-				free(expanded);
-				return (1);
-			}
-			i++;
+			free(expanded);
+			return (1);
 		}
 		free(tokens[0]->value);
-		tokens[0]->value = expanded;
+		tokens[0]->value = ft_strdup(split_tokens[0]);
+		j = 1;
+		while (split_tokens[j])
+		{
+			tokens[j] = malloc(sizeof(t_token));
+			tokens[j]->value = ft_strdup(split_tokens[j]);
+			tokens[j]->type = TOKEN_WORD;
+			tokens[j]->heredoc_fd = -1;
+			j++;
+		}
+		tokens[j] = NULL;
+		k = 0;
+		while (split_tokens[k])
+			free(split_tokens[k++]);
+		free(split_tokens);
+		free(expanded);
 		return (0);
 	}
 	return (0);
@@ -104,12 +118,14 @@ void	execute(t_token **tokens, t_shell *msh)
 
 static void	fill_cmd_args(t_token **tokens, t_shell *msh)
 {
-	int		i = 0, j;
+	int		i;
+	int		j;
 	int		count;
 	char	*arg;
 	char	*tmp;
 
-	i = 0, j = 0;
+	i = 0;
+	j = 0;
 	if (!tokens || !msh)
 		return ;
 	free_cmd_args(msh);

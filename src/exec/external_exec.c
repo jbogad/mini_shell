@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/16 15:39:09 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/18 15:33:26 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,20 @@ static void	free_arrays(char **argv, char **envp)
 		free(envp);
 	}
 }
+char *get_cmd_or_path_env(char *cmd, t_env *env)
+{
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	while (env && ft_strcmp(env->name_env, "PATH") != 0)
+		env = env->next;
+	if (!env)
+		return (NULL);
+	return (NULL);
+}
 
 char	*find_path(char *cmd, t_env *env)
 {
@@ -91,7 +105,7 @@ char	*find_path(char *cmd, t_env *env)
 	char	*full_path;
 	int		i;
 
-	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+    if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, X_OK) == 0)
 			return (ft_strdup(cmd));
@@ -133,41 +147,25 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 		msh->exit_status = 127;
 		return ;
 	}
-	printf("DEBUG: Found path: %s\n", cmd_path);
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("DEBUG: Child process starting...\n");
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		if (ft_strcmp(tokens[0]->value, "./minishell") == 0)
 		{
-			printf("DEBUG: Child - setting up terminal for minishell\n");
 			close(STDIN_FILENO);
 			open("/dev/tty", O_RDONLY);
 		}
-		// else
-		// {
-		// 	printf("DEBUG: Child - ensuring stdin is connected\n");
-		// 	if (!isatty(STDIN_FILENO)) //fumadita del subject que verifica si el stdin es un terminal
-		// 	{
-		// 		close(STDIN_FILENO);
-		// 		open("/dev/tty", O_RDONLY); //aunque este redirigido, lo conecta a /dev/tty para que pueda leer
-		// 	}
-		// }
 		envp = create_env_array(msh->env);
 		argv = create_argv_array(tokens);
-		printf("DEBUG: Child calling execve...\n");
 		execve(cmd_path, argv, envp);
-		printf("DEBUG: execve failed!\n");
 		free_arrays(argv, envp);
 		exit(127);
 	}
 	else if (pid > 0)
 	{
-		printf("DEBUG: Parent waiting for child %d\n", pid);
 		waitpid(pid, &status, 0);
-		printf("DEBUG: Child exited with status: %d\n", WEXITSTATUS(status));
 		msh->exit_status = WEXITSTATUS(status);
 	}
 	else

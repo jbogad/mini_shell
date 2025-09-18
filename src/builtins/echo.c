@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbogad <jbogad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:06:24 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/17 12:33:28 by jbogad           ###   ########.fr       */
+/*   Updated: 2025/09/17 15:18:16 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,24 @@ static int	is_valid_n_option(char *str)
 	return (1);
 }
 
+void	expand_echo(t_token *token, t_shell *msh)
+{
+	char	*expanded;
+
+	if (token->type != TOKEN_SIM_QUOTE)
+	{
+		expanded = expand_arg(token->value, msh);
+		ft_printf("%s", expanded);
+		free(expanded);
+	}
+	else
+		ft_printf("%s", token->value);
+}
+
 void	ft_echo(t_token **tokens, t_shell *msh)
 {
-	int		i;
-	int		new_line;
-	char	*expanded;
+	int	i;
+	int	new_line;
 
 	i = 1;
 	new_line = 1;
@@ -75,15 +88,7 @@ void	ft_echo(t_token **tokens, t_shell *msh)
 			|| tokens[i]->type == TOKEN_DOB_QUOTE
 			|| tokens[i]->type == TOKEN_SIM_QUOTE))
 	{
-		// if (tokens[i]->type != TOKEN_SIM_QUOTE)
-		// {
-		// 	expanded = expand_arg(tokens[i]->value, msh);
-		// 	ft_printf("%s", expanded);
-		// 	free(expanded);
-		// }
-		// else
-		// 	ft_printf("%s", tokens[i]->value);
-		
+		expand_echo(tokens[i], msh);
 		if (tokens[i + 1])
 			ft_printf(" ");
 		i++;
@@ -91,13 +96,3 @@ void	ft_echo(t_token **tokens, t_shell *msh)
 	if (new_line)
 		ft_printf("\n");
 }
-
-
-		if (tokens[i]->type != TOKEN_SIM_QUOTE)
-		{
-			expanded = expand_arg(tokens[i]->value, msh);
-			ft_printf("%s", expanded);
-			free(expanded);
-		}
-		else
-			ft_printf("%s", tokens[i]->value);
