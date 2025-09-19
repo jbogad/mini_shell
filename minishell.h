@@ -6,7 +6,7 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:28:25 by clalopez          #+#    #+#             */
-/*   Updated: 2025/09/17 11:14:18 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/19 13:18:51 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void							free_tokens(t_token **tokens);
 int								ft_strcmp(const char *s1, const char *s2);
 void							free_env(t_env *env_list);
 int								get_shell_pid(void);
+void							free_cmd_args(t_shell *msh);
 
 // Pipes helper structure
 typedef struct s_pipe_data
@@ -148,8 +149,26 @@ void							ft_echo(t_token **tokens, t_shell *msh);
 void							execute(t_token **tokens, t_shell *msh);
 void							free_cmd_args(t_shell *msh);
 char							*find_path(char *cmd, t_env *env);
+void							restore_stdio(int stdin_backup,
+									int stdout_backup);
+void							run_command(t_token **tokens, t_shell *msh);
+void							fill_cmd_args(t_token **tokens, t_shell *msh);
+void							execute_builtin(t_token **tokens, t_shell *msh);
+int								first_env_var(t_token **tokens, t_shell *msh);
+char							*join_quoted_args(t_token **tokens,
+									int *i, char *arg);
+
+//External exec
 void							execute_external_command(t_token **tokens,
 									t_shell *msh);
+char							*get_command_path(t_token **tokens,
+									t_shell *msh);
+void							child_process(char *cmd_path, t_token **tokens,
+									t_shell *msh);
+char							**get_paths(t_env *env);
+char							**create_env_array(t_env *env_list);
+char							**create_argv_array(t_token **tokens);
+void							free_arrays(char **argv, char **envp);
 
 /*export*/
 void							ft_export(t_shell *msh);

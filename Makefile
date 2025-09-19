@@ -56,7 +56,7 @@ SRC = src/minishell.c \
       src/builtins/pwd.c src/builtins/echo.c src/builtins/export.c \
       src/builtins/unset.c src/builtins/cd.c src/builtins/env.c \
       src/builtins/exit.c src/builtins/utils_export.c \
-      src/exec/exec.c src/exec/external_exec.c src/exec/pipes.c src/exec/pipes_utils.c src/exec/pipes_cmd.c \
+      src/exec/exec.c src/exec/exec_help.c src/exec/external_exec.c src/exec/external_exec_help.c src/exec/pipes.c src/exec/pipes_utils.c src/exec/pipes_cmd.c \
       src/exec/pipes_child.c src/exec/utils_pipes.c src/exec/redirections.c src/exec/redirections_utils.c \
       src/exec/redirections_input.c src/exec/redirections_output.c \
       src/utils/utils.c \

@@ -6,14 +6,14 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:32:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/18 15:33:26 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/19 11:32:26 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 #include <sys/wait.h>
 
-static char	**create_argv_array(t_token **tokens)
+char	**create_argv_array(t_token **tokens)
 {
 	char	**argv;
 	int		count;
@@ -35,7 +35,7 @@ static char	**create_argv_array(t_token **tokens)
 	return (argv);
 }
 
-static char	**create_env_array(t_env *env_list)
+char	**create_env_array(t_env *env_list)
 {
 	char	**envp;
 	char	*temp;
@@ -63,7 +63,7 @@ static char	**create_env_array(t_env *env_list)
 	return (envp);
 }
 
-static void	free_arrays(char **argv, char **envp)
+void	free_arrays(char **argv, char **envp)
 {
 	int	i;
 
@@ -82,41 +82,21 @@ static void	free_arrays(char **argv, char **envp)
 		free(envp);
 	}
 }
-char *get_cmd_or_path_env(char *cmd, t_env *env)
+
+char	*find_path(char *cmd, t_env *env)
 {
+	char	**paths;
+	char	*temp;
+	char	*full_path;
+	int		i;
+
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, X_OK) == 0)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}
-	while (env && ft_strcmp(env->name_env, "PATH") != 0)
-		env = env->next;
-	if (!env)
-		return (NULL);
-	return (NULL);
-}
-
-char	*find_path(char *cmd, t_env *env)
-{
-	char	*path_env;
-	char	**paths;
-	char	*temp;
-	char	*full_path;
-	int		i;
-
-    if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
-	{
-		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
-	}
-	while (env && ft_strcmp(env->name_env, "PATH") != 0)
-		env = env->next;
-	if (!env)
-		return (NULL);
-	path_env = env->val_env;
-	paths = ft_split(path_env, ':');
+	paths = get_paths(env);
 	if (!paths)
 		return (NULL);
 	i = -1;
@@ -137,32 +117,13 @@ void	execute_external_command(t_token **tokens, t_shell *msh)
 	char	*cmd_path;
 	pid_t	pid;
 	int		status;
-	char	**envp;
-	char	**argv;
 
-	cmd_path = find_path(tokens[0]->value, msh->env);
+	cmd_path = get_command_path(tokens, msh);
 	if (!cmd_path)
-	{
-		ft_printf("minishell: %s: command not found\n", tokens[0]->value);
-		msh->exit_status = 127;
 		return ;
-	}
 	pid = fork();
 	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		if (ft_strcmp(tokens[0]->value, "./minishell") == 0)
-		{
-			close(STDIN_FILENO);
-			open("/dev/tty", O_RDONLY);
-		}
-		envp = create_env_array(msh->env);
-		argv = create_argv_array(tokens);
-		execve(cmd_path, argv, envp);
-		free_arrays(argv, envp);
-		exit(127);
-	}
+		child_process(cmd_path, tokens, msh);
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);

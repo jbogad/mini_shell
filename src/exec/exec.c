@@ -6,15 +6,11 @@
 /*   By: clalopez <clalopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:04:51 by jaboga-d          #+#    #+#             */
-/*   Updated: 2025/09/18 14:58:47 by clalopez         ###   ########.fr       */
+/*   Updated: 2025/09/19 13:17:46 by clalopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-static void	fill_cmd_args(t_token **tokens, t_shell *msh);
-void		free_cmd_args(t_shell *msh);
-static void	execute_builtin(t_token **tokens, t_shell *msh);
 
 int	first_env_var(t_token **tokens, t_shell *msh)
 {
@@ -98,31 +94,16 @@ void	execute(t_token **tokens, t_shell *msh)
 	if (status != 1)
 		msh->exit_status = 1;
 	else
-	{
-		if (first_env_var(tokens, msh) == 1)
-			msh->exit_status = 127;
-		else
-		{
-			expand_env_values(msh->env, tokens);
-			fill_cmd_args(tokens, msh);
-			execute_builtin(tokens, msh);
-		}
-	}
-	if (dup2(stdin_backup, STDIN_FILENO) == -1)
-		perror("dup2 stdin");
-	if (dup2(stdout_backup, STDOUT_FILENO) == -1)
-		perror("dup2 stdout");
-	close(stdin_backup);
-	close(stdout_backup);
+		run_command(tokens, msh);
+	restore_stdio(stdin_backup, stdout_backup);
 }
 
-static void	fill_cmd_args(t_token **tokens, t_shell *msh)
+void	fill_cmd_args(t_token **tokens, t_shell *msh)
 {
 	int		i;
 	int		j;
 	int		count;
 	char	*arg;
-	char	*tmp;
 
 	i = 0;
 	j = 0;
@@ -137,14 +118,7 @@ static void	fill_cmd_args(t_token **tokens, t_shell *msh)
 	while (tokens[i])
 	{
 		arg = ft_strdup(tokens[i]->value);
-		while (tokens[i + 1] && (tokens[i + 1]->type == TOKEN_DOB_QUOTE
-				|| tokens[i + 1]->type == TOKEN_SIM_QUOTE))
-		{
-			tmp = ft_strjoin("", tokens[i + 1]->value);
-			free(arg);
-			arg = tmp;
-			i++;
-		}
+		arg = join_quoted_args(tokens, &i, arg);
 		msh->cmd_args[j++] = arg;
 		i++;
 	}
@@ -173,7 +147,7 @@ void	free_cmd_args(t_shell *msh)
  * @param tokens Array de tokens con el comando.
  * @param msh Estructura principal del shell.
  */
-static void	execute_builtin(t_token **tokens, t_shell *msh)
+void	execute_builtin(t_token **tokens, t_shell *msh)
 {
 	if (ft_strcmp(tokens[0]->value, "pwd") == 0)
 		ft_pwd();
